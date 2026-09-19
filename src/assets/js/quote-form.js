@@ -17,8 +17,17 @@
     date.required = scheduled;
   }
 
+  var params = new URLSearchParams(location.search);
+  // Back from a plain (no-script) form post: the function redirects with ?sent=1 or ?failed=1.
+  if (params.get('sent') === '1') {
+    form.hidden = true;
+    ok.hidden = false;
+    return;
+  }
+  if (params.get('failed') === '1') fail.hidden = false;
+
   // /quote/?when=scheduled pre-selects "scheduled" (Set Up a Scheduled Route).
-  var preset = new URLSearchParams(location.search).get('when');
+  var preset = params.get('when');
   if (preset && when.querySelector('option[value="' + preset.replace(/[^a-z]/g, '') + '"]')) {
     when.value = preset;
   }

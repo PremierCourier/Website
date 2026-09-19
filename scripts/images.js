@@ -9,6 +9,7 @@ import sharp from 'sharp';
 
 const RASTER = new Set(['.png', '.jpg', '.jpeg']);
 const MAX_WIDTH = 960; // largest display is ~440 CSS px; 960 covers 2x screens
+const SMALL_WIDTH = 480; // phones: a ~320 CSS px slot at 1.5x
 
 export async function processImages(srcDir, outDir, publicPrefix) {
   await mkdir(outDir, { recursive: true });
@@ -55,6 +56,18 @@ export async function processImages(srcDir, outDir, publicPrefix) {
       width,
       height,
     };
+
+    // Wide images also get a small variant; the picture partial offers both via srcset so
+    // phones download the small one.
+    if (width > SMALL_WIDTH * 1.25) {
+      const small = sharp(input).rotate().resize({ width: SMALL_WIDTH });
+      await Promise.all([
+        small.clone().avif({ quality: 55, effort: 6 }).toFile(path.join(outDir, `${name}-${SMALL_WIDTH}.avif`)),
+        small.clone().webp({ quality: 80 }).toFile(path.join(outDir, `${name}-${SMALL_WIDTH}.webp`)),
+      ]);
+      manifest[name].srcsetAvif = `${publicPrefix}/${name}-${SMALL_WIDTH}.avif ${SMALL_WIDTH}w, ${publicPrefix}/${name}.avif ${width}w`;
+      manifest[name].srcsetWebp = `${publicPrefix}/${name}-${SMALL_WIDTH}.webp ${SMALL_WIDTH}w, ${publicPrefix}/${name}.webp ${width}w`;
+    }
   }
   return manifest;
 }

@@ -142,17 +142,20 @@ export async function build(targetName = process.env.BUILD_TARGET || 'local') {
     await copyFile(path.join(ROOT, 'node_modules/@fontsource/inter/files', f), path.join(DIST, 'assets/fonts', f));
   }
   await cp(path.join(SRC, 'assets/js'), path.join(DIST, 'assets/js'), { recursive: true });
-  // Turntable frames are final web files (npm run stills); copied as-is.
-  // Manifest: { object: { frames, widths: [largest, …] } }.
-  const turntableDir = path.join(SRC, 'assets/turntable');
-  const turntable = {};
-  if (existsSync(turntableDir)) {
-    for (const object of await readdir(turntableDir)) {
-      const widths = (await readdir(path.join(turntableDir, object))).map(Number).sort((a, b) => b - a);
-      const frames = (await readdir(path.join(turntableDir, object, String(widths[0])))).length;
-      turntable[object] = { frames, widths };
-    }
-    await cp(turntableDir, path.join(DIST, 'assets/turntable'), { recursive: true });
+  // Hero frame sequence (npm run sequence): copied as-is; the poster is inlined as the
+  // first paint, so it never waits on a request.
+  const seqDir = path.join(SRC, 'assets/sequence');
+  let sequence = null;
+  if (existsSync(path.join(seqDir, 'manifest.json'))) {
+    const manifest = await readJson(path.join(seqDir, 'manifest.json'));
+    await cp(seqDir, path.join(DIST, 'assets/sequence'), { recursive: true });
+    const posterAvif = await readFile(path.join(seqDir, 'poster.avif'));
+    sequence = {
+      ...manifest,
+      path: `${base}/assets/sequence`,
+      posterAvif: `data:image/avif;base64,${posterAvif.toString('base64')}`,
+      posterWebp: `${base}/assets/sequence/poster.webp`,
+    };
   }
 
   const css = await buildCss(base);
@@ -162,24 +165,6 @@ export async function build(targetName = process.env.BUILD_TARGET || 'local') {
 
   const schemaJson = JSON.stringify(shared.schema).replace(/</g, '\\u003c');
   const year = new Date().getFullYear();
-
-  // Hero kit items get their still and turntable data attached by id.
-  const withKit = (page) => {
-    if (!page.hero?.kit) return page;
-    const kit = page.hero.kit.map((item) => {
-      const still = img[`kit-${item.id}`];
-      if (!still) throw new Error(`content/${page.file}: no still src/assets/img/src/kit-${item.id}.png`);
-      const t = turntable[item.id];
-      return {
-        ...item,
-        still,
-        frames: t ? t.frames : 0,
-        widths: t ? t.widths.join(',') : '',
-        path: `${base}/assets/turntable/${item.id}`,
-      };
-    });
-    return { ...page, hero: { ...page.hero, kit } };
-  };
 
   // Any content object with "photoId" gets `photo` (the lazy image entry) for {{> picture }}.
   const withPhotos = (value, file) => {
@@ -196,7 +181,7 @@ export async function build(targetName = process.env.BUILD_TARGET || 'local') {
   };
 
   for (const rawPage of pages) {
-    const page = withPhotos(withKit(rawPage), rawPage.file);
+    const page = withPhotos(rawPage, rawPage.file);
     const tpl = templates[page.template];
     if (tpl === undefined) throw new Error(`content/${page.file}: no template src/pages/${page.template}.html`);
     const ctx = {
@@ -207,6 +192,7 @@ export async function build(targetName = process.env.BUILD_TARGET || 'local') {
       year,
       css,
       schemaJson,
+      sequence,
       noindex: target.noindex,
       canonical: shared.site.url + (page.route === '/404.html' ? '/' : page.route),
       fullTitle: `${page.title} ${shared.site.titleSuffix}`,
@@ -243,7 +229,7 @@ export async function build(targetName = process.env.BUILD_TARGET || 'local') {
   return { target: targetName, pages: pages.map((p) => ({ route: p.route, status: p.status })) };
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   build()
     .then((r) => {
       const proposed = r.pages.filter((p) => p.status !== 'approved').length;

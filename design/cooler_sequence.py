@@ -325,8 +325,9 @@ def pose(state, open_amount):
     latch_k = smoothstep(open_amount / (STAGGER * 1.5))
     for hinge in state['latches']:
         hinge.rotation_euler = (math.radians(100 * latch_k), 0, 0)
-    # Camera pulls back and up as the stack rises.
-    cam_k = smoothstep(open_amount)
+    # Camera pulls back and up on the lid's curve (the first and highest part to move), so
+    # the rising stack never outruns the frame.
+    cam_k = smoothstep(open_amount / span)
     target_z = 0.2 + 0.47 * cam_k
     dist = 1.95 + 1.05 * cam_k
     elev, az = math.radians(20 + 4 * cam_k), math.radians(34)
@@ -387,7 +388,7 @@ def main():
         bpy.ops.render.render(write_still=True)
         print(f'Wrote {scene.render.filepath}')
         return
-    scene.cycles.samples = 64 if PREVIEW else 180   # denoised; frames are seen in motion
+    scene.cycles.samples = 64 if PREVIEW else 128   # denoised; frames are seen in motion
     frames_dir = os.path.join(OUT, 'frames')
     os.makedirs(frames_dir, exist_ok=True)
     for f in os.listdir(frames_dir):

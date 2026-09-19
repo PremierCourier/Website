@@ -10,17 +10,15 @@
       </div>
     </div>
     <div class="hero__stage">
-      <div class="hero__kit" data-kit{{#if page.hero.flash}} data-flash{{/if}}>
-        {{#each page.hero.kit}}<div class="hero__item" data-kit-item data-id="{{ id }}" data-depth="{{ depth }}" data-drift-x="{{ driftX }}" data-drift-y="{{ driftY }}" data-turn="{{ turn }}" data-phase="{{ phase }}"{{#if frames}} data-frames="{{ frames }}" data-widths="{{ widths }}" data-path="{{ path }}"{{/if}} style="--x:{{ x }}%;--y:{{ y }}%;--size:{{ size }}%;--z:{{ z }}">
-          <picture data-hero-still>
-            <source type="image/avif" srcset="{{ still.avif }}">
-            <source type="image/webp" srcset="{{ still.webp }}">
-            <img src="{{ still.fallback }}" alt="{{ alt }}" width="{{ still.width }}" height="{{ still.height }}" loading="lazy" fetchpriority="low" decoding="async">
-          </picture>
-          {{#if frames}}<canvas class="hero__canvas" aria-hidden="true"></canvas>{{/if}}
-        </div>
-        {{/each}}
-      </div>
+      {{#if sequence}}<div class="hero__sequence" data-sequence data-path="{{ sequence.path }}"
+           data-desktop-frames="{{ sequence.desktop.frames }}" data-mobile-frames="{{ sequence.mobile.frames }}"
+           style="aspect-ratio: {{ sequence.desktop.width }} / {{ sequence.desktop.height }}">
+        <picture>
+          <source type="image/avif" srcset="{{{ sequence.posterAvif }}}">
+          <img class="hero__poster" src="{{ sequence.posterWebp }}" alt="{{ page.hero.sequenceAlt }}" width="{{ sequence.mobile.width }}" height="{{ sequence.mobile.height }}" decoding="async">
+        </picture>
+        <canvas class="hero__canvas" aria-hidden="true"></canvas>
+      </div>{{/if}}
     </div>
   </div>
 </section>

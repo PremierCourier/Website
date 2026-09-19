@@ -212,7 +212,7 @@ export async function audit() {
       ...attrValues(html, 'link', 'href'),
       ...attrValues(html, 'script', 'src'),
       ...attrValues(html, 'img', 'src'),
-      ...attrValues(html, 'source', 'srcset').map((s) => s.split(/\s/)[0]),
+      ...attrValues(html, 'source', 'srcset').flatMap((s) => s.split(',').map((c) => c.trim().split(/\s+/)[0])),
     ].filter((u) => u.startsWith('/') && !u.startsWith('//'));
     for (const url of urls) {
       const target = toDistPath(url);
@@ -249,7 +249,7 @@ export async function audit() {
   return { failures, warnings, pages: pages.size, target: info.target };
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   audit()
     .then(({ failures, warnings, pages, target }) => {
       for (const w of warnings) console.warn(`warn  ${w}`);

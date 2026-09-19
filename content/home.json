@@ -10,61 +10,7 @@
   "hero": {
     "eyebrow": "Medical and business courier · Prescott, Arizona",
     "lead": "Premier Courier Services is the trusted medical and business courier for Central and Northern Arizona — on time, every time, 24/7, including holidays.",
-    "flash": true,
-    "kit": [
-      {
-        "id": "vials",
-        "alt": "Sealed, unlabeled specimen collection tubes",
-        "x": 17,
-        "y": 22,
-        "size": 30,
-        "depth": 0.6,
-        "driftX": -34,
-        "driftY": -30,
-        "turn": -220,
-        "phase": 1.3,
-        "z": 1
-      },
-      {
-        "id": "sterile",
-        "alt": "Wrapped sterile instrument pack",
-        "x": 82,
-        "y": 20,
-        "size": 32,
-        "depth": 0.75,
-        "driftX": 34,
-        "driftY": -34,
-        "turn": 180,
-        "phase": 3.4,
-        "z": 2
-      },
-      {
-        "id": "cooler",
-        "alt": "Premier Courier's sealed blue transport cooler with the P mark",
-        "x": 50,
-        "y": 52,
-        "size": 62,
-        "depth": 1,
-        "driftX": 0,
-        "driftY": -6,
-        "turn": 360,
-        "phase": 0,
-        "z": 3
-      },
-      {
-        "id": "envelope",
-        "alt": "Sealed document envelope with the Premier Courier seal",
-        "x": 80,
-        "y": 80,
-        "size": 38,
-        "depth": 1.4,
-        "driftX": 30,
-        "driftY": 38,
-        "turn": -160,
-        "phase": 2.1,
-        "z": 4
-      }
-    ]
+    "sequenceAlt": "Premier Courier's sealed blue transport cooler with the P mark"
   },
   "intro": {
     "heading": "Serving Central and Northern Arizona since 2014 — and built on a legacy that started long before.",

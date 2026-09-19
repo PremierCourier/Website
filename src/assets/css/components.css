@@ -139,7 +139,7 @@
 .hero__grid {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-  align-items: center;
+  align-items: start;
   gap: 48px;
 }
 
@@ -160,31 +160,33 @@
   position: relative;
 }
 
-/* Hero kit: Premier Courier's own objects floating in layered depth. Each item's still
-   paints first; hero.js swaps in its turntable canvas (frame 0 matches the still) once frames
-   load, and drives position (--tx/--ty), scale (--s), and opacity from scroll and pointer. */
-.hero__kit {
+/* Hero sequence: the cooler opens and closes as the page scrolls (hero.js). The inlined
+   poster (frame 0) paints with the HTML; the canvas takes over once frames load. While
+   it scrubs, the cooler drifts down through reserved space (--travel) at a fraction of
+   scroll speed so it stays in view — scroll itself is never pinned or slowed. */
+.hero__stage {
+  position: relative;
+}
+
+.hero__sequence {
   position: relative;
   width: 100%;
-  max-width: 560px;
-  aspect-ratio: 1;
+  max-width: 460px;
   margin: 0 auto;
+  transform: translate3d(0, var(--drift, 0px), 0);
 }
 
-.hero__item {
-  position: absolute;
-  left: var(--x);
-  top: var(--y);
-  z-index: var(--z);
-  width: var(--size);
-  transform: translate(-50%, -50%) translate3d(var(--tx, 0px), var(--ty, 0px), 0) scale(var(--s, 1));
-  will-change: transform;
+/* Reserved from first paint (the js class is set in <head>), so nothing below shifts. */
+.js .hero__stage {
+  padding-bottom: 60vh;
+  padding-bottom: 60svh;
 }
 
-.hero__item img {
+.hero__sequence img {
+  display: block;
   width: 100%;
-  height: auto;
-  transition: opacity 240ms linear;
+  height: 100%;
+  object-fit: contain;
 }
 
 .hero__canvas {
@@ -193,47 +195,14 @@
   width: 100%;
   height: 100%;
   opacity: 0;
-  transition: opacity 240ms linear;
 }
 
-.hero__item.is-live .hero__canvas {
+.hero__sequence.is-live .hero__canvas {
   opacity: 1;
 }
 
-.hero__item.is-live img {
-  opacity: 0;
-}
-
-/* Flash extras — brand-guide exceptions awaiting Alanna's approval. Removing
-   "flash": true from content/home.json turns all of them off. */
-
-/* Glow: a Sky Blue halo behind the cooler that swells as the hero scrolls (--p). */
-.hero__kit[data-flash]::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 52%;
-  z-index: 0;
-  width: 78%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--pc-sky) 55%, transparent) 0%, color-mix(in srgb, var(--pc-sky) 18%, transparent) 45%, transparent 70%);
-  transform: translate(-50%, -50%) scale(calc(0.9 + var(--p, 0) * 0.6));
-  opacity: calc(0.85 + var(--p, 0) * 0.15);
-  pointer-events: none;
-}
-
-/* Fly-in: items start hidden and hero.js assembles them. If the script never runs, they
-   appear anyway after 2.5 s. */
-.js .hero__kit[data-flash]:not(.is-intro) .hero__item {
-  opacity: 0;
-  animation: pc-kit-fallback 0s 2.5s forwards;
-}
-
-@keyframes pc-kit-fallback {
-  to {
-    opacity: 1;
-  }
+.hero__sequence.is-live img {
+  visibility: hidden;
 }
 
 /* ---------- Cards ---------- */
@@ -657,8 +626,8 @@
     gap: 24px;
   }
 
-  .hero__kit {
-    max-width: 440px;
+  .hero__sequence {
+    max-width: 380px;
   }
 
   .site-footer__inner {
@@ -746,16 +715,18 @@
     gap: 28px;
   }
 
+  /* Phones: text first, photo after — keeps the headline as the page's largest first paint. */
+  .profile__photo,
   .profile--reverse .profile__photo {
-    order: 0;
+    order: 2;
   }
 
   .profile__photo {
     max-width: 320px;
   }
 
-  .hero__kit {
-    max-width: 340px;
+  .hero__sequence {
+    max-width: 320px;
   }
 
   .site-footer__inner {
@@ -777,13 +748,12 @@
     transition: none;
   }
 
-  .hero__item {
-    transform: translate(-50%, -50%);
+  .hero__sequence {
+    transform: none;
   }
 
-  .js .hero__kit[data-flash]:not(.is-intro) .hero__item {
-    opacity: 1;
-    animation: none;
+  .js .hero__stage {
+    padding-bottom: 0;
   }
 
   html {

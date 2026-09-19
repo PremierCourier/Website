@@ -35,7 +35,8 @@ npm run build      # clean build to dist/ (BUILD_TARGET=local|staging|production
 npm run audit      # fails on forbidden strings, missing alt text, EXIF, broken internal links, missing meta
                    # (matching rules: docs/content-rules.md → Forbidden strings)
 npm run lighthouse # runs against dist/; fails under Performance 95 / SEO 100 / Accessibility 95 on mobile
-npm run stills     # publishes approved hero frames from design/ into src/ (strips metadata)
+npm run sequence   # publishes the rendered cooler frames from design/ into src/assets/sequence/ (crop, AVIF+WebP, budget check)
+npm run stills     # publishes single renders from design/ into src/assets/img/src/ (strips metadata)
 npm run deploy:staging
 npm run deploy     # requires APPROVED=1 env var; refuses otherwise
                    # deploys need DEPLOY_REMOTE (git URL); CI sets it — see .github/workflows/
@@ -51,10 +52,10 @@ src/partials/     cta-bar, service-card, area-list, testimonial, how-we-handle, 
 src/assets/css/   tokens.css, base.css, components.css — tokens.css is the only place colors/fonts are defined
 src/assets/img/   originals in img/src/, never committed larger than 4 MB, never with EXIF
 src/assets/js/    nav.js, motion.js (reveals), hero.js (frame scrub), quote-form.js
-scripts/          build.js, audit.js, images.js, stills.js, dev.js, deploy.js, lighthouse.js, lib/
+scripts/          build.js, audit.js, images.js, sequence.js, stills.js, dev.js, deploy.js, lighthouse.js, lib/
 design/           frame production sources (outside the build; see the 3D section)
 functions/quote/  Azure Function (separate deploy; see functions/quote/README.md)
-docs/             brand-guide-internal.md, content-rules.md, dns-cutover.md
+docs/             brand-guide-internal.md, content-rules.md, dns-cutover.md, review-for-alanna.md (her sign-off list)
 ```
 
 ## Pages (routes)
@@ -91,9 +92,11 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 - Technique: pre-rendered frame sequence drawn to a `<canvas>`, frame index driven by scroll position within the hero (the Apple AirPods pattern). No Three.js, no WebGL, no glTF, no Blender in the build.
 - Subjects are Premier Courier's own objects, nothing generic: (1) the sealed blue transport cooler with the P mark — home hero: closed on white at scroll 0, opens into its layers (lid, insulated body, cold packs, one sealed plain inner pouch) mid-hero, closes again by the time the phone element is reached; (2) a relief map of the five counties in the brand blues with route lines — coverage band: flat at entry, rises into relief over a short scroll. No people, no vehicles, no abstract "tech" geometry.
 - Frame production (in `design/`, outside the build): the layered cooler is modeled and animated in Blender (`design/cooler_sequence.py`) and rendered straight to frames — chosen over AI stills + morph because clean frames compress smaller, never flicker or warp, pace exactly with scroll, and render on a transparent background for a tight crop. The P mark is never generated or redrawn: it is the real mark applied as a texture in every frame. Exploded contents carry no labels, barcodes, tubes, forms, or text. Generated objects are permitted; generated people never are.
-- Approval gate: Alanna approves the closed still and the exploded end frame before the sequence is rendered. No cooler-sequence frames enter `src/` until both are approved. Interim exception: the floating-kit hero (and its turntable frames) stays in `src/` as the staging hero until the approved sequence replaces it.
+- Approval gate: the closed still and the exploded end frame are approved before the sequence is rendered. No cooler-sequence frames enter `src/` until both are approved. Status: both approved 2026-09-19 (relayed by the project lead); the sequence is built and on staging for Alanna's final review.
 - Budget (frames cropped tight to the object and sized to its display box × DPR, so decoded memory stays low): desktop ≤72 frames at up to 1440px, AVIF with WebP fallback, total ≤3.5 MB; mobile/tablet ≤24 frames at 720px, total ≤900 KB; frames are fetched after the headline, phone element, and quote button have painted, and only when the hero is in view. First frame is inlined as the poster. `prefers-reduced-motion: reduce` shows the closed-cooler still only.
 - Scroll stays native: the page never pins, snaps, or hijacks scroll; frame index is a pure function of scroll offset. Canvas is `aria-hidden`; the headline carries the meaning.
+- Keeping the cooler in view without pinning: CSS reserves 60svh under the hero stage from first paint (no layout shift), and while the sequence plays the cooler drifts down through that space at 75% of scroll speed (`--drift`), so it stays on screen as it opens and closes. Reduced motion and Save-Data remove the reserved space and show the poster only.
+- Source and pipeline: `design/cooler_sequence.py` → `npm run sequence` (crop to the union of all frames, desktop 72 / mobile 24 frames, AVIF + WebP, poster, budget check) → `src/assets/sequence/`.
 - Hero LCP is the headline, not the canvas. Budget: hero must not push LCP past 1.8s on mobile 4G or 1.2s on desktop.
 
 ### Motion
@@ -154,5 +157,5 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 - Alanna's mobile number for SMS: set in Azure Function settings by Hemang; never in repo.
 - Photoshoot assets: not yet available. Build with the cooler frame-sequence hero; photography lands on service and about pages when delivered.
 - Design changes not yet approved by Alanna: Inter-only type (no serif) and the 3D hero. They are presented to her on staging as proposals (brand guide v1.1).
-- 3D frames: produced in `design/` (outside `src/`) per the 3D section. Cooler must match the brand guide (blue, P mark composited, sealed, unlabeled); Alanna approves the closed and exploded stills before the sequence is rendered. Until then the floating-kit hero stays on staging.
+- 3D frames: produced in `design/` (outside `src/`) per the 3D section. Stills approved and sequence built; Alanna gives final sign-off on staging.
 - P mark source for compositing: the only mark available is cropped from the official logo PNG (40×59 px). At 1440px frames the badge is far larger than that, so the composite needs a vector trace or a high-resolution logo file, approved by Alanna.
