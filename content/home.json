@@ -2,13 +2,69 @@
   "route": "/",
   "template": "home",
   "status": "proposed",
-  "scripts": ["hero.js"],
+  "scripts": [
+    "hero.js"
+  ],
   "title": "Medical and Business Courier",
   "description": "Arizona's trusted medical and business courier. On time, every time — 24/7, including holidays, and the owner answers the phone.",
   "hero": {
     "eyebrow": "Medical and business courier · Prescott, Arizona",
     "lead": "Premier Courier Services is the trusted medical and business courier for Central and Northern Arizona — on time, every time, 24/7, including holidays.",
-    "coolerAlt": "Premier Courier's sealed blue transport cooler"
+    "flash": true,
+    "kit": [
+      {
+        "id": "vials",
+        "alt": "Sealed, unlabeled specimen collection tubes",
+        "x": 17,
+        "y": 22,
+        "size": 30,
+        "depth": 0.6,
+        "driftX": -34,
+        "driftY": -30,
+        "turn": -220,
+        "phase": 1.3,
+        "z": 1
+      },
+      {
+        "id": "sterile",
+        "alt": "Wrapped sterile instrument pack",
+        "x": 82,
+        "y": 20,
+        "size": 32,
+        "depth": 0.75,
+        "driftX": 34,
+        "driftY": -34,
+        "turn": 180,
+        "phase": 3.4,
+        "z": 2
+      },
+      {
+        "id": "cooler",
+        "alt": "Premier Courier's sealed blue transport cooler with the P mark",
+        "x": 50,
+        "y": 52,
+        "size": 62,
+        "depth": 1,
+        "driftX": 0,
+        "driftY": -6,
+        "turn": 360,
+        "phase": 0,
+        "z": 3
+      },
+      {
+        "id": "envelope",
+        "alt": "Sealed document envelope with the Premier Courier seal",
+        "x": 80,
+        "y": 80,
+        "size": 38,
+        "depth": 1.4,
+        "driftX": 30,
+        "driftY": 38,
+        "turn": -160,
+        "phase": 2.1,
+        "z": 4
+      }
+    ]
   },
   "intro": {
     "heading": "Serving Central and Northern Arizona since 2014 — and built on a legacy that started long before.",
@@ -17,27 +73,75 @@
   "serve": {
     "heading": "Who we serve",
     "items": [
-      { "name": "Hospitals", "line": "Specimens, blood products, platelets, and surgical trays transported on time, every time." },
-      { "name": "Labs", "line": "Time-sensitive specimen pickups handled with precision so your results never wait on logistics." },
-      { "name": "Emergency Rooms", "line": "24/7 availability for critical deliveries when every minute matters." },
-      { "name": "Operating Rooms", "line": "Urgent surgical supply runs available day or night, including holidays." },
-      { "name": "Sterile Processing Departments", "line": "Compliant transport of sterilized instruments and trays with proper handling protocols." },
-      { "name": "Pharmacies", "line": "Prompt, discreet delivery of time-sensitive medications and pharmaceuticals." },
-      { "name": "Doctor Offices", "line": "Flexible specimen, record, and supply deliveries that fit your office schedule." },
-      { "name": "Dentists", "line": "Reliable pickup and delivery of impressions, lab work, and supplies to keep your schedule running." },
-      { "name": "Law Firms", "line": "Same-day, discreet delivery of legal documents, filings, and confidential materials." },
-      { "name": "Accountant Offices", "line": "Secure same-day delivery of sensitive financial documents, tax season and beyond." },
-      { "name": "Airport Retrievals", "line": "Pickup and drop-off at the airport, on your timeline." },
-      { "name": "And More", "line": "If it needs to get there fast and handled right, we'll make it happen." }
+      {
+        "name": "Hospitals",
+        "line": "Specimens, blood products, platelets, and surgical trays transported on time, every time."
+      },
+      {
+        "name": "Labs",
+        "line": "Time-sensitive specimen pickups handled with precision so your results never wait on logistics."
+      },
+      {
+        "name": "Emergency Rooms",
+        "line": "24/7 availability for critical deliveries when every minute matters."
+      },
+      {
+        "name": "Operating Rooms",
+        "line": "Urgent surgical supply runs available day or night, including holidays."
+      },
+      {
+        "name": "Sterile Processing Departments",
+        "line": "Compliant transport of sterilized instruments and trays with proper handling protocols."
+      },
+      {
+        "name": "Pharmacies",
+        "line": "Prompt, discreet delivery of time-sensitive medications and pharmaceuticals."
+      },
+      {
+        "name": "Doctor Offices",
+        "line": "Flexible specimen, record, and supply deliveries that fit your office schedule."
+      },
+      {
+        "name": "Dentists",
+        "line": "Reliable pickup and delivery of impressions, lab work, and supplies to keep your schedule running."
+      },
+      {
+        "name": "Law Firms",
+        "line": "Same-day, discreet delivery of legal documents, filings, and confidential materials."
+      },
+      {
+        "name": "Accountant Offices",
+        "line": "Secure same-day delivery of sensitive financial documents, tax season and beyond."
+      },
+      {
+        "name": "Airport Retrievals",
+        "line": "Pickup and drop-off at the airport, on your timeline."
+      },
+      {
+        "name": "And More",
+        "line": "If it needs to get there fast and handled right, we'll make it happen."
+      }
     ]
   },
   "handle": {
     "heading": "Handled right, the first time.",
     "points": [
-      { "title": "HIPAA-compliant handling", "body": "Our drivers handle every item in a HIPAA-compliant manner." },
-      { "title": "The same care for every item", "body": "We treat every item with the utmost care, no matter its value." },
-      { "title": "Any hour, including holidays", "body": "Business doesn't stop at 5 p.m., on weekends, or on holidays. Neither do we." },
-      { "title": "Drivers your staff know by name", "body": "Friendly, meticulous drivers your staff will know by name." }
+      {
+        "title": "HIPAA-compliant handling",
+        "body": "Our drivers handle every item in a HIPAA-compliant manner."
+      },
+      {
+        "title": "The same care for every item",
+        "body": "We treat every item with the utmost care, no matter its value."
+      },
+      {
+        "title": "Any hour, including holidays",
+        "body": "Business doesn't stop at 5 p.m., on weekends, or on holidays. Neither do we."
+      },
+      {
+        "title": "Drivers your staff know by name",
+        "body": "Friendly, meticulous drivers your staff will know by name."
+      }
     ],
     "linkLabel": "How we handle it"
   },

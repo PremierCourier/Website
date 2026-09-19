@@ -20,7 +20,9 @@ const TYPES = {
   '.glb': 'model/gltf-binary',
 };
 
-export function serve(root, port) {
+export function serve(dir, port) {
+  // Normalise so the containment check below compares like with like on Windows.
+  const root = path.resolve(dir);
   const server = createServer(async (req, res) => {
     const urlPath = decodeURIComponent(new URL(req.url, 'http://x').pathname);
     let file = path.join(root, urlPath);

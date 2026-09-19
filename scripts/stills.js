@@ -1,7 +1,8 @@
 // Publishes Blender renders from design/renders/.
 //   *.png            → src/assets/img/src/ (the build makes AVIF/WebP/PNG from these)
-//   turntable/*.png  → src/assets/turntable/{720,480}/NNN.avif (final web files; the
-//                      build copies them as-is, the hero script loads them after page load)
+//   turntable/<object>/NNN.png → src/assets/turntable/<object>/<width>/NNN.avif (final web
+//                      files; the build copies them as-is and hero.js loads them after page
+//                      load). Widths: the frame's own width and a smaller step below it.
 // Every image is re-encoded (dropping Blender's EXIF and render-stat text chunks) and the
 // outer 7% of each edge fades to transparent, so the soft floor shadow never ends in a
 // hard line on the page. Preview renders (*-preview.png) are skipped.
@@ -18,7 +19,7 @@ const TO = path.join(ROOT, 'src/assets/img/src');
 const FADE = 0.07;
 const TURNTABLE_FROM = path.join(FROM, 'turntable');
 const TURNTABLE_TO = path.join(ROOT, 'src/assets/turntable');
-const TURNTABLE_WIDTHS = [720, 480];
+const WIDTH_STEPS = [720, 480, 320];
 
 function edgeMask(w, h) {
   const fx = Math.round(w * FADE);
@@ -61,19 +62,26 @@ for (const f of files) {
 }
 
 if (existsSync(TURNTABLE_FROM)) {
-  const frames = (await readdir(TURNTABLE_FROM)).filter((f) => /^\d{3}\.png$/.test(f)).sort();
   await rm(TURNTABLE_TO, { recursive: true, force: true });
-  for (const w of TURNTABLE_WIDTHS) await mkdir(path.join(TURNTABLE_TO, String(w)), { recursive: true });
-  for (const f of frames) {
-    const { buffer } = await faded(path.join(TURNTABLE_FROM, f));
-    await Promise.all(
-      TURNTABLE_WIDTHS.map((w) =>
-        sharp(buffer)
-          .resize({ width: w })
-          .avif({ quality: 50, effort: 6 })
-          .toFile(path.join(TURNTABLE_TO, String(w), f.replace('.png', '.avif'))),
-      ),
-    );
+  for (const object of await readdir(TURNTABLE_FROM)) {
+    const dir = path.join(TURNTABLE_FROM, object);
+    const frames = (await readdir(dir)).filter((f) => /^\d{3}\.png$/.test(f)).sort();
+    if (!frames.length) continue;
+    const { width } = await sharp(path.join(dir, frames[0])).metadata();
+    const top = WIDTH_STEPS.findIndex((w) => w <= width);
+    const widths = WIDTH_STEPS.slice(top, top + 2);
+    for (const w of widths) await mkdir(path.join(TURNTABLE_TO, object, String(w)), { recursive: true });
+    for (const f of frames) {
+      const { buffer } = await faded(path.join(dir, f));
+      await Promise.all(
+        widths.map((w) =>
+          sharp(buffer)
+            .resize({ width: w })
+            .avif({ quality: 50, effort: 6 })
+            .toFile(path.join(TURNTABLE_TO, object, String(w), f.replace('.png', '.avif'))),
+        ),
+      );
+    }
+    console.log(`published ${object}: ${frames.length} frames at ${widths.join(' and ')} px`);
   }
-  console.log(`published ${frames.length} turntable frames at ${TURNTABLE_WIDTHS.join(' and ')} px`);
 }

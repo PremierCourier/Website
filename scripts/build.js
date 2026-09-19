@@ -143,9 +143,17 @@ export async function build(targetName = process.env.BUILD_TARGET || 'local') {
   }
   await cp(path.join(SRC, 'assets/js'), path.join(DIST, 'assets/js'), { recursive: true });
   // Turntable frames are final web files (npm run stills); copied as-is.
-  const turntable = path.join(SRC, 'assets/turntable');
-  const turntableFrames = existsSync(turntable) ? (await readdir(path.join(turntable, '720'))).length : 0;
-  if (turntableFrames) await cp(turntable, path.join(DIST, 'assets/turntable'), { recursive: true });
+  // Manifest: { object: { frames, widths: [largest, …] } }.
+  const turntableDir = path.join(SRC, 'assets/turntable');
+  const turntable = {};
+  if (existsSync(turntableDir)) {
+    for (const object of await readdir(turntableDir)) {
+      const widths = (await readdir(path.join(turntableDir, object))).map(Number).sort((a, b) => b - a);
+      const frames = (await readdir(path.join(turntableDir, object, String(widths[0])))).length;
+      turntable[object] = { frames, widths };
+    }
+    await cp(turntableDir, path.join(DIST, 'assets/turntable'), { recursive: true });
+  }
 
   const css = await buildCss(base);
   const layout = await readFile(path.join(SRC, 'layouts/base.html'), 'utf8');
@@ -155,7 +163,26 @@ export async function build(targetName = process.env.BUILD_TARGET || 'local') {
   const schemaJson = JSON.stringify(shared.schema).replace(/</g, '\\u003c');
   const year = new Date().getFullYear();
 
-  for (const page of pages) {
+  // Hero kit items get their still and turntable data attached by id.
+  const withKit = (page) => {
+    if (!page.hero?.kit) return page;
+    const kit = page.hero.kit.map((item) => {
+      const still = img[`kit-${item.id}`];
+      if (!still) throw new Error(`content/${page.file}: no still src/assets/img/src/kit-${item.id}.png`);
+      const t = turntable[item.id];
+      return {
+        ...item,
+        still,
+        frames: t ? t.frames : 0,
+        widths: t ? t.widths.join(',') : '',
+        path: `${base}/assets/turntable/${item.id}`,
+      };
+    });
+    return { ...page, hero: { ...page.hero, kit } };
+  };
+
+  for (const rawPage of pages) {
+    const page = withKit(rawPage);
     const tpl = templates[page.template];
     if (tpl === undefined) throw new Error(`content/${page.file}: no template src/pages/${page.template}.html`);
     const ctx = {
@@ -166,7 +193,6 @@ export async function build(targetName = process.env.BUILD_TARGET || 'local') {
       year,
       css,
       schemaJson,
-      turntableFrames,
       noindex: target.noindex,
       canonical: shared.site.url + (page.route === '/404.html' ? '/' : page.route),
       fullTitle: `${page.title} ${shared.site.titleSuffix}`,

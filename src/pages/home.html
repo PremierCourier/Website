@@ -10,13 +10,16 @@
       </div>
     </div>
     <div class="hero__stage">
-      <div class="hero__turntable"{{#if turntableFrames}} data-turntable data-frames="{{ turntableFrames }}" data-path="{{ base }}/assets/turntable"{{/if}}>
-        <picture data-hero-still>
-          <source type="image/avif" srcset="{{ img.cooler-hero.avif }}">
-          <source type="image/webp" srcset="{{ img.cooler-hero.webp }}">
-          <img src="{{ img.cooler-hero.fallback }}" alt="{{ page.hero.coolerAlt }}" width="{{ img.cooler-hero.width }}" height="{{ img.cooler-hero.height }}" fetchpriority="low" decoding="async">
-        </picture>
-        {{#if turntableFrames}}<canvas class="hero__canvas" aria-hidden="true"></canvas>{{/if}}
+      <div class="hero__kit" data-kit{{#if page.hero.flash}} data-flash{{/if}}>
+        {{#each page.hero.kit}}<div class="hero__item" data-kit-item data-id="{{ id }}" data-depth="{{ depth }}" data-drift-x="{{ driftX }}" data-drift-y="{{ driftY }}" data-turn="{{ turn }}" data-phase="{{ phase }}"{{#if frames}} data-frames="{{ frames }}" data-widths="{{ widths }}" data-path="{{ path }}"{{/if}} style="--x:{{ x }}%;--y:{{ y }}%;--size:{{ size }}%;--z:{{ z }}">
+          <picture data-hero-still>
+            <source type="image/avif" srcset="{{ still.avif }}">
+            <source type="image/webp" srcset="{{ still.webp }}">
+            <img src="{{ still.fallback }}" alt="{{ alt }}" width="{{ still.width }}" height="{{ still.height }}" loading="lazy" fetchpriority="low" decoding="async">
+          </picture>
+          {{#if frames}}<canvas class="hero__canvas" aria-hidden="true"></canvas>{{/if}}
+        </div>
+        {{/each}}
       </div>
     </div>
   </div>

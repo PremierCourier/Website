@@ -377,7 +377,7 @@ The brand’s world is the Arizona road between a facility and a lab — high-de
 
 - Futuristic tracking dashboards, GPS map overlays, or ‘tech’ imagery — the capability is not established and the aesthetic is off-brand.
 
-- Cartoon illustrations, emoji-heavy designs, and generic or abstract 3D renders. (v1.1: 3D renders of Premier Courier's own objects are allowed — the sealed, unlabeled blue transport cooler with the P mark, and a relief map of the five counties.)
+- Cartoon illustrations, emoji-heavy designs, and generic or abstract 3D renders. (v1.1: 3D renders of Premier Courier's own objects are allowed — the sealed, unlabeled blue transport cooler with the P mark; sealed, empty, unlabeled specimen tubes; a closed document envelope; a wrapped sterile instrument pack; and a relief map of the five counties.)
 
 - Unsplash-style generic photography as a permanent solution. Acceptable as a placeholder until real photography exists.
 
