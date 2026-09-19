@@ -15,7 +15,7 @@ Read this file fully before writing code. `@docs/brand-guide-internal.md` and `@
 
 ## Stack
 
-- Node 20+, no framework. Plain HTML templates + CSS + minimal vanilla JS (nav toggle, form submit). No React, no Tailwind, no client-side routing, no animation libraries.
+- Node 20+, no framework. Plain HTML templates + CSS + minimal vanilla JS (nav toggle, form submit, scroll reveals, hero frame scrub). No React, no Tailwind, no client-side routing, no animation libraries.
 - Build: `scripts/build.js` — renders `src/pages/*.html` through `src/layouts/base.html`, injects `content/*.json`, copies `src/assets/`, optimizes images (`sharp`), strips EXIF, emits `sitemap.xml`, `robots.txt`, `llms.txt`, `404.html`, `CNAME`.
 - Page status: every page's content JSON carries `"status": "proposed"` or `"status": "approved"`. `npm run build` builds every page; the production deploy refuses to publish if any page is not `approved`. Staging publishes proposed pages so Alanna can review them.
 - Output: `dist/`. Committed by CI only.
@@ -35,6 +35,7 @@ npm run build      # clean build to dist/ (BUILD_TARGET=local|staging|production
 npm run audit      # fails on forbidden strings, missing alt text, EXIF, broken internal links, missing meta
                    # (matching rules: docs/content-rules.md → Forbidden strings)
 npm run lighthouse # runs against dist/; fails under Performance 95 / SEO 100 / Accessibility 95 on mobile
+npm run stills     # publishes approved hero frames from design/ into src/ (strips metadata)
 npm run deploy:staging
 npm run deploy     # requires APPROVED=1 env var; refuses otherwise
                    # deploys need DEPLOY_REMOTE (git URL); CI sets it — see .github/workflows/
@@ -46,11 +47,12 @@ npm run deploy     # requires APPROVED=1 env var; refuses otherwise
 content/          copy as JSON, one file per page + shared.json (phone, email, hours, counties)
 src/layouts/      base.html (header, fixed phone element, mobile bottom bar, footer, schema)
 src/pages/        one template per route (see Pages)
-src/partials/     cta-bar, service-card, area-list, testimonial, how-we-handle
+src/partials/     cta-bar, service-card, area-list, testimonial, how-we-handle, picture
 src/assets/css/   tokens.css, base.css, components.css — tokens.css is the only place colors/fonts are defined
 src/assets/img/   originals in img/src/, never committed larger than 4 MB, never with EXIF
-src/assets/js/    nav.js, quote-form.js
-scripts/          build.js, audit.js, images.js
+src/assets/js/    nav.js, motion.js (reveals), hero.js (frame scrub), quote-form.js
+scripts/          build.js, audit.js, images.js, stills.js, dev.js, deploy.js, lighthouse.js, lib/
+design/           frame production sources (outside the build; see the 3D section)
 functions/quote/  Azure Function (separate deploy; see functions/quote/README.md)
 docs/             brand-guide-internal.md, content-rules.md, dns-cutover.md
 ```
@@ -76,7 +78,7 @@ Every page: fixed phone element in header (desktop) and bottom bar with "(928) 5
 
 ## Design direction
 
-Reference feel: superpower.com (Daybreak Studio) — white canvas, one type family at heavy weights, large left-aligned headlines in a centered column, full-bleed photography, one accent, generous space, no UI gradients, a 3D hero object, scroll-driven reveals, and dark bands that break the page. All of it is in scope, built the way Daybreak shipped it (CSS-first, WebGL only where it earns it), never the way they prototyped it.
+Reference feel: superpower.com (Daybreak Studio) — white canvas, one type family at heavy weights, large left-aligned headlines in a centered column, full-bleed photography, one accent, generous space, no UI gradients, a 3D hero object, scroll-driven reveals, and dark bands that break the page. All of it is in scope, delivered as scroll-scrubbed frame sequences and CSS — no 3D runtime.
 
 - Type: Inter only (self-hosted woff2, weights 400/500/700/800). Headlines 700–800, tight leading, up to 72px on desktop. Body 400 at 17–18px. No serif on the web.
 - Color (tokens.css): `--pc-primary #178EC7`, `--pc-deep #0A5A96`, `--pc-navy #0B3556`, `--pc-sky #6BADDF`, `--pc-steel #608CBE`, `--pc-copper #C0632B`, `--pc-bg #FFFFFF`, `--pc-bg-alt #F3F7FB`, `--pc-text #0B3556`, `--pc-text-2 #5A6B7C`, `--pc-border #D9E3EC`.
@@ -84,21 +86,21 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 - Dark bands: Navy Ink `#0B3556` background with white type, used for the how-we-handle-it section on home and the coverage section. Maximum two dark bands per page. Copper still limited to one element.
 - Photography: golden-hour Arizona light, full-bleed, real people and real vehicles from the shoot. Before the shoot: the 3D hero object on white, no stock.
 
-### 3D
+### 3D (scroll-scrubbed frame sequences — no 3D runtime)
 
-- Subjects are Premier Courier's own objects, nothing generic: (1) the home hero **kit** — what Premier Courier carries, floating in layered depth on white: the sealed blue transport cooler with the P mark (centre), sealed specimen collection tubes (empty, frosted, unlabeled, brand-blue caps), a closed document envelope with a P-mark seal, and a blue-wrapped sterile instrument pack with plain tape; (2) a relief map of the five counties in the brand blues with route lines — coverage band on home and area pages. No people, no vehicles, no abstract "tech" geometry, nothing labeled.
-- Ship CSS-first: rendered stills, no WebGL. Each kit object is a **turntable sequence** (cooler 60 frames at 720/480 px; tubes, envelope, sterile pack 36 frames at 480/320 px; AVIF) drawn to a canvas by `src/assets/js/hero.js`, so the objects genuinely turn. Stills paint first and stay for reduced motion, Save-Data, and no-AVIF browsers; frame 0 matches each still. Frames load after `load` via `requestIdleCallback` (cooler first) and do not count toward LCP or page weight. Source: `design/kit.py` (see `design/README.md`).
-- WebGL (Three.js, r160+, tree-shaken, ≤250 KB gzipped for lib + scene) only for the home hero cooler, only on desktop ≥1024px, only when `prefers-reduced-motion: no-preference`, loaded after `load` with `requestIdleCallback`. Mobile, tablet, and reduced-motion get a rendered still (AVIF/WebP) in the same layout. The still is also the poster that paints before WebGL initializes, so the hero never flashes empty.
-- Renders are produced once in Blender (source `.blend` files in `design/`, not in `src/`), exported as stills and, for the WebGL path, a single glTF ≤2 MB with a 1K baked texture. No runtime asset generation.
-- Hero LCP is the headline, not the scene. Headline, phone element, and quote button paint before any 3D asset is requested. Budget: hero scene must not push LCP past 1.8s on mobile 4G or 1.2s on desktop.
-- Interaction: as the hero scrolls away the kit spreads apart, every object turns (the cooler a full circle, ending P mark forward) and the cooler scales up — the page scrolls normally, nothing pins. On desktop the layers shift at their own depth and turn with the pointer (±45°). At rest each object bobs and drifts. No click-to-spin, no scroll-jacking, no camera flythroughs.
-- Flash extras (`"flash": true` in `content/home.json`, one switch): fly-in assembly on load, a glint sweeping the cooler, a Sky Blue glow behind the kit that swells on scroll. These are **brand-guide exceptions** ("never flashy", "no UI gradients") awaiting Alanna's approval; if she declines, remove the flag.
+- Technique: pre-rendered frame sequence drawn to a `<canvas>`, frame index driven by scroll position within the hero (the Apple AirPods pattern). No Three.js, no WebGL, no glTF, no Blender in the build.
+- Subjects are Premier Courier's own objects, nothing generic: (1) the sealed blue transport cooler with the P mark — home hero: closed on white at scroll 0, opens into its layers (lid, insulated body, cold packs, one sealed plain inner pouch) mid-hero, closes again by the time the phone element is reached; (2) a relief map of the five counties in the brand blues with route lines — coverage band: flat at entry, rises into relief over a short scroll. No people, no vehicles, no abstract "tech" geometry.
+- Frame production (outside the repo, in `design/`): AI-generate the closed object and the exploded end frame as stills; morph the two into one clip; export frames. Generated objects are permitted (the council rule bars generated people only). The P mark is never generated: generate the cooler with a blank blue badge area and composite the real mark onto every frame in the export step. Exploded contents carry no labels, barcodes, tubes, forms, or text.
+- Approval gate: Alanna approves the closed still and the exploded end frame before the morph is produced. No frames enter `src/` until both are approved.
+- Budget: desktop ≤72 frames at 1440px, AVIF with WebP fallback, total ≤3.5 MB; mobile/tablet ≤24 frames at 720px, total ≤900 KB; frames are fetched after the headline, phone element, and quote button have painted, and only when the hero is in view. First frame is inlined as the poster. `prefers-reduced-motion: reduce` shows the closed-cooler still only.
+- Scroll stays native: the page never pins, snaps, or hijacks scroll; frame index is a pure function of scroll offset. Canvas is `aria-hidden`; the headline carries the meaning.
+- Hero LCP is the headline, not the canvas. Budget: hero must not push LCP past 1.8s on mobile 4G or 1.2s on desktop.
 
 ### Motion
 
 - Scroll reveals via `IntersectionObserver` + CSS transitions: sections fade and translate up 16px over 400–600ms, once, on entry. Headlines may stagger by word (60ms). Nothing delays reading: text is visible at ≥0.6 opacity before the transition starts. Elements are dimmed only after the visitor's first scroll and only while just below the fold, so a page that is loaded but never scrolled (audits, crawlers, print) is never dimmed.
 - No scroll-jacking, no horizontal scroll sections, no sticky-pinned storytelling.
-- `prefers-reduced-motion: reduce` disables reveals, parallax, and WebGL; everything renders in its final state.
+- `prefers-reduced-motion: reduce` disables reveals, parallax, and frame scrubbing; everything renders in its final state.
 - Layout: centered column, 1040px content max, 680px reading max, 8px radius everywhere, shadow `0 2px 12px rgba(11,53,86,0.08)`, ≥60% white space per viewport outside dark bands.
 - Icons: structural only (phone, clock, map pin). Maximum one decorative icon per page; zero preferred.
 
@@ -119,7 +121,7 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 - `llms.txt` at root — content from `content/llms.txt` (already approved).
 - Images: `<picture>` with AVIF/WebP/JPEG, explicit width/height, `loading="lazy"` below the fold, alt text required (audit fails without it).
 - No third-party scripts. No analytics until Alanna approves a provider; if approved, privacy-respecting only (Plausible or similar), no cookies.
-- Target: LCP < 1.8s on mobile 4G, < 1.2s desktop; total page weight < 450 KB excluding hero stills; WebGL bundle loads after `load` and does not count toward LCP.
+- Target: LCP < 1.8s on mobile 4G, < 1.2s desktop; total page weight < 450 KB excluding hero stills; hero frame sequence loads after the headline paints and does not count toward LCP.
 
 ## Quote form
 
@@ -150,8 +152,7 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 - Founding year: unconfirmed. Leave out of copy and schema until Alanna confirms.
 - Whether drivers receive formal HIPAA training: unconfirmed. Use "HIPAA-compliant handling" only.
 - Alanna's mobile number for SMS: set in Azure Function settings by Hemang; never in repo.
-- Photoshoot assets: not yet available. Build with the 3D cooler hero and rendered stills; photography lands on service and about pages when delivered.
+- Photoshoot assets: not yet available. Build with the cooler frame-sequence hero; photography lands on service and about pages when delivered.
 - Design changes not yet approved by Alanna: Inter-only type (no serif) and the 3D hero. They are presented to her on staging as proposals (brand guide v1.1).
-- P mark on the cooler decal and envelope seal: currently the mark cropped from the official logo PNG (40×59 px, slightly soft). A vector trace replaces it once Alanna approves one.
-- Hero flash extras (fly-in, glint, glow): brand-guide exceptions, pending Alanna's approval.
-- 3D renders: the hero is built now with a flat placeholder so layout and LCP work can proceed; `design/` Blender sources replace it. Cooler design must match the brand guide (blue, P mark, sealed, unlabeled) and is approved by Alanna as a still before any WebGL work starts.
+- 3D frames: produced in `design/` (outside `src/`) per the 3D section. Cooler must match the brand guide (blue, P mark composited, sealed, unlabeled); Alanna approves the closed and exploded stills before the morph is made. Until then the hero uses a flat placeholder in the final layout.
+- P mark source for compositing: the only mark available is cropped from the official logo PNG (40×59 px). At 1440px frames the badge is far larger than that, so the composite needs a vector trace or a high-resolution logo file, approved by Alanna.
