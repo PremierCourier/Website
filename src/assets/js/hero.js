@@ -3,7 +3,8 @@
 // Frame index and position are pure functions of scroll offset; scrolling itself is never
 // pinned, snapped, or slowed.
 //   Laptops (≥1024 px): once the headline has scrolled away, the cooler slides to the middle
-//   of the screen and grows as it opens, stays centred while it closes, then scrolls away.
+//   of the screen and grows to fill its height as it opens, then zooms back out and rises
+//   as it closes, and scrolls away.
 //   Phones: it opens and closes while drifting down at 75% of scroll speed.
 // The room it moves through is reserved under the hero, so nothing below is overlapped.
 //
@@ -24,7 +25,10 @@
   }
 
   var DRIFT = 0.75;   // phones: share of scroll the cooler drifts down while it plays
-  var GROW = 0.12;    // laptops: how much the cooler grows once centered
+  var CENTRE_MARGIN = 24;   // laptops: px kept clear above and below the centred cooler
+  var MAX_SCALE = 1.8;      // laptops: never grow past this, however tall the screen
+  var CLOSE_RISE = 0.6;     // laptops: while closing, the cooler rises at this share of scroll
+  var CLOSE_KEEP = 0.25;    // laptops: share of the growth kept once closed (zooms back out)
   var canvas = el.querySelector('canvas');
   var ctx = canvas.getContext('2d');
   var set = window.innerWidth >= 1024 ? 'desktop' : 'mobile';
@@ -52,10 +56,20 @@
     var rect = el.getBoundingClientRect();
     var vh = window.innerHeight;
     var docTop = rect.top + window.scrollY;
-    // Laptops draw at the grown size, so the cooler stays sharp once it is centred.
-    var dpr = Math.min(window.devicePixelRatio || 1, 2) * (set === 'desktop' ? 1 + GROW : 1);
-    canvas.width = Math.round(rect.width * dpr);
-    canvas.height = Math.round(rect.height * dpr);
+    var header = document.querySelector('.site-header');
+    var headerH = header ? header.offsetHeight : 0;
+
+    // Laptops: once centred, the cooler grows to fill the height below the header.
+    var grow = 1;
+    if (set === 'desktop') {
+      grow = Math.min(MAX_SCALE, (vh - headerH - 2 * CENTRE_MARGIN) / rect.height, (window.innerWidth * 0.7) / rect.width);
+      grow = Math.max(1, grow);
+    }
+    // Draw at the grown size so it stays sharp, but never above the frames' own resolution.
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var frameW = Number(el.dataset[set + 'Width']) || Infinity;
+    canvas.width = Math.round(Math.min(rect.width * dpr * grow, frameW));
+    canvas.height = Math.round(canvas.width * (rect.height / rect.width));
     drawn = null;
 
     if (set === 'mobile') {
@@ -67,15 +81,13 @@
 
     // Laptops: once the headline has scrolled away, the cooler slides to the middle of the
     // screen and grows as it opens, stays centred while it closes, then scrolls away.
-    var header = document.querySelector('.site-header');
-    var headerH = header ? header.offsetHeight : 0;
     var copy = document.querySelector('.hero__copy');
     var copyBottom = copy ? copy.getBoundingClientRect().bottom + window.scrollY : docTop + rect.height;
     var centreY = headerH + (vh - headerH) / 2;                   // viewport y of the middle
     var moveEnd = Math.max(copyBottom - headerH - 16, vh * 0.3);  // text is gone by here
-    var moveStart = Math.max(0, moveEnd - vh * 0.35);
-    var peak = moveEnd + vh * 0.12;                               // fully open, centred
-    var span = peak + vh * 0.6;                                   // closed again
+    var moveStart = Math.max(0, moveEnd - vh * 0.25);
+    var peak = moveEnd + vh * 0.05;                               // fully open, centred
+    var span = peak + vh * 0.3;                                   // closed again
     var cx0 = rect.left + rect.width / 2;
     var cy0 = docTop + rect.height / 2;                           // page y of its centre
     geometry = {
@@ -87,11 +99,14 @@
       dx: window.innerWidth / 2 - cx0,
       centreY: centreY,
       cy0: cy0,
+      grow: grow,
     };
     // Reserve exactly the room the cooler travels through, so it never overlaps the next
     // section. The content below is off screen at this point, so nothing visibly shifts.
-    var endDrift = centreY - cy0 + span;
-    stage.style.paddingBottom = Math.ceil(endDrift + rect.height * GROW / 2 + 32) + 'px';
+    var endY = centreY - CLOSE_RISE * (span - peak);
+    var endDrift = endY - (cy0 - span);
+    var endScale = 1 + (grow - 1) * CLOSE_KEEP;
+    stage.style.paddingBottom = Math.ceil(endDrift + rect.height * (endScale - 1) / 2 + 32) + 'px';
   }
 
   function nearest(i) {
@@ -119,7 +134,14 @@
       var natural = g.cy0 - s;                                    // where the layout puts it
       var drifting = natural + s * DRIFT;                         // phones' drift, before moving
       var y = drifting + (g.centreY - drifting) * m;              // …blending to the middle
-      place(g.dx * m, y - natural, 1 + GROW * m);
+      var scale = 1 + (g.grow - 1) * m;                           // grows as it arrives
+      if (s > g.peak) {
+        // Closing: zoom back out and start rising, so it is already leaving when it shuts.
+        var c = smooth((s - g.peak) / (g.span - g.peak));
+        y = g.centreY - CLOSE_RISE * (s - g.peak);
+        scale = 1 + (g.grow - 1) * (1 - (1 - CLOSE_KEEP) * c);
+      }
+      place(g.dx * m, y - natural, scale);
     }
     var img = nearest(Math.round(open * (N - 1)));
     if (img && img !== drawn) {

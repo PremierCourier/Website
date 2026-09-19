@@ -12,6 +12,7 @@
     <div class="hero__stage">
       {{#if sequence}}<div class="hero__sequence" data-sequence data-path="{{ sequence.path }}"
            data-desktop-frames="{{ sequence.desktop.frames }}" data-mobile-frames="{{ sequence.mobile.frames }}"
+           data-desktop-width="{{ sequence.desktop.width }}" data-mobile-width="{{ sequence.mobile.width }}"
            style="aspect-ratio: {{ sequence.desktop.width }} / {{ sequence.desktop.height }}">
         <picture>
           <source type="image/avif" srcset="{{{ sequence.posterAvif }}}">
