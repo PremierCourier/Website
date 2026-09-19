@@ -166,22 +166,11 @@
 .hero__object {
   position: relative;
   width: 100%;
-  max-width: 440px;
+  max-width: 460px;
+  height: auto;
   margin: 0 auto;
   transform: rotateX(var(--rx)) rotateY(var(--ry));
   transition: transform 600ms var(--pc-ease);
-}
-
-.hero__shadow {
-  position: absolute;
-  left: 18%;
-  right: 18%;
-  bottom: 12%;
-  height: 8%;
-  border-radius: 50%;
-  background: var(--pc-navy);
-  opacity: 0.12;
-  filter: blur(14px);
 }
 
 /* ---------- Cards ---------- */

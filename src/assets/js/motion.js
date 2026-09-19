@@ -36,8 +36,8 @@
   if (!stage || reduce) return;
 
   var desktop = window.matchMedia('(min-width: 1024px) and (pointer: fine)');
-  var MAX = 6;          // degrees of pointer tilt
-  var IDLE = 8;         // degrees of idle turn
+  var MAX = 3;          // degrees of pointer tilt (a still reads as flat past ~4°)
+  var IDLE = 2.5;       // degrees of idle sway; the real turn arrives with WebGL
   var PERIOD = 14000;   // ms per idle cycle
   var target = { x: 0, y: 0 };
   var visible = true;

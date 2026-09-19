@@ -10,8 +10,11 @@
       </div>
     </div>
     <div class="hero__stage" data-parallax>
-      <div class="hero__shadow" aria-hidden="true"></div>
-      <img class="hero__object" src="{{ img.cooler-placeholder.svg }}" alt="{{ page.hero.coolerAlt }}" width="480" height="480" fetchpriority="low" decoding="async">
+      <picture data-hero-still>
+        <source type="image/avif" srcset="{{ img.cooler-hero.avif }}">
+        <source type="image/webp" srcset="{{ img.cooler-hero.webp }}">
+        <img class="hero__object" src="{{ img.cooler-hero.fallback }}" alt="{{ page.hero.coolerAlt }}" width="{{ img.cooler-hero.width }}" height="{{ img.cooler-hero.height }}" fetchpriority="low" decoding="async">
+      </picture>
     </div>
   </div>
 </section>

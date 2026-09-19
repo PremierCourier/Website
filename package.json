@@ -13,7 +13,8 @@
     "audit": "node scripts/audit.js",
     "lighthouse": "node scripts/lighthouse.js",
     "deploy:staging": "node scripts/deploy.js staging",
-    "deploy": "node scripts/deploy.js production"
+    "deploy": "node scripts/deploy.js production",
+    "stills": "node scripts/stills.js"
   },
   "devDependencies": {
     "@fontsource/inter": "^5.3.0",

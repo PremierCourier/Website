@@ -13,3 +13,5 @@ desktop.ini
 .build-info.json
 .lighthouse/
 .claude/
+design/renders/
+*.blend1

@@ -104,7 +104,7 @@ export async function audit() {
 
     if (IMAGE_EXT.has(ext)) {
       const meta = await sharp(file).metadata();
-      if (meta.exif || meta.xmp || meta.iptc) fail(r, 'image carries EXIF/XMP/IPTC metadata');
+      if (meta.exif || meta.xmp || meta.iptc || meta.comments?.length) fail(r, 'image carries metadata (EXIF/XMP/IPTC/text chunks)');
     }
   }
 
@@ -116,7 +116,7 @@ export async function audit() {
       if (!IMAGE_EXT.has(path.extname(file).toLowerCase())) continue;
       if ((await stat(file)).size > SOURCE_IMAGE_LIMIT) fail(r, 'source image larger than 4 MB');
       const meta = await sharp(file).metadata();
-      if (meta.exif || meta.xmp || meta.iptc) fail(r, 'source image carries EXIF/XMP/IPTC metadata — strip before committing');
+      if (meta.exif || meta.xmp || meta.iptc || meta.comments?.length) fail(r, 'source image carries metadata — strip before committing (npm run stills does this for renders)');
     }
   }
 
