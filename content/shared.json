@@ -40,7 +40,7 @@
   "nav": [
     {
       "label": "Services",
-      "route": "/services/specimen-and-lab-transport/"
+      "route": "/services/"
     },
     {
       "label": "How We Handle It",
@@ -116,6 +116,10 @@
       {
         "label": "Contact",
         "route": "/contact/"
+      },
+      {
+        "label": "Privacy",
+        "route": "/privacy/"
       }
     ]
   },

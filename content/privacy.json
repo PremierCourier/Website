@@ -1,0 +1,35 @@
+{
+  "route": "/privacy/",
+  "template": "prose",
+  "status": "proposed",
+  "title": "Privacy",
+  "description": "What the Premier Courier website collects when you request a quote, who receives it, and what it doesn't do: no cookies, no analytics, nothing sold.",
+  "eyebrow": "Privacy",
+  "heading": "Privacy",
+  "lead": "This site collects only what you type into the quote form, and only to answer your request.",
+  "sections": [
+    {
+      "heading": "What the quote form collects",
+      "paragraphs": [
+        "Pickup and drop-off addresses, what is being sent, when it's needed, your name, your phone number, and — if you choose to give it — your email address.",
+        "Please don't include patient names or health information in the form."
+      ]
+    },
+    {
+      "heading": "Who receives it",
+      "paragraphs": [
+        "Your request goes to Alanna Hanigan, the owner of Premier Courier, by email and by text message, so she can call you back. It is delivered through the email and text-message services that carry those messages. It is not stored on this website."
+      ]
+    },
+    {
+      "heading": "What we don't do",
+      "paragraphs": [
+        "We don't sell or share your information. This site uses no cookies, no analytics, no advertising trackers, and no third-party scripts."
+      ]
+    }
+  ],
+  "contact": {
+    "heading": "Questions",
+    "body": "Ask us anything about your information:"
+  }
+}

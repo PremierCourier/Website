@@ -3,6 +3,7 @@
 (function () {
   var form = document.querySelector('.quote-form');
   if (!form) return;
+  var loadedAt = Date.now();   // the function treats submits under 3 s as automated
   var ok = document.querySelector('.form-result--ok');
   var fail = document.querySelector('.form-result--fail');
   var when = form.elements.when;
@@ -11,10 +12,14 @@
   var submit = form.querySelector('[type="submit"]');
   var submitLabel = submit.textContent;
 
+  var nowNote = form.querySelector('[data-now-note]');
+
   function syncDate() {
     var scheduled = when.value === 'scheduled';
     dateField.hidden = !scheduled;
     date.required = scheduled;
+    // "Now": point at the phone — faster than a form and a callback.
+    if (nowNote) nowNote.hidden = when.value !== 'now';
   }
 
   var params = new URLSearchParams(location.search);
@@ -34,11 +39,19 @@
   syncDate();
   when.addEventListener('change', syncDate);
 
+  // aria-describedby may already point at a hint; add and remove only the error's id.
+  function describedBy(field, id, on) {
+    var ids = (field.getAttribute('aria-describedby') || '').split(/\s+/).filter(function (x) { return x && x !== id; });
+    if (on) ids.push(id);
+    if (ids.length) field.setAttribute('aria-describedby', ids.join(' '));
+    else field.removeAttribute('aria-describedby');
+  }
+
   function clearError(field) {
     field.removeAttribute('aria-invalid');
     var msg = document.getElementById(field.id + '-error');
     if (msg) msg.remove();
-    field.removeAttribute('aria-describedby');
+    describedBy(field, field.id + '-error', false);
   }
 
   function showError(field) {
@@ -48,7 +61,7 @@
     msg.className = 'field__error';
     msg.id = field.id + '-error';
     msg.textContent = form.dataset.required;
-    field.setAttribute('aria-describedby', msg.id);
+    describedBy(field, msg.id, true);
     field.parentNode.appendChild(msg);
   }
 
@@ -92,6 +105,7 @@
       data[k] = form.elements[k].value.trim();
     });
     if (data.when !== 'scheduled') delete data.date;
+    data.elapsed = Date.now() - loadedAt;
 
     submit.disabled = true;
     submit.textContent = form.dataset.sending;

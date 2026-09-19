@@ -95,3 +95,40 @@ export function createLimiter(limit = 5, windowMs = 10 * 60 * 1000) {
 export function parseForm(text) {
   return Object.fromEntries(new URLSearchParams(text));
 }
+
+/**
+ * The page reports how long it was open before submit (`elapsed`, ms — relative, so clock
+ * differences don't matter). People take seconds; scripts take milliseconds.
+ * Returns 'fast' (treat as spam), 'ok', or 'unknown' (no signal: a plain form post).
+ */
+export function timing(elapsed, minMs = 3000) {
+  const n = Number(elapsed);
+  if (elapsed === undefined || elapsed === null || elapsed === '' || !Number.isFinite(n)) return 'unknown';
+  return n < minMs ? 'fast' : 'ok';
+}
+
+/** Exact match against the configured origins; an absent Origin is never allowed. */
+export function originAllowed(origin, allowedCsv) {
+  if (!origin) return false;
+  return String(allowedCsv || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .includes(origin);
+}
+
+/** Counts per UTC day; `take()` returns false once `cap` is reached for the day. */
+export function createDailyCounter(cap) {
+  let day = '';
+  let count = 0;
+  return function take(now = Date.now()) {
+    const today = new Date(now).toISOString().slice(0, 10);
+    if (today !== day) {
+      day = today;
+      count = 0;
+    }
+    if (count >= cap) return false;
+    count += 1;
+    return true;
+  };
+}

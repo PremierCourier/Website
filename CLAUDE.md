@@ -63,6 +63,7 @@ docs/             brand-guide-internal.md, content-rules.md, dns-cutover.md, rev
 | Route | Template | Purpose |
 |---|---|---|
 | `/` | home | Positioning line, phone, who we serve grid, coverage, testimonials, CTA |
+| `/services/` | services | Overview of all services, medical first; the nav's "Services" link |
 | `/services/specimen-and-lab-transport/` | service | Specimens, blood products, platelets, lab pickups |
 | `/services/hospital-or-and-sterile-processing/` | service | Surgical trays, sterilized instruments, urgent supply runs |
 | `/services/pharmacy-delivery/` | service | Time-sensitive medications, discreet delivery |
@@ -73,6 +74,7 @@ docs/             brand-guide-internal.md, content-rules.md, dns-cutover.md, rev
 | `/about/` | about | Origin story (approved text only), Alanna in first person, drivers |
 | `/quote/` | quote | Short form: pickup, drop-off, what, when, name, phone. Posts to Function |
 | `/contact/` | contact | Phone, email, hours, mailing address |
+| `/privacy/` | prose | What the quote form collects, who receives it, no cookies/analytics (facts only; Alanna approves) |
 | `/404.html` | 404 | Phone number and link home |
 
 Every page: fixed phone element in header (desktop) and bottom bar with "(928) 533-3585 · Available 24/7" (mobile ≤768px). Medical services always listed before business services.
@@ -129,14 +131,15 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 ## Quote form
 
 - Fields: pickup address, drop-off address, what is being sent (select: specimens / trays or instruments / pharmaceuticals / documents / other), when (select: now / today / scheduled + date), name, phone, optional email. Nothing else.
-- Client-side: required-field checks only. Honeypot field. No CAPTCHA.
+- Client-side: required-field checks only. Honeypot field. No CAPTCHA. Under the addresses: "Please don't include patient names or health information." Choosing "Now" shows a call-us-first prompt; "Scheduled" explains recurring routes. The page sends how long it was open (`elapsed`) with the request.
 - `/quote/?when=scheduled` pre-selects "scheduled" (target of the "Set Up a Scheduled Route" CTA). Airport retrievals is a home-grid item only, with no service page.
 - Posts JSON to the Function URL from `content/shared.json`. Function sends email + SMS, returns 200; page shows "We'll call you shortly" with the phone number. On failure, show the phone number — the form is never the only path.
 - Function code, Twilio, and mail credentials live in `functions/quote/` and Azure settings. This site never holds secrets.
+- Abuse guards (Alanna is on call): allowed Origin required; honeypot or submit under 3 s → answered as success, nothing sent; plain form posts → email only; SMS capped per day (`SMS_DAILY_CAP`, default 20), email continues. SMS needs Twilio A2P 10DLC registration (or toll-free verification) before launch.
 
 ## Deploy and DNS
 
-- `staging` branch → workflow builds without `CNAME` and pushes `dist/` to the `pcaz-website-staging` repo's Pages site. Send Alanna the link; she reviews on her phone.
+- `staging` branch → workflow builds without `CNAME` and pushes `dist/` to the `pcaz-website-staging` repo's Pages site with an SSH deploy key owned by that repo (`STAGING_DEPLOY_KEY`; setup steps in `.github/workflows/staging.yml`) — never a personal access token. Send Alanna the link; she reviews on her phone.
 - `main` → `gh-pages` via GitHub Actions on push, only when `APPROVED=1` is set on the workflow dispatch.
 - DNS cutover steps and rollback in `docs/dns-cutover.md`. Do not touch Squarespace DNS until `main` is approved and `dist/` passes audit + lighthouse.
 - Keep the Squarespace site live and untouched until cutover completes and HTTPS is verified on the custom domain.

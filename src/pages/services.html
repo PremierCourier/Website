@@ -1,0 +1,33 @@
+<section class="section page-head">
+  <div class="container container--reading">
+    <p class="eyebrow">{{ page.eyebrow }}</p>
+    <h1 class="page-head__title">{{ page.heading }}</h1>
+    <p class="lead">{{ page.lead }}</p>
+    <div class="button-row">
+      {{#if exists./quote/}}<a class="button button--primary" href="{{ base }}/quote/">{{ cta.quote }}</a>{{/if}}
+      <a class="button button--secondary" href="tel:{{ phone.tel }}">Call {{ phone.display }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight" aria-labelledby="medical-heading">
+  <div class="container">
+    <h2 class="section__heading reveal" id="medical-heading">{{ page.medical.heading }}</h2>
+    <ul class="cards">
+      {{#each page.medical.items}}{{> service-card }}{{/each}}
+    </ul>
+  </div>
+</section>
+
+<section class="section section--alt" aria-labelledby="business-heading">
+  <div class="container">
+    <h2 class="section__heading reveal" id="business-heading">{{ page.business.heading }}</h2>
+    <ul class="cards">
+      {{#each page.business.items}}{{> service-card }}{{/each}}
+    </ul>
+  </div>
+</section>
+
+{{> how-we-handle handleBlock }}
+
+{{> cta-bar page.closing }}

@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+/* The hidden attribute always wins over component display rules (e.g. a grid form). */
+[hidden] {
+  display: none !important;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   scroll-padding-top: calc(var(--pc-header-h) + 16px);

@@ -1,0 +1,18 @@
+<section class="section page-head">
+  <div class="container container--reading">
+    <p class="eyebrow">{{ page.eyebrow }}</p>
+    <h1 class="page-head__title">{{ page.heading }}</h1>
+    <p class="lead">{{ page.lead }}</p>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container container--reading prose">
+    {{#each page.sections}}<h2>{{ heading }}</h2>
+    {{#each paragraphs}}<p>{{ this }}</p>
+    {{/each}}
+    {{/each}}
+    <h2>{{ page.contact.heading }}</h2>
+    <p>{{ page.contact.body }} <a href="mailto:{{ email }}">{{ email }}</a> · <a href="tel:{{ phone.tel }}">{{ phone.display }}</a></p>
+  </div>
+</section>

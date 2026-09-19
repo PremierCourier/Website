@@ -1,0 +1,53 @@
+{
+  "route": "/services/",
+  "template": "services",
+  "status": "proposed",
+  "title": "Services",
+  "description": "Specimen and lab transport, hospital and sterile processing runs, pharmacy delivery, clinic and dental delivery, and legal and financial documents — 24/7, including holidays.",
+  "eyebrow": "Services",
+  "heading": "Medical first. Business deliveries with the same care.",
+  "lead": "Premier Courier Services is the trusted medical and business courier for Central and Northern Arizona — on time, every time, 24/7, including holidays.",
+  "medical": {
+    "heading": "Medical",
+    "items": [
+      {
+        "name": "Specimen and lab transport",
+        "line": "Specimens, blood products, platelets, and lab pickups on the lab’s schedule.",
+        "route": "/services/specimen-and-lab-transport/"
+      },
+      {
+        "name": "Hospital, OR, and sterile processing",
+        "line": "Surgical trays, sterilized instruments, and urgent surgical supply runs, day or night.",
+        "route": "/services/hospital-or-and-sterile-processing/"
+      },
+      {
+        "name": "Pharmacy delivery",
+        "line": "Prompt, discreet delivery of time-sensitive medications and pharmaceuticals.",
+        "route": "/services/pharmacy-delivery/"
+      },
+      {
+        "name": "Clinic and dental delivery",
+        "line": "Specimens, records, supplies, impressions, and lab work on your office’s schedule.",
+        "route": "/services/clinic-and-dental-delivery/"
+      }
+    ]
+  },
+  "business": {
+    "heading": "Business",
+    "items": [
+      {
+        "name": "Legal and financial documents",
+        "line": "Same-day, discreet delivery of filings, legal documents, and financial documents.",
+        "route": "/services/legal-and-financial-documents/"
+      },
+      {
+        "name": "Airport retrievals and special requests",
+        "line": "If it needs to get there fast and handled right, we'll make it happen.",
+        "route": "/quote/"
+      }
+    ]
+  },
+  "closing": {
+    "heading": "Scheduled routes that run without reminders."
+  }
+}

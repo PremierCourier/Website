@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { validate, smsText, emailText, createLimiter, parseForm } from '../src/lib.js';
+import { validate, smsText, emailText, createLimiter, parseForm, timing, originAllowed, createDailyCounter } from '../src/lib.js';
 
 const good = {
   pickup: '123 Main St, Prescott',
@@ -69,4 +69,31 @@ test('limiter allows five per window per key', () => {
 
 test('parses a plain form post', () => {
   assert.deepEqual(parseForm('name=Pat&phone=555'), { name: 'Pat', phone: '555' });
+});
+
+test('timing: fast, ok, or unknown', () => {
+  assert.equal(timing(800), 'fast');
+  assert.equal(timing('2999'), 'fast');
+  assert.equal(timing(4200), 'ok');
+  assert.equal(timing(undefined), 'unknown');
+  assert.equal(timing(''), 'unknown');
+  assert.equal(timing('abc'), 'unknown');
+});
+
+test('origin must match exactly, and must be present', () => {
+  const list = 'https://www.premiercourieraz.com, https://premiercourier-az.github.io';
+  assert.equal(originAllowed('https://www.premiercourieraz.com', list), true);
+  assert.equal(originAllowed('https://premiercourier-az.github.io', list), true);
+  assert.equal(originAllowed('https://evil.example', list), false);
+  assert.equal(originAllowed('https://www.premiercourieraz.com.evil.example', list), false);
+  assert.equal(originAllowed('', list), false);
+});
+
+test('daily counter caps per UTC day and resets', () => {
+  const take = createDailyCounter(2);
+  const d1 = Date.UTC(2026, 8, 19, 10);
+  assert.equal(take(d1), true);
+  assert.equal(take(d1 + 1), true);
+  assert.equal(take(d1 + 2), false);
+  assert.equal(take(Date.UTC(2026, 8, 20, 0, 1)), true);
 });

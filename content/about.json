@@ -5,8 +5,8 @@
   "title": "About",
   "description": "Founded by Travis Womack and owned and operated by Alanna Hanigan since 2014. Meet the owner and the drivers behind Premier Courier.",
   "eyebrow": "About",
-  "heading": "His legacy lives on in everything we do.",
-  "lead": "Serving Central and Northern Arizona since 2014 — and built on a legacy that started long before.",
+  "heading": "Serving Central and Northern Arizona since 2014 — and built on a legacy that started long before.",
+  "lead": "The owner answers the phone directly — there is no answering service.",
   "origin": {
     "heading": "Our story",
     "paragraphs": [
@@ -28,12 +28,31 @@
     "heading": "Our drivers",
     "lead": "Friendly, meticulous drivers your staff will know by name.",
     "list": [
-      { "name": "Johnna", "photoId": null, "initial": "J" },
-      { "name": "Dave", "photoId": "driver-dave" },
-      { "name": "Sherry", "photoId": "driver-sherry" },
-      { "name": "Sergio", "photoId": "driver-sergio" },
-      { "name": "Brandon", "photoId": "driver-brandon" },
-      { "name": "Zaine", "photoId": "driver-zaine" }
+      {
+        "name": "Johnna",
+        "photoId": null,
+        "initial": "J"
+      },
+      {
+        "name": "Dave",
+        "photoId": "driver-dave"
+      },
+      {
+        "name": "Sherry",
+        "photoId": "driver-sherry"
+      },
+      {
+        "name": "Sergio",
+        "photoId": "driver-sergio"
+      },
+      {
+        "name": "Brandon",
+        "photoId": "driver-brandon"
+      },
+      {
+        "name": "Zaine",
+        "photoId": "driver-zaine"
+      }
     ]
   },
   "closing": {

@@ -1,5 +1,15 @@
 name: Deploy staging
 
+# Pushes the staging build to the pcaz-website-staging repo with an SSH deploy key that
+# belongs to that repo — not a personal access token, so no person's account is attached
+# to deploys and nothing breaks when someone leaves.
+#
+# One-time setup:
+#   1. ssh-keygen -t ed25519 -C "pcaz staging deploy" -f staging_deploy -N ""
+#   2. pcaz-website-staging → Settings → Deploy keys → add staging_deploy.pub, allow write.
+#   3. pcaz-website → Settings → Secrets → Actions → STAGING_DEPLOY_KEY = contents of staging_deploy.
+#   4. Delete both key files locally.
+
 on:
   push:
     branches: [staging]
@@ -18,7 +28,16 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - name: Load the staging deploy key
+        env:
+          STAGING_DEPLOY_KEY: ${{ secrets.STAGING_DEPLOY_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$STAGING_DEPLOY_KEY" > ~/.ssh/staging_deploy
+          chmod 600 ~/.ssh/staging_deploy
+          ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts
       - name: Build, audit, push to pcaz-website-staging
         run: npm run deploy:staging
         env:
-          DEPLOY_REMOTE: https://x-access-token:${{ secrets.STAGING_DEPLOY_TOKEN }}@github.com/premiercourier-az/pcaz-website-staging.git
+          DEPLOY_REMOTE: git@github.com:premiercourier-az/pcaz-website-staging.git
+          GIT_SSH_COMMAND: ssh -i ~/.ssh/staging_deploy -o IdentitiesOnly=yes

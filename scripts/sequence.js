@@ -21,6 +21,7 @@ const TO = path.join(ROOT, 'src/assets/sequence');
 const DESKTOP_MAX_W = 960;
 const MOBILE_W = 520;
 const MOBILE_FRAMES = 24;
+const POSTER_W = 360;
 const BUDGET = { desktop: 3.5 * 1024 * 1024, mobile: 900 * 1024 };
 const PAD = 0.06;          // margin around the union box; the edge fade lives inside it
 const ALPHA = 24;          // a pixel counts as the object above this alpha (ignores shadow haze)
@@ -87,7 +88,20 @@ for (let i = 0; i < files.length; i++) {
 for (let j = 0; j < mobilePick.length; j++) {
   await encode(path.join(FROM, files[mobilePick[j]]), MOBILE_W, path.join(TO, 'mobile', String(j).padStart(3, '0')));
 }
-await encode(path.join(FROM, files[0]), MOBILE_W, path.join(TO, 'poster'));
+// The poster is inlined into the page's HTML, so it is kept small: every byte delays first
+// paint on a slow phone connection. It shows only until the first frames load.
+{
+  const cropped = await sharp(path.join(FROM, files[0])).extract(crop).png().toBuffer();
+  const faded = await sharp(cropped)
+    .composite([{ input: edgeMask(crop.width, crop.height, 0.05), blend: 'dest-in' }])
+    .png()
+    .toBuffer();
+  const base = sharp(faded).resize({ width: POSTER_W });
+  await Promise.all([
+    base.clone().avif({ quality: 42, effort: 9 }).toFile(path.join(TO, 'poster.avif')),
+    base.clone().webp({ quality: 70, alphaQuality: 80, effort: 6 }).toFile(path.join(TO, 'poster.webp')),
+  ]);
+}
 
 async function total(dir, ext) {
   let sum = 0;

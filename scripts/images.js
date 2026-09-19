@@ -37,8 +37,10 @@ export async function processImages(srcDir, outDir, publicPrefix) {
     const width = Math.min(meta.width, MAX_WIDTH);
     const height = Math.round((meta.height * width) / meta.width);
     const fallbackExt = ext === '.png' ? 'png' : 'jpg';
-    // Honor orientation, cap width; metadata is dropped.
-    const base = sharp(input).rotate().resize({ width, withoutEnlargement: true });
+    // Honor orientation, convert to sRGB using any embedded profile (phone photos are often
+    // Display P3 — dropping the profile without converting shifts skin tones), cap width.
+    // Metadata, including the profile, is dropped on output.
+    const base = sharp(input).rotate().toColourspace('srgb').resize({ width, withoutEnlargement: true });
 
     await Promise.all([
       base.clone().avif({ quality: 55, effort: 6 }).toFile(path.join(outDir, `${name}.avif`)),
@@ -60,7 +62,7 @@ export async function processImages(srcDir, outDir, publicPrefix) {
     // Wide images also get a small variant; the picture partial offers both via srcset so
     // phones download the small one.
     if (width > SMALL_WIDTH * 1.25) {
-      const small = sharp(input).rotate().resize({ width: SMALL_WIDTH });
+      const small = sharp(input).rotate().toColourspace('srgb').resize({ width: SMALL_WIDTH });
       await Promise.all([
         small.clone().avif({ quality: 55, effort: 6 }).toFile(path.join(outDir, `${name}-${SMALL_WIDTH}.avif`)),
         small.clone().webp({ quality: 80 }).toFile(path.join(outDir, `${name}-${SMALL_WIDTH}.webp`)),

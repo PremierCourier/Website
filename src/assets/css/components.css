@@ -474,6 +474,15 @@
   font-weight: 700;
 }
 
+.prose h2 {
+  margin-top: 40px;
+  font-size: var(--pc-text-h3);
+}
+
+.prose p {
+  font-size: var(--pc-text-lead);
+}
+
 /* ---------- Quote form ---------- */
 
 .quote-form {
@@ -515,6 +524,20 @@
   margin: 6px 0 0;
   color: var(--pc-navy);
   font-size: var(--pc-text-small);
+  font-weight: 700;
+}
+
+.field__hint {
+  margin: 8px 0 0;
+  color: var(--pc-text-2);
+  font-size: var(--pc-text-small);
+}
+
+.field__note {
+  margin: 10px 0 0;
+  padding: 12px 14px;
+  background: var(--pc-bg-alt);
+  border-radius: var(--pc-radius);
   font-weight: 700;
 }
 

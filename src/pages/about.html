@@ -6,28 +6,28 @@
   </div>
 </section>
 
-<section class="section section--tight" aria-labelledby="origin-heading">
+<section class="section section--tight" aria-labelledby="alanna-heading">
   <div class="container">
     <div class="profile reveal">
-      <div class="profile__photo">{{> picture img.travis.belowFold }}</div>
-      <div class="profile__text">
-        <h2 class="section__heading" id="origin-heading">{{ page.origin.heading }}</h2>
-        {{#each page.origin.paragraphs}}<p>{{ this }}</p>
-        {{/each}}
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section section--alt" aria-labelledby="alanna-heading">
-  <div class="container">
-    <div class="profile profile--reverse reveal">
       <div class="profile__photo">{{> picture img.alanna.belowFold }}</div>
       <div class="profile__text">
         <h2 class="section__heading" id="alanna-heading">{{ page.alanna.heading }}</h2>
         {{#each page.alanna.paragraphs}}<p>{{ this }}</p>
         {{/each}}
         <p class="band__cta"><a href="tel:{{ phone.tel }}">{{ cta.alannaAnswers }}</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt" aria-labelledby="origin-heading">
+  <div class="container">
+    <div class="profile profile--reverse reveal">
+      <div class="profile__photo">{{> picture img.travis.belowFold }}</div>
+      <div class="profile__text">
+        <h2 class="section__heading" id="origin-heading">{{ page.origin.heading }}</h2>
+        {{#each page.origin.paragraphs}}<p>{{ this }}</p>
+        {{/each}}
       </div>
     </div>
   </div>
