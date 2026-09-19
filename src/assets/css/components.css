@@ -177,7 +177,7 @@
   width: 100%;
   max-width: 460px;
   margin: 0 auto;
-  transform: translate3d(var(--tx, 0px), var(--ty, 0px), 0) scale(var(--s, 1));
+  transform: translate3d(var(--tx, 0px), var(--ty, 0px), 0) rotate(var(--rot, 0deg)) scale(var(--s, 1));
 }
 
 /* The length of the hold. Reserved from first paint (the js class is set in <head>), so
