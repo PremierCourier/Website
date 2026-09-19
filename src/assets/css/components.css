@@ -133,7 +133,8 @@
 
 .hero {
   padding: clamp(48px, 7vw, 104px) 0 clamp(56px, 7vw, 96px);
-  overflow: hidden;
+  /* clip, not hidden: hidden would make .hero a scroll container and break the sticky hold */
+  overflow: clip;
 }
 
 .hero__grid {
@@ -161,26 +162,34 @@
 }
 
 /* Hero sequence: the cooler opens and closes as the page scrolls (hero.js). The inlined
-   poster (frame 0) paints with the HTML; the canvas takes over once frames load. While
-   it scrubs, the cooler drifts down through reserved space (--travel) at a fraction of
-   scroll speed so it stays in view — scroll itself is never pinned or slowed. */
+   poster (frame 0) paints with the HTML; the canvas takes over once frames load. The
+   browser holds the cooler with position: sticky over the spacer (.hero__travel) — native,
+   so it never jitters — while hero.js sets the frame, the slide to centre, and the size.
+   Scroll itself is never pinned or slowed. */
 .hero__stage {
   position: relative;
 }
 
 .hero__sequence {
-  position: relative;
+  position: sticky;
+  top: var(--stick-top, 0px);
   z-index: 2;
   width: 100%;
   max-width: 460px;
   margin: 0 auto;
-  transform: translate3d(var(--tx, 0px), var(--drift, 0px), 0) scale(var(--s, 1));
+  transform: translate3d(var(--tx, 0px), var(--ty, 0px), 0) scale(var(--s, 1));
 }
 
-/* Reserved from first paint (the js class is set in <head>), so nothing below shifts. */
-.js .hero__stage {
-  padding-bottom: 60vh;
-  padding-bottom: 60svh;
+/* The length of the hold. Reserved from first paint (the js class is set in <head>), so
+   nothing below shifts; hero.js sizes it exactly. */
+.hero__travel {
+  display: none;
+}
+
+.js .hero__travel {
+  display: block;
+  height: 60vh;
+  height: 60svh;
 }
 
 .hero__sequence img {
@@ -773,11 +782,12 @@
   }
 
   .hero__sequence {
+    position: relative;
     transform: none;
   }
 
-  .js .hero__stage {
-    padding-bottom: 0;
+  .js .hero__travel {
+    display: none;
   }
 
   html {

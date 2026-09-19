@@ -1,34 +1,37 @@
 // Hero sequence: the cooler opens into its layers and closes again as the page scrolls.
 //
-// Frame index and position are pure functions of scroll offset; scrolling itself is never
-// pinned, snapped, or slowed.
-//   Laptops (≥1024 px): once the headline has scrolled away, the cooler slides to the middle
-//   of the screen and grows to fill its height as it opens, then zooms back out and rises
-//   as it closes, and scrolls away.
-//   Phones: it opens and closes while drifting down at 75% of scroll speed.
-// The room it moves through is reserved under the hero, so nothing below is overlapped.
+// The browser holds the cooler in place with CSS `position: sticky` (native, so it never
+// lags or jitters behind the scroll, in either direction). This script only sets what
+// doesn't fight the scroll: which frame shows, how far the cooler has slid toward the
+// middle, and how large it is — all functions of scroll offset. The shown frame is eased
+// toward its target, so a mouse-wheel notch plays through the frames between instead of
+// jumping. Scrolling itself is never pinned, snapped, or slowed.
 //
-// Desktop (≥1024 px wide) scrubs 72 frames; smaller screens scrub 24. Frames load after
-// the page has loaded and only once the hero is in view, every fourth frame first so
-// scrubbing works at once, and are decoded off the main thread. AVIF, falling back to
-// WebP. The inlined poster (frame 0) shows until then, and stays alone under reduced
-// motion or Save-Data.
+//   Laptops (≥1024 px): held from the first scroll; once the headline has gone, the cooler
+//   slides to the middle and grows to fill the height below the header as it opens, pauses
+//   fully open, then is released — it closes and zooms back out as it scrolls away.
+//   Phones: held in the middle of the screen while it opens and closes, then scrolls away.
+//
+// The hold's length is a spacer under the cooler (.hero__travel), so nothing below is ever
+// overlapped. Desktop scrubs 72 frames; phones 24. Frames load after the page has loaded
+// and only once the hero is in view, every fourth frame first, decoded off the main thread;
+// AVIF, falling back to WebP. The inlined poster (frame 0) shows until then, and stays
+// alone under reduced motion or Save-Data.
 (function () {
   var el = document.querySelector('[data-sequence]');
   if (!el) return;
-  var stage = el.parentElement;
+  var travel = document.querySelector('.hero__travel');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var saveData = navigator.connection && navigator.connection.saveData;
   if (reduce || saveData || !window.HTMLCanvasElement) {
-    stage.style.paddingBottom = '0px';
+    if (travel) travel.style.height = '0px';
     return;
   }
 
-  var DRIFT = 0.75;   // phones: share of scroll the cooler drifts down while it plays
-  var CENTRE_MARGIN = 24;   // laptops: px kept clear above and below the centred cooler
+  var CENTRE_MARGIN = 24;   // px kept clear above and below the centred cooler
   var MAX_SCALE = 1.8;      // laptops: never grow past this, however tall the screen
-  var CLOSE_RISE = 0.6;     // laptops: while closing, the cooler rises at this share of scroll
   var CLOSE_KEEP = 0.25;    // laptops: share of the growth kept once closed (zooms back out)
+  var FRAME_EASE_MS = 70;   // how quickly the shown frame catches up with the scroll
   var canvas = el.querySelector('canvas');
   var ctx = canvas.getContext('2d');
   var set = window.innerWidth >= 1024 ? 'desktop' : 'mobile';
@@ -39,6 +42,8 @@
   var drawn = null;
   var raf = 0;
   var geometry = null;
+  var shown = 0;            // eased frame position, 0 … N-1
+  var lastT = 0;
 
   function smooth(x) {
     x = Math.min(1, Math.max(0, x));
@@ -47,19 +52,22 @@
 
   function place(tx, ty, scale) {
     el.style.setProperty('--tx', tx.toFixed(1) + 'px');
-    el.style.setProperty('--drift', ty.toFixed(1) + 'px');
+    el.style.setProperty('--ty', ty.toFixed(1) + 'px');
     el.style.setProperty('--s', scale.toFixed(4));
   }
 
   function measure() {
-    place(0, 0, 1);   // measure the cooler where the layout puts it
+    // Measure where the layout puts the cooler, with the hold switched off.
+    el.style.setProperty('--stick-top', '-100000px');
+    place(0, 0, 1);
     var rect = el.getBoundingClientRect();
     var vh = window.innerHeight;
     var docTop = rect.top + window.scrollY;
     var header = document.querySelector('.site-header');
     var headerH = header ? header.offsetHeight : 0;
+    var bar = document.querySelector('.call-cue--bar');
+    var barH = bar && bar.offsetParent ? bar.offsetHeight : 0;
 
-    // Laptops: once centred, the cooler grows to fill the height below the header.
     var grow = 1;
     if (set === 'desktop') {
       grow = Math.min(MAX_SCALE, (vh - headerH - 2 * CENTRE_MARGIN) / rect.height, (window.innerWidth * 0.7) / rect.width);
@@ -72,41 +80,45 @@
     canvas.height = Math.round(canvas.width * (rect.height / rect.width));
     drawn = null;
 
+    var centreTop = headerH + (vh - headerH - barH - rect.height) / 2;   // top edge when centred
+
     if (set === 'mobile') {
-      // Phones: open and close while drifting down through the reserved space.
-      var travel = parseFloat(getComputedStyle(stage).paddingBottom) || 0;
-      geometry = { mode: 'drift', start: Math.max(0, docTop - vh * 0.6), span: travel / DRIFT };
+      // Phones: stick in the middle; play while held for most of a screen of scrolling.
+      var stickTop = Math.max(headerH + 8, centreTop);
+      var span = vh * 0.9;
+      geometry = { mode: 'hold', start: docTop - stickTop, span: span };
+      el.style.setProperty('--stick-top', stickTop.toFixed(1) + 'px');
+      if (travel) travel.style.height = Math.ceil(span) + 'px';
       return;
     }
 
-    // Laptops: once the headline has scrolled away, the cooler slides to the middle of the
-    // screen and grows as it opens, stays centred while it closes, then scrolls away.
+    // Laptops: held from the first scroll at its place beside the headline. Once the text
+    // has gone, it slides to the middle and grows as it opens, then zooms back out as it
+    // closes, and the hold ends.
     var copy = document.querySelector('.hero__copy');
     var copyBottom = copy ? copy.getBoundingClientRect().bottom + window.scrollY : docTop + rect.height;
-    var centreY = headerH + (vh - headerH) / 2;                   // viewport y of the middle
-    var moveEnd = Math.max(copyBottom - headerH - 16, vh * 0.3);  // text is gone by here
+    var moveEnd = Math.max(copyBottom - headerH - 16, vh * 0.3);    // text is gone by here
     var moveStart = Math.max(0, moveEnd - vh * 0.25);
-    var peak = moveEnd + vh * 0.05;                               // fully open, centred
-    var span = peak + vh * 0.3;                                   // closed again
-    var cx0 = rect.left + rect.width / 2;
-    var cy0 = docTop + rect.height / 2;                           // page y of its centre
+    var peak = moveEnd + vh * 0.05;                                 // fully open, centred
+    var holdEnd = peak + vh * 0.1;                                  // brief pause, then release
+    var endAt = holdEnd + vh * 0.5;                                 // closed, on its way out
+    var stickAt = Math.max(headerH, docTop);                        // viewport top while held
     geometry = {
       mode: 'centre',
-      span: span,
+      start: docTop - stickAt,
+      span: endAt,
       peak: peak,
+      holdEnd: holdEnd,
       moveStart: moveStart,
       moveEnd: moveEnd,
-      dx: window.innerWidth / 2 - cx0,
-      centreY: centreY,
-      cy0: cy0,
+      dx: window.innerWidth / 2 - (rect.left + rect.width / 2),
+      dy: centreTop - stickAt,
       grow: grow,
     };
-    // Reserve exactly the room the cooler travels through, so it never overlaps the next
-    // section. The content below is off screen at this point, so nothing visibly shifts.
-    var endY = centreY - CLOSE_RISE * (span - peak);
-    var endDrift = endY - (cy0 - span);
-    var endScale = 1 + (grow - 1) * CLOSE_KEEP;
-    stage.style.paddingBottom = Math.ceil(endDrift + rect.height * (endScale - 1) / 2 + 32) + 'px';
+    el.style.setProperty('--stick-top', stickAt.toFixed(1) + 'px');
+    // The spacer is the length of the hold. The content below is off screen, so nothing
+    // visibly shifts when it is sized.
+    if (travel) travel.style.height = Math.ceil(holdEnd) + 'px';
   }
 
   function nearest(i) {
@@ -117,38 +129,46 @@
     return null;
   }
 
-  function render() {
+  // Target frame position (0 … N-1) for the current scroll, and the cooler's placement.
+  function target() {
+    var g = geometry;
+    var s = Math.min(Math.max(window.scrollY - g.start, 0), g.span);
+    if (g.mode === 'hold') {
+      place(0, 0, 1);
+      return Math.sin(Math.PI * (s / g.span)) * (N - 1);             // closed → open → closed
+    }
+    var m = smooth((s - g.moveStart) / (g.moveEnd - g.moveStart));  // 0 → 1: to the middle
+    var scale = 1 + (g.grow - 1) * m;
+    var open;
+    if (s <= g.holdEnd) {
+      open = smooth(s / g.peak);                                    // opens; stays open to the release
+    } else {
+      // Released: the page carries it up while it closes and zooms back out.
+      var c = smooth((s - g.holdEnd) / (g.span - g.holdEnd));
+      open = 1 - c;
+      scale = 1 + (g.grow - 1) * (1 - (1 - CLOSE_KEEP) * c);
+    }
+    place(g.dx * m, g.dy * m, scale);
+    return open * (N - 1);
+  }
+
+  function render(t) {
     raf = 0;
     if (!geometry) return;
-    var g = geometry;
-    var open;
-    if (g.mode === 'drift') {
-      var scrolled = Math.min(Math.max(window.scrollY - g.start, 0), g.span);
-      var t = g.span ? scrolled / g.span : 0;
-      open = Math.sin(Math.PI * t);                               // closed → open → closed
-      place(0, scrolled * DRIFT, 1);
-    } else {
-      var s = Math.min(Math.max(window.scrollY, 0), g.span);
-      var m = smooth((s - g.moveStart) / (g.moveEnd - g.moveStart));   // 0 → 1: to the middle
-      open = s <= g.peak ? smooth(s / g.peak) : smooth(1 - (s - g.peak) / (g.span - g.peak));
-      var natural = g.cy0 - s;                                    // where the layout puts it
-      var drifting = natural + s * DRIFT;                         // phones' drift, before moving
-      var y = drifting + (g.centreY - drifting) * m;              // …blending to the middle
-      var scale = 1 + (g.grow - 1) * m;                           // grows as it arrives
-      if (s > g.peak) {
-        // Closing: zoom back out and start rising, so it is already leaving when it shuts.
-        var c = smooth((s - g.peak) / (g.span - g.peak));
-        y = g.centreY - CLOSE_RISE * (s - g.peak);
-        scale = 1 + (g.grow - 1) * (1 - (1 - CLOSE_KEEP) * c);
-      }
-      place(g.dx * m, y - natural, scale);
-    }
-    var img = nearest(Math.round(open * (N - 1)));
+    var goal = target();
+    // Ease the shown frame toward the goal, frame-rate independent.
+    var dt = lastT ? Math.min(t - lastT, 100) : 16;
+    lastT = t;
+    shown += (goal - shown) * (1 - Math.exp(-dt / FRAME_EASE_MS));
+    if (Math.abs(goal - shown) < 0.05) shown = goal;
+    var img = nearest(Math.round(shown));
     if (img && img !== drawn) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       drawn = img;
     }
+    if (shown !== goal) schedule();
+    else lastT = 0;
   }
 
   function schedule() { if (!raf) raf = requestAnimationFrame(render); }
@@ -214,7 +234,7 @@
   }
 
   measure();
-  render();
+  shown = target();   // start on the right frame, not eased in from 0
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', function () { measure(); schedule(); });
 
