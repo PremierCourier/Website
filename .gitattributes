@@ -1,0 +1,11 @@
+CLAUDE.md export-ignore
+docs/ export-ignore
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.woff2 binary
+*.glb binary
+*.blend binary
