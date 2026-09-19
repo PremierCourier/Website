@@ -1,0 +1,7 @@
+<ul class="area-list">
+  {{#each counties}}<li class="area-list__county">
+    <h3 class="area-list__name">{{ name }}</h3>
+    <p class="area-list__towns">{{#each towns}}{{ this }}{{#unless @last}} · {{/unless}}{{/each}}</p>
+  </li>
+  {{/each}}
+</ul>

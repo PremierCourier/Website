@@ -1,0 +1,34 @@
+name: Deploy production
+
+# Manual only. Type 1 in "approved" only after Alanna has approved staging in writing.
+on:
+  workflow_dispatch:
+    inputs:
+      approved:
+        description: "Alanna approved staging in writing? Type 1 to deploy."
+        required: true
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main' && inputs.approved == '1'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Lighthouse (mobile thresholds)
+        run: npm run lighthouse
+      - name: Build, audit, push to gh-pages
+        run: npm run deploy
+        env:
+          APPROVED: ${{ inputs.approved }}
+          DEPLOY_REMOTE: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git

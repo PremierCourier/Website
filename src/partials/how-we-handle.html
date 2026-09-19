@@ -1,0 +1,13 @@
+<section class="section band band--dark" aria-labelledby="handle-heading">
+  <div class="container">
+    <h2 class="band__heading reveal" id="handle-heading">{{ heading }}</h2>
+    <ul class="points">
+      {{#each points}}<li class="points__item reveal">
+        <h3 class="points__title">{{ title }}</h3>
+        <p>{{ body }}</p>
+      </li>
+      {{/each}}
+    </ul>
+    <p class="band__cta reveal"><a href="tel:{{ phone.tel }}">{{ cta.alannaAnswers }}</a>{{#if exists./how-we-handle-it/}} · <a href="{{ base }}/how-we-handle-it/">{{ linkLabel }}</a>{{/if}}</p>
+  </div>
+</section>

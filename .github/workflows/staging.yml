@@ -1,0 +1,24 @@
+name: Deploy staging
+
+on:
+  push:
+    branches: [staging]
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Build, audit, push to pcaz-website-staging
+        run: npm run deploy:staging
+        env:
+          DEPLOY_REMOTE: https://x-access-token:${{ secrets.STAGING_DEPLOY_TOKEN }}@github.com/premiercourier-az/pcaz-website-staging.git

@@ -1,0 +1,54 @@
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <p class="eyebrow">{{ page.hero.eyebrow }}</p>
+      <h1 class="hero__title" id="hero-heading">{{ site.brandLine }}</h1>
+      <p class="hero__lead">{{ page.hero.lead }}</p>
+      <div class="button-row">
+        {{#if exists./quote/}}<a class="button button--primary" href="{{ base }}/quote/">{{ cta.quote }}</a>{{/if}}
+        <a class="button button--secondary" href="tel:{{ phone.tel }}">Call {{ phone.display }}</a>
+      </div>
+    </div>
+    <div class="hero__stage" data-parallax>
+      <div class="hero__shadow" aria-hidden="true"></div>
+      <img class="hero__object" src="{{ img.cooler-placeholder.svg }}" alt="{{ page.hero.coolerAlt }}" width="480" height="480" fetchpriority="low" decoding="async">
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="intro-heading">
+  <div class="container container--reading reveal">
+    <h2 class="section__heading" id="intro-heading">{{ page.intro.heading }}</h2>
+    <p class="lead">{{ page.intro.body }}</p>
+  </div>
+</section>
+
+<section class="section section--alt" id="services" aria-labelledby="serve-heading">
+  <div class="container">
+    <h2 class="section__heading reveal" id="serve-heading">{{ page.serve.heading }}</h2>
+    <ul class="cards">
+      {{#each page.serve.items}}{{> service-card }}{{/each}}
+    </ul>
+  </div>
+</section>
+
+{{> how-we-handle page.handle }}
+
+<section class="section" aria-labelledby="testimonials-heading">
+  <div class="container">
+    <h2 class="section__heading reveal" id="testimonials-heading">{{ page.testimonials.heading }}</h2>
+    <div class="testimonials">
+      {{#each page.testimonials.items}}{{> testimonial }}{{/each}}
+    </div>
+  </div>
+</section>
+
+<section class="section band band--dark" aria-labelledby="coverage-heading">
+  <div class="container">
+    <h2 class="band__heading reveal" id="coverage-heading">{{ page.coverage.heading }}</h2>
+    <p class="band__lead reveal">{{ page.coverage.lead }}</p>
+    {{> area-list }}
+  </div>
+</section>
+
+{{> cta-bar page.closing }}

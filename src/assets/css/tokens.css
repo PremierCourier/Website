@@ -1,0 +1,79 @@
+/* The only place colors and fonts are defined. */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/assets/fonts/inter-latin-400-normal.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/assets/fonts/inter-latin-500-normal.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/assets/fonts/inter-latin-700-normal.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(/assets/fonts/inter-latin-800-normal.woff2) format('woff2');
+}
+
+:root {
+  /* Brand palette */
+  --pc-primary: #178EC7;
+  --pc-deep: #0A5A96;
+  --pc-navy: #0B3556;
+  --pc-sky: #6BADDF;
+  --pc-steel: #608CBE;
+  --pc-copper: #C0632B;
+  --pc-bg: #FFFFFF;
+  --pc-bg-alt: #F3F7FB;
+  --pc-text: #0B3556;
+  --pc-text-2: #5A6B7C;
+  --pc-border: #D9E3EC;
+
+  /* Roles. Courier Blue on white is 3.7:1, so text-sized links and buttons use Deep Blue (7.2:1).
+     Copper carries white text only at ≥19px bold (large text, 4.1:1). */
+  --pc-link: var(--pc-deep);
+  --pc-link-hover: var(--pc-navy);
+  --pc-on-dark: #FFFFFF;
+  --pc-on-dark-2: rgba(255, 255, 255, 0.82);
+  --pc-link-on-dark: var(--pc-sky);
+  --pc-focus: var(--pc-primary);
+
+  /* Type */
+  --pc-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --pc-text-body: 1.0625rem;          /* 17px */
+  --pc-text-lead: 1.1875rem;          /* 19px */
+  --pc-text-small: 0.9375rem;         /* 15px */
+  --pc-text-eyebrow: 0.875rem;        /* 14px */
+  --pc-text-h1: clamp(2.5rem, 1.6rem + 4.2vw, 4.5rem);   /* 40 → 72px */
+  --pc-text-h2: clamp(1.75rem, 1.35rem + 1.8vw, 2.75rem);
+  --pc-text-h3: 1.1875rem;
+  --pc-text-cue: 1.1875rem;           /* 19px — keeps copper at large-text contrast */
+
+  /* Shape and space */
+  --pc-radius: 8px;
+  --pc-shadow: 0 2px 12px rgba(11, 53, 86, 0.08);
+  --pc-content: 1040px;
+  --pc-reading: 680px;
+  --pc-gutter: 24px;
+  --pc-section: clamp(64px, 8vw, 120px);
+  --pc-header-h: 76px;
+  --pc-bar-h: 56px;
+
+  /* Motion */
+  --pc-reveal-ms: 520ms;
+  --pc-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}

@@ -1,0 +1,10 @@
+{
+  "route": "/404.html",
+  "template": "404",
+  "status": "proposed",
+  "title": "Page not found",
+  "description": "This page doesn't exist. Call (928) 533-3585 — 24/7, including holidays — or head back to the home page.",
+  "heading": "This page doesn't exist.",
+  "lead": "If you need a delivery, call (928) 533-3585 — any hour, including holidays.",
+  "homeLabel": "Back to the home page"
+}

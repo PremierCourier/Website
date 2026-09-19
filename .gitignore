@@ -7,3 +7,9 @@ local.settings.json
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# local drops, never committed
+/Premier Courier Logo*.png
+.build-info.json
+.lighthouse/
+.claude/

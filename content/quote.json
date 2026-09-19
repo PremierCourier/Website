@@ -1,0 +1,36 @@
+{
+  "route": "/quote/",
+  "template": "quote",
+  "status": "proposed",
+  "scripts": ["quote-form.js"],
+  "title": "Get a Quote",
+  "description": "Request a quote for a specimen, tray, pharmaceutical, or document delivery. Or call (928) 533-3585 — 24/7, including holidays.",
+  "heading": "Get a Quote",
+  "lead": "Tell us what's going where, and when. For anything urgent, call (928) 533-3585.",
+  "fields": {
+    "pickup": "Pickup address",
+    "dropoff": "Drop-off address",
+    "what": "What is being sent",
+    "whatOptions": [
+      { "value": "specimens", "label": "Specimens" },
+      { "value": "trays-or-instruments", "label": "Trays or instruments" },
+      { "value": "pharmaceuticals", "label": "Pharmaceuticals" },
+      { "value": "documents", "label": "Documents" },
+      { "value": "other", "label": "Other" }
+    ],
+    "when": "When",
+    "whenOptions": [
+      { "value": "now", "label": "Now" },
+      { "value": "today", "label": "Today" },
+      { "value": "scheduled", "label": "Scheduled" }
+    ],
+    "date": "Date",
+    "name": "Name",
+    "phone": "Phone",
+    "email": "Email (optional)",
+    "submit": "Send request",
+    "required": "Please fill in this field.",
+    "sending": "Sending…"
+  },
+  "success": "We'll call you shortly."
+}

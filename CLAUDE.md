@@ -31,12 +31,13 @@ Read this file fully before writing code. `@docs/brand-guide-internal.md` and `@
 ```
 npm install
 npm run dev        # build + local server on :4321 with watch
-npm run build      # clean build to dist/
+npm run build      # clean build to dist/ (BUILD_TARGET=local|staging|production; default local)
 npm run audit      # fails on forbidden strings, missing alt text, EXIF, broken internal links, missing meta
                    # (matching rules: docs/content-rules.md → Forbidden strings)
 npm run lighthouse # runs against dist/; fails under Performance 95 / SEO 100 / Accessibility 95 on mobile
 npm run deploy:staging
 npm run deploy     # requires APPROVED=1 env var; refuses otherwise
+                   # deploys need DEPLOY_REMOTE (git URL); CI sets it — see .github/workflows/
 ```
 
 ## Repository layout
@@ -79,7 +80,7 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 
 - Type: Inter only (self-hosted woff2, weights 400/500/700/800). Headlines 700–800, tight leading, up to 72px on desktop. Body 400 at 17–18px. No serif on the web.
 - Color (tokens.css): `--pc-primary #178EC7`, `--pc-deep #0A5A96`, `--pc-navy #0B3556`, `--pc-sky #6BADDF`, `--pc-steel #608CBE`, `--pc-copper #C0632B`, `--pc-bg #FFFFFF`, `--pc-bg-alt #F3F7FB`, `--pc-text #0B3556`, `--pc-text-2 #5A6B7C`, `--pc-border #D9E3EC`.
-- Blue carries the brand: nav, footer, headings, links, service cards. Copper is used for exactly one element per page — the Call Now / 24-7 cue. Never as a general accent, never for text.
+- Blue carries the brand: nav, footer, headings, links, service cards. Courier Blue is 3.7:1 on white, so text-sized links, buttons, and eyebrows use Deep Blue; Courier Blue is for large type and non-text accents. Copper is used for exactly one element per page — the Call Now / 24-7 cue. Never as a general accent, never for text.
 - Dark bands: Navy Ink `#0B3556` background with white type, used for the how-we-handle-it section on home and the coverage section. Maximum two dark bands per page. Copper still limited to one element.
 - Photography: golden-hour Arizona light, full-bleed, real people and real vehicles from the shoot. Before the shoot: the 3D hero object on white, no stock.
 
@@ -94,7 +95,7 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 
 ### Motion
 
-- Scroll reveals via `IntersectionObserver` + CSS transitions: sections fade and translate up 16px over 400–600ms, once, on entry. Headlines may stagger by word (60ms). Nothing delays reading: text is visible at ≥0.6 opacity before the transition starts.
+- Scroll reveals via `IntersectionObserver` + CSS transitions: sections fade and translate up 16px over 400–600ms, once, on entry. Headlines may stagger by word (60ms). Nothing delays reading: text is visible at ≥0.6 opacity before the transition starts. Elements are dimmed only after the visitor's first scroll and only while just below the fold, so a page that is loaded but never scrolled (audits, crawlers, print) is never dimmed.
 - No scroll-jacking, no horizontal scroll sections, no sticky-pinned storytelling.
 - `prefers-reduced-motion: reduce` disables reveals, parallax, and WebGL; everything renders in its final state.
 - Layout: centered column, 1040px content max, 680px reading max, 8px radius everywhere, shadow `0 2px 12px rgba(11,53,86,0.08)`, ≥60% white space per viewport outside dark bands.

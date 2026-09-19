@@ -1,0 +1,10 @@
+<section class="section cta-bar reveal" aria-labelledby="cta-bar-heading">
+  <div class="container">
+    <h2 class="cta-bar__heading" id="cta-bar-heading">{{ heading }}</h2>
+    <div class="button-row">
+      {{#if exists./quote/}}<a class="button button--primary" href="{{ base }}/quote/?when=scheduled">{{ cta.scheduledRoute }}</a>
+      <a class="button button--secondary" href="{{ base }}/quote/">{{ cta.quote }}</a>{{/if}}
+      <a class="button button--secondary" href="tel:{{ phone.tel }}">Call {{ phone.display }}</a>
+    </div>
+  </div>
+</section>

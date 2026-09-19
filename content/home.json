@@ -1,0 +1,71 @@
+{
+  "route": "/",
+  "template": "home",
+  "status": "proposed",
+  "title": "Medical and Business Courier",
+  "description": "Arizona's trusted medical and business courier. On time, every time — 24/7, including holidays, and the owner answers the phone.",
+  "hero": {
+    "eyebrow": "Medical and business courier · Prescott, Arizona",
+    "lead": "Premier Courier Services is the trusted medical and business courier for Central and Northern Arizona — on time, every time, 24/7, including holidays.",
+    "coolerAlt": "Premier Courier's sealed blue transport cooler"
+  },
+  "intro": {
+    "heading": "Serving Central and Northern Arizona since 2014 — and built on a legacy that started long before.",
+    "body": "Premier Courier has served Central and Northern Arizona for more than two decades, transporting specimens, blood products, surgical trays, pharmaceuticals, and confidential documents for hospitals, labs, pharmacies, physician offices, and law firms. Our drivers are meticulous and HIPAA-compliant in how they handle every item, we run 24 hours a day including holidays, and when you call, the owner answers."
+  },
+  "serve": {
+    "heading": "Who we serve",
+    "items": [
+      { "name": "Hospitals", "line": "Specimens, blood products, platelets, and surgical trays transported on time, every time." },
+      { "name": "Labs", "line": "Time-sensitive specimen pickups handled with precision so your results never wait on logistics." },
+      { "name": "Emergency Rooms", "line": "24/7 availability for critical deliveries when every minute matters." },
+      { "name": "Operating Rooms", "line": "Urgent surgical supply runs available day or night, including holidays." },
+      { "name": "Sterile Processing Departments", "line": "Compliant transport of sterilized instruments and trays with proper handling protocols." },
+      { "name": "Pharmacies", "line": "Prompt, discreet delivery of time-sensitive medications and pharmaceuticals." },
+      { "name": "Doctor Offices", "line": "Flexible specimen, record, and supply deliveries that fit your office schedule." },
+      { "name": "Dentists", "line": "Reliable pickup and delivery of impressions, lab work, and supplies to keep your schedule running." },
+      { "name": "Law Firms", "line": "Same-day, discreet delivery of legal documents, filings, and confidential materials." },
+      { "name": "Accountant Offices", "line": "Secure same-day delivery of sensitive financial documents, tax season and beyond." },
+      { "name": "Airport Retrievals", "line": "Pickup and drop-off at the airport, on your timeline." },
+      { "name": "And More", "line": "If it needs to get there fast and handled right, we'll make it happen." }
+    ]
+  },
+  "handle": {
+    "heading": "Handled right, the first time.",
+    "points": [
+      { "title": "HIPAA-compliant handling", "body": "Our drivers handle every item in a HIPAA-compliant manner." },
+      { "title": "The same care for every item", "body": "We treat every item with the utmost care, no matter its value." },
+      { "title": "Any hour, including holidays", "body": "Business doesn't stop at 5 p.m., on weekends, or on holidays. Neither do we." },
+      { "title": "Drivers your staff know by name", "body": "Friendly, meticulous drivers your staff will know by name." }
+    ],
+    "linkLabel": "How we handle it"
+  },
+  "testimonials": {
+    "heading": "What customers say",
+    "items": [
+      {
+        "name": "Alex Castaneda",
+        "quote": "I've had an outstanding experience with Premier Courier Services! Their team is professional, punctual, and incredibly reliable. From urgent same-day deliveries to scheduled logistics, they've consistently exceeded expectations. Communication is clear and prompt, and their attention to detail ensures that packages arrive on time and in perfect condition. It's rare to find a courier service that combines efficiency with such friendly and personalized customer service. Highly recommended for anyone looking for dependable and top-notch courier solutions!"
+      },
+      {
+        "name": "Jacob Konigseder",
+        "quote": "A review honestly can't say enough about them, they were simply beyond amazing. Let's face it, we expect every business we work with to be professional. This level was just exceptional! An incredible degree of service from start to finish and most importantly communication that alleviates any doubt, concern, or worry. Personal service that made you feel like you were there along during the process. I specifically needed this service to tranpsort two large items that were basically unexpectedly freight and they managed without issues and with unmatched helpfulness. I would recommend them to anyone in a heartbeat."
+      },
+      {
+        "name": "Suzanne Sullivan",
+        "quote": "Alanna at Premier Courier services has always been professional and able to meet any courier needs in a timely manner."
+      },
+      {
+        "name": "JJ Bullard",
+        "quote": "Quick response and scheduling! Super flexible and easy to work with."
+      }
+    ]
+  },
+  "coverage": {
+    "heading": "Based in Prescott. Serving five Arizona counties.",
+    "lead": "Yavapai, Coconino, Maricopa, Pima, and Mohave counties — 24 hours a day, including holidays."
+  },
+  "closing": {
+    "heading": "Scheduled routes that run without reminders."
+  }
+}

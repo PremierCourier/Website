@@ -1,0 +1,102 @@
+{
+  "site": {
+    "url": "https://www.premiercourieraz.com",
+    "name": "Premier Courier",
+    "legalName": "Premier Courier Services, LLC",
+    "titleSuffix": "| Premier Courier Services, Prescott AZ",
+    "brandLine": "Arizona's Trusted Courier. On Time, Every Time."
+  },
+  "phone": {
+    "display": "(928) 533-3585",
+    "tel": "+19285333585"
+  },
+  "email": "alanna@premiercourieraz.com",
+  "hours": "24 hours a day, 7 days a week, including holidays",
+  "hoursShort": "Available 24/7",
+  "hoursFooter": "Available 24/7, including holidays",
+  "address": {
+    "line1": "P.O. Box 10762",
+    "line2": "Prescott, AZ 86304"
+  },
+  "imageAlt": {
+    "logo": "Premier Courier Services, LLC"
+  },
+  "quoteEndpoint": "https://quote.premiercourieraz.com/api/quote",
+  "cta": {
+    "quote": "Get a Quote",
+    "callLabel": "Call Now",
+    "scheduledRoute": "Set Up a Scheduled Route",
+    "bottomBar": "(928) 533-3585 · Available 24/7",
+    "formFailure": "Call us instead — (928) 533-3585. We answer.",
+    "alannaAnswers": "Call (928) 533-3585. Alanna answers."
+  },
+  "nav": [
+    { "label": "Services", "route": "/#services" },
+    { "label": "How We Handle It", "route": "/how-we-handle-it/" },
+    { "label": "About", "route": "/about/" },
+    { "label": "Contact", "route": "/contact/" }
+  ],
+  "footer": {
+    "services": [
+      { "label": "Specimen & Lab Transport", "route": "/services/specimen-and-lab-transport/" },
+      { "label": "Hospital, OR & Sterile Processing", "route": "/services/hospital-or-and-sterile-processing/" },
+      { "label": "Pharmacy Delivery", "route": "/services/pharmacy-delivery/" },
+      { "label": "Clinic & Dental Delivery", "route": "/services/clinic-and-dental-delivery/" },
+      { "label": "Legal & Financial Documents", "route": "/services/legal-and-financial-documents/" }
+    ],
+    "areas": [
+      { "label": "Prescott", "route": "/areas/prescott/" },
+      { "label": "Flagstaff", "route": "/areas/flagstaff/" },
+      { "label": "Phoenix", "route": "/areas/phoenix/" },
+      { "label": "Tucson", "route": "/areas/tucson/" },
+      { "label": "Kingman", "route": "/areas/kingman/" }
+    ],
+    "company": [
+      { "label": "How We Handle It", "route": "/how-we-handle-it/" },
+      { "label": "About", "route": "/about/" },
+      { "label": "Get a Quote", "route": "/quote/" },
+      { "label": "Contact", "route": "/contact/" }
+    ]
+  },
+  "counties": [
+    { "name": "Yavapai County", "towns": ["Prescott", "Prescott Valley", "Chino Valley", "Sedona", "Cottonwood", "Jerome"] },
+    { "name": "Coconino County", "towns": ["Flagstaff"] },
+    { "name": "Maricopa County", "towns": ["Phoenix", "Mesa", "Tempe", "Scottsdale"] },
+    { "name": "Pima County", "towns": ["Tucson"] },
+    { "name": "Mohave County", "towns": ["Kingman"] }
+  ],
+  "schema": {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": "https://www.premiercourieraz.com/#business",
+    "name": "Premier Courier Services",
+    "legalName": "Premier Courier Services, LLC",
+    "description": "Arizona's trusted medical and business courier. On time, every time — 24/7, including holidays, and the owner answers the phone.",
+    "url": "https://www.premiercourieraz.com/",
+    "telephone": "+19285333585",
+    "email": "alanna@premiercourieraz.com",
+    "image": "https://www.premiercourieraz.com/assets/img/logo.png",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Prescott",
+      "addressRegion": "AZ",
+      "postalCode": "86304",
+      "addressCountry": "US"
+    },
+    "areaServed": [
+      { "@type": "AdministrativeArea", "name": "Yavapai County, AZ" },
+      { "@type": "AdministrativeArea", "name": "Coconino County, AZ" },
+      { "@type": "AdministrativeArea", "name": "Maricopa County, AZ" },
+      { "@type": "AdministrativeArea", "name": "Pima County, AZ" },
+      { "@type": "AdministrativeArea", "name": "Mohave County, AZ" }
+    ],
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      "opens": "00:00",
+      "closes": "23:59"
+    },
+    "founder": { "@type": "Person", "name": "Travis Womack" },
+    "employee": { "@type": "Person", "name": "Alanna Hanigan", "jobTitle": "Owner and Manager" }
+  }
+}

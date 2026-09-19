@@ -297,7 +297,7 @@ Logistics solutions; last-mile; leverage; seamless; cutting-edge; state-of-the-a
 
 - Do not pair the logo with any other company’s or vendor’s branding in any client-facing asset.
 
-> **ASSET LIMITATION The only logo file available is a 320×132 px PNG with a baked-in white background. It is adequate for web, social, and email signatures at native size or smaller. It is not adequate for print, vehicle graphics, or large-format use. Do not upscale it. If a print asset is required, the logo must be re-traced as vector first and approved by Alanna.**
+> **ASSET LIMITATION The only logo file available is a 320×132 px PNG with a transparent background and a soft dark edge shadow (so it still belongs on white or on a white panel, never directly on navy). It is adequate for web, social, and email signatures at native size or smaller. It is not adequate for print, vehicle graphics, or large-format use. Do not upscale it. If a print asset is required, the logo must be re-traced as vector first and approved by Alanna.**
 
 ### Official Color Palette
 

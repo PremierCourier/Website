@@ -1,0 +1,17 @@
+<section class="section page-head">
+  <div class="container container--reading">
+    <h1 class="page-head__title">{{ page.heading }}</h1>
+    <p class="lead">{{ page.lead }}</p>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container container--reading">
+    <dl class="contact-list">
+      <div><dt>{{ page.labels.phone }}</dt><dd><a href="tel:{{ phone.tel }}">{{ phone.display }}</a></dd></div>
+      <div><dt>{{ page.labels.email }}</dt><dd><a href="mailto:{{ email }}">{{ email }}</a></dd></div>
+      <div><dt>{{ page.labels.hours }}</dt><dd>{{ hours }}</dd></div>
+      <div><dt>{{ page.labels.mail }}</dt><dd>{{ address.line1 }}<br>{{ address.line2 }}</dd></div>
+    </dl>
+  </div>
+</section>

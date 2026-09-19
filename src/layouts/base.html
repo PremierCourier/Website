@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ fullTitle }}</title>
+<meta name="description" content="{{ page.description }}">
+{{#if noindex}}<meta name="robots" content="noindex, nofollow">
+{{/if}}<link rel="canonical" href="{{ canonical }}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ site.legalName }}">
+<meta property="og:title" content="{{ fullTitle }}">
+<meta property="og:description" content="{{ page.description }}">
+<meta property="og:url" content="{{ canonical }}">
+<meta name="theme-color" content="#0B3556">
+<link rel="icon" type="image/png" href="{{ base }}/assets/img/favicon.png">
+<link rel="preload" href="{{ base }}/assets/fonts/inter-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ base }}/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>{{{ css }}}</style>
+<script>document.documentElement.classList.add('js')</script>
+<script type="application/ld+json">{{{ schemaJson }}}</script>
+</head>
+<body data-page-type="{{ page.template }}">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="site-header__logo" href="{{ base }}/">{{> picture img.logo }}</a>
+    <nav class="site-nav" aria-label="Main">
+      <button class="site-nav__toggle" type="button" aria-expanded="false" aria-controls="site-nav-list">Menu</button>
+      <ul class="site-nav__list" id="site-nav-list">
+        {{#each nav}}<li><a href="{{ base }}{{ route }}">{{ label }}</a></li>
+        {{/each}}{{#if exists./quote/}}<li class="site-nav__quote"><a class="button button--primary" href="{{ base }}/quote/">{{ cta.quote }}</a></li>{{/if}}
+      </ul>
+    </nav>
+    <a class="call-cue call-cue--header" href="tel:{{ phone.tel }}">
+      <span class="call-cue__label">{{ cta.callLabel }}</span>
+      <span class="call-cue__number">{{ phone.display }}</span>
+    </a>
+  </div>
+</header>
+
+<main id="main">
+{{{ body }}}
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__brand">
+      <span class="logo-panel">{{> picture img.logo.belowFold }}</span>
+      <p class="site-footer__line">{{ site.brandLine }}</p>
+      <p><a href="tel:{{ phone.tel }}">{{ phone.display }}</a><br>
+      <a href="mailto:{{ email }}">{{ email }}</a><br>
+      {{ hoursFooter }}</p>
+      <p>{{ address.line1 }}<br>{{ address.line2 }}</p>
+    </div>
+    {{#if footerServices}}<div>
+      <h2 class="site-footer__heading">Services</h2>
+      <ul>{{#each footerServices}}<li><a href="{{ base }}{{ route }}">{{ label }}</a></li>{{/each}}</ul>
+    </div>{{/if}}
+    {{#if footerAreas}}<div>
+      <h2 class="site-footer__heading">Areas</h2>
+      <ul>{{#each footerAreas}}<li><a href="{{ base }}{{ route }}">{{ label }}</a></li>{{/each}}</ul>
+    </div>{{/if}}
+    {{#if footerCompany}}<div>
+      <h2 class="site-footer__heading">Company</h2>
+      <ul>{{#each footerCompany}}<li><a href="{{ base }}{{ route }}">{{ label }}</a></li>{{/each}}</ul>
+    </div>{{/if}}
+  </div>
+  <p class="site-footer__legal">© {{ year }} {{ site.legalName }}</p>
+</footer>
+
+<a class="call-cue call-cue--bar" href="tel:{{ phone.tel }}">{{ cta.bottomBar }}</a>
+
+<script src="{{ base }}/assets/js/nav.js" defer></script>
+<script src="{{ base }}/assets/js/motion.js" defer></script>
+{{#if page.scripts}}{{#each page.scripts}}<script src="{{ base }}/assets/js/{{ this }}" defer></script>
+{{/each}}{{/if}}</body>
+</html>
