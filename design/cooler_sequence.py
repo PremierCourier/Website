@@ -13,7 +13,8 @@
 #   renders/sequence/frames/NNN.png                              N frames, open 0 → 1
 #   blend/cooler_sequence.blend                                  scene only, no UI state/paths
 #
-# Nothing in the cooler carries a label, barcode, tube, form, or text. The P mark is the real
+# Nothing in the cooler carries a label, barcode, form, or text; the tubes are empty, capped,
+# and unlabeled. The P mark is the real
 # mark cropped from the official logo (design/p-mark.png), applied as a texture — never drawn.
 
 import math
@@ -51,10 +52,11 @@ CAV_W, CAV_D = W - 2 * WALL, D - 2 * WALL
 # Exploded layout: (lift in m, x shift, y shift, z-rotation deg, x-tilt deg, y-tilt deg).
 # Order is the opening order; each part starts a little after the previous one.
 PARTS = {
-    'lid':      {'order': 0, 'lift': 0.88, 'dx': 0.00, 'dy': 0.02, 'rz': 0,  'rx': -12, 'ry': 6},
-    'pack_top': {'order': 1, 'lift': 0.66, 'dx': -0.03, 'dy': 0.0, 'rz': -7, 'rx': 0,   'ry': -3},
-    'pouch':    {'order': 2, 'lift': 0.50, 'dx': 0.03, 'dy': 0.0, 'rz': 9,  'rx': 0,   'ry': 4},
-    'pack_bot': {'order': 3, 'lift': 0.34, 'dx': -0.02, 'dy': 0.0, 'rz': -4, 'rx': 0,   'ry': -2},
+    'lid':      {'order': 0, 'lift': 0.98, 'dx': 0.00, 'dy': 0.02, 'rz': 0,  'rx': -12, 'ry': 6},
+    'pack_top': {'order': 1, 'lift': 0.74, 'dx': -0.03, 'dy': 0.0, 'rz': -7, 'rx': 0,   'ry': -3},
+    'rack':     {'order': 2, 'lift': 0.54, 'dx': -0.08, 'dy': -0.02, 'rz': -10, 'rx': 14, 'ry': -3},
+    'pouch':    {'order': 2, 'lift': 0.46, 'dx': 0.09, 'dy': 0.0, 'rz': 10, 'rx': 0,   'ry': 4},
+    'pack_bot': {'order': 3, 'lift': 0.30, 'dx': -0.02, 'dy': 0.0, 'rz': -4, 'rx': 0,   'ry': -2},
 }
 STAGGER = 0.1
 
@@ -180,6 +182,88 @@ def smoothstep(x):
 
 # ---------- model ----------
 
+TUBE_R, TUBE_L = 0.0092, 0.088
+
+
+def round_part(name, radius, depth, location, mat, parent, vertices=48, bevel=True):
+    bpy.ops.mesh.primitive_cylinder_add(vertices=vertices, radius=radius, depth=depth, location=location)
+    obj = active()
+    obj.name = name
+    if bevel:
+        mod = obj.modifiers.new('Bevel', 'BEVEL')
+        mod.width = min(radius, depth) * 0.25
+        mod.segments = 4
+        mod.limit_method = 'ANGLE'
+        mod.harden_normals = True
+    bpy.ops.object.shade_smooth()
+    obj.data.materials.append(mat)
+    set_parent(obj, parent)
+    return obj
+
+
+def build_rack(cx, base_z, width, depth, rig):
+    """Tube rack: base plate, a drilled upper plate, four posts, six empty capped tubes.
+    Tubes are frosted and unlabeled with no contents. Returns the z of the tallest cap."""
+    # Deep Blue rack so the pale tubes read against it; light caps so they read against the rack.
+    rack_mat = material('Rack', DEEP_BLUE, roughness=0.3, coat=0.4)
+    glass = material('Tube', '#DCE7F1', roughness=0.28, coat=0.6, Transmission_Weight=0.05, IOR=1.45)
+    caps = [material('Cap Courier', COURIER_BLUE), material('Cap Sky', SKY), material('Cap White', WHITE, roughness=0.35, coat=0.3)]
+    plate_t, upper_z = 0.006, base_z + 0.058
+    box('Rack Base', (width, depth, plate_t), (cx, 0, base_z + plate_t / 2), 0.003, rack_mat, 3, parent=rig)
+    upper = box('Rack Upper', (width, depth, plate_t), (cx, 0, upper_z), 0.003, rack_mat, 3, parent=rig)
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            round_part(f'Rack Post {sx}{sy}', 0.005, upper_z - base_z,
+                       (cx + sx * (width / 2 - 0.012), sy * (depth / 2 - 0.012), (base_z + upper_z) / 2),
+                       rack_mat, rig, 24, False)
+
+    xs = [cx - width * 0.28, cx, cx + width * 0.28]
+    ys = [-depth * 0.2, depth * 0.2]
+    holes = []
+    top = base_z
+    for row, y in enumerate(ys):
+        for col, x in enumerate(xs):
+            bottom = base_z + plate_t + TUBE_R
+            bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=TUBE_R, depth=TUBE_L, location=(x, y, bottom + TUBE_L / 2))
+            tube = active()
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, radius=TUBE_R, location=(x, y, bottom))
+            end = active()
+            bpy.ops.object.select_all(action='DESELECT')
+            tube.select_set(True)
+            end.select_set(True)
+            bpy.context.view_layer.objects.active = tube
+            bpy.ops.object.join()
+            tube.name = f'Tube {row}{col}'
+            bpy.ops.object.shade_smooth()
+            tube.data.materials.append(glass)
+            set_parent(tube, rig)
+            cap_mat = caps[(row * 3 + col) % 3]
+            cap_z = bottom + TUBE_L + 0.009
+            round_part(f'Cap {row}{col}', TUBE_R * 1.22, 0.022, (x, y, cap_z), cap_mat, rig)
+            round_part(f'Cap Rim {row}{col}', TUBE_R * 1.32, 0.005, (x, y, bottom + TUBE_L - 0.001), cap_mat, rig)
+            top = max(top, cap_z + 0.011)
+            bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=TUBE_R + 0.0012, depth=0.05, location=(x, y, upper_z))
+            holes.append(active())
+
+    # Drill the upper plate: one boolean against all hole cutters, hidden from render.
+    bpy.ops.object.select_all(action='DESELECT')
+    for h in holes:
+        h.select_set(True)
+    bpy.context.view_layer.objects.active = holes[0]
+    bpy.ops.object.join()
+    cutter = holes[0]
+    cutter.name = 'Rack Hole Cutter'
+    cutter.hide_render = True
+    cutter.display_type = 'WIRE'
+    drill = upper.modifiers.new('Holes', 'BOOLEAN')
+    drill.operation = 'DIFFERENCE'
+    drill.object = cutter
+    drill.solver = 'EXACT'
+    bpy.context.view_layer.objects.active = upper
+    bpy.ops.object.modifier_move_to_index(modifier='Holes', index=0)
+    set_parent(cutter, rig)
+    return top
+
 def build():
     bpy.ops.wm.read_factory_settings(use_empty=True)
     scene = bpy.context.scene
@@ -258,20 +342,30 @@ def build():
     for x in (-0.15, 0.15):
         box(f'Handle Mount {x:+.2f}', (0.05, 0.05, 0.024), (x, 0, top + 0.016), 0.008, hardware, 4, parent=lid)
 
-    # Contents, stacked inside the cavity: cold pack, sealed plain pouch, cold pack.
+    # Contents inside the cavity: a cold pack; then, side by side, a tube rack holding six
+    # empty, capped, unlabeled tubes and a sealed plain pouch; then a cold pack on top.
     pack_size = (CAV_W - 0.03, CAV_D - 0.03, 0.032)
     z1 = WALL + 0.004 + 0.016
     pack_bot = empty('Pack Bottom Rig', (0, 0, z1))
     box('Cold Pack Bottom', pack_size, (0, 0, z1), 0.012, gel, parent=pack_bot)
-    z2 = z1 + 0.016 + 0.004 + 0.035
-    pouch = empty('Pouch Rig', (0, 0, z2))
-    box('Pouch', (CAV_W - 0.07, CAV_D - 0.06, 0.07), (0, 0, z2), 0.022, pouch_mat, 8, parent=pouch)
-    box('Pouch Seal', (0.022, CAV_D - 0.07, 0.012), ((CAV_W - 0.07) / 2 - 0.004, 0, z2), 0.004, seal_mat, 3, parent=pouch)
-    z3 = z2 + 0.035 + 0.004 + 0.016
+
+    base_z = z1 + 0.016 + 0.004                     # floor of the middle layer
+    half_w = CAV_W / 2 - 0.02
+    rack_x = -CAV_W / 4
+    rack = empty('Rack Rig', (rack_x, 0, base_z + 0.05))
+    rack_top = build_rack(rack_x, base_z, half_w, CAV_D - 0.07, rack)
+
+    pouch_h = 0.06
+    pouch_x = CAV_W / 4
+    pouch = empty('Pouch Rig', (pouch_x, 0, base_z + pouch_h / 2))
+    box('Pouch', (half_w, CAV_D - 0.06, pouch_h), (pouch_x, 0, base_z + pouch_h / 2), 0.02, pouch_mat, 8, parent=pouch)
+    box('Pouch Seal', (0.022, CAV_D - 0.07, 0.012), (pouch_x + half_w / 2 - 0.004, 0, base_z + pouch_h / 2), 0.004, seal_mat, 3, parent=pouch)
+
+    z3 = rack_top + 0.004 + 0.016
     pack_top = empty('Pack Top Rig', (0, 0, z3))
     box('Cold Pack Top', pack_size, (0, 0, z3), 0.012, gel, parent=pack_top)
 
-    rigs = {'lid': lid, 'pack_top': pack_top, 'pouch': pouch, 'pack_bot': pack_bot}
+    rigs = {'lid': lid, 'pack_top': pack_top, 'rack': rack, 'pouch': pouch, 'pack_bot': pack_bot}
     rest = {k: v.location.copy() for k, v in rigs.items()}
 
     # Shadow-catcher floor: only the overhead softbox casts a shadow.
@@ -328,8 +422,8 @@ def pose(state, open_amount):
     # Camera pulls back and up on the lid's curve (the first and highest part to move), so
     # the rising stack never outruns the frame.
     cam_k = smoothstep(open_amount / span)
-    target_z = 0.2 + 0.47 * cam_k
-    dist = 1.95 + 1.05 * cam_k
+    target_z = 0.2 + 0.52 * cam_k
+    dist = 1.95 + 1.2 * cam_k
     elev, az = math.radians(20 + 4 * cam_k), math.radians(34)
     state['target'].location = (0, 0, target_z)
     state['cam'].location = Vector((0, 0, target_z)) + Vector((

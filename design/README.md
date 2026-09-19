@@ -26,7 +26,7 @@ Status:
 
 ## Cooler open/close sequence (the approved hero direction)
 
-`cooler_sequence.py` models the layered cooler — insulated shell with a foam interior, lid with foam plug, two cold packs, one sealed plain inner pouch — and drives everything from one `open` value (0 sealed → 1 exploded). The lid lifts first, then the top pack, pouch, and bottom pack; the latches swing down; the camera pulls back so both states fit. Contents carry no labels or text; the P mark is the real mark as a texture.
+`cooler_sequence.py` models the layered cooler — insulated shell with a foam interior, lid with foam plug, two cold packs, and between them a Deep Blue tube rack (six empty, capped, unlabeled tubes) beside one sealed plain inner pouch — and drives everything from one `open` value (0 sealed → 1 exploded). The lid lifts first, then the top pack, the rack and pouch (separating sideways), and the bottom pack; the latches swing down; the camera pulls back so both states fit. Contents carry no labels or text; the P mark is the real mark as a texture.
 
 ```
 blender -b -P design/cooler_sequence.py -- --still closed      # renders/sequence/closed.png   (approval still 1)
