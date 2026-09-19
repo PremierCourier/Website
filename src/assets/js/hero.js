@@ -1,9 +1,11 @@
 // Hero sequence: the cooler opens into its layers and closes again as the page scrolls.
 //
-// Frame index is a pure function of scroll offset: scrolling through the hero plays the
-// frames open (0 → last) and back closed (last → 0). While it plays, the cooler drifts down
-// through the space reserved under it in CSS at 75% of scroll speed, so it stays in view.
-// Scroll is never pinned, snapped, or slowed.
+// Frame index and position are pure functions of scroll offset; scrolling itself is never
+// pinned, snapped, or slowed.
+//   Laptops (≥1024 px): once the headline has scrolled away, the cooler slides to the middle
+//   of the screen and grows as it opens, stays centred while it closes, then scrolls away.
+//   Phones: it opens and closes while drifting down at 75% of scroll speed.
+// The room it moves through is reserved under the hero, so nothing below is overlapped.
 //
 // Desktop (≥1024 px wide) scrubs 72 frames; smaller screens scrub 24. Frames load after
 // the page has loaded and only once the hero is in view, every fourth frame first so
@@ -21,7 +23,8 @@
     return;
   }
 
-  var DRIFT = 0.75;   // share of scroll the cooler drifts down while the sequence plays
+  var DRIFT = 0.75;   // phones: share of scroll the cooler drifts down while it plays
+  var GROW = 0.12;    // laptops: how much the cooler grows once centered
   var canvas = el.querySelector('canvas');
   var ctx = canvas.getContext('2d');
   var set = window.innerWidth >= 1024 ? 'desktop' : 'mobile';
@@ -33,21 +36,62 @@
   var raf = 0;
   var geometry = null;
 
+  function smooth(x) {
+    x = Math.min(1, Math.max(0, x));
+    return x * x * (3 - 2 * x);
+  }
+
+  function place(tx, ty, scale) {
+    el.style.setProperty('--tx', tx.toFixed(1) + 'px');
+    el.style.setProperty('--drift', ty.toFixed(1) + 'px');
+    el.style.setProperty('--s', scale.toFixed(4));
+  }
+
   function measure() {
-    var travel = parseFloat(getComputedStyle(stage).paddingBottom) || 0;
+    place(0, 0, 1);   // measure the cooler where the layout puts it
     var rect = el.getBoundingClientRect();
-    var top = rect.top + window.scrollY - (parseFloat(getComputedStyle(el).getPropertyValue('--drift')) || 0);
     var vh = window.innerHeight;
-    geometry = {
-      // Start when the cooler's top reaches 60% of the viewport (at load on desktop).
-      start: Math.max(0, top - vh * 0.6),
-      span: travel / DRIFT,
-      travel: travel,
-    };
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var docTop = rect.top + window.scrollY;
+    // Laptops draw at the grown size, so the cooler stays sharp once it is centred.
+    var dpr = Math.min(window.devicePixelRatio || 1, 2) * (set === 'desktop' ? 1 + GROW : 1);
     canvas.width = Math.round(rect.width * dpr);
     canvas.height = Math.round(rect.height * dpr);
     drawn = null;
+
+    if (set === 'mobile') {
+      // Phones: open and close while drifting down through the reserved space.
+      var travel = parseFloat(getComputedStyle(stage).paddingBottom) || 0;
+      geometry = { mode: 'drift', start: Math.max(0, docTop - vh * 0.6), span: travel / DRIFT };
+      return;
+    }
+
+    // Laptops: once the headline has scrolled away, the cooler slides to the middle of the
+    // screen and grows as it opens, stays centred while it closes, then scrolls away.
+    var header = document.querySelector('.site-header');
+    var headerH = header ? header.offsetHeight : 0;
+    var copy = document.querySelector('.hero__copy');
+    var copyBottom = copy ? copy.getBoundingClientRect().bottom + window.scrollY : docTop + rect.height;
+    var centreY = headerH + (vh - headerH) / 2;                   // viewport y of the middle
+    var moveEnd = Math.max(copyBottom - headerH - 16, vh * 0.3);  // text is gone by here
+    var moveStart = Math.max(0, moveEnd - vh * 0.35);
+    var peak = moveEnd + vh * 0.12;                               // fully open, centred
+    var span = peak + vh * 0.6;                                   // closed again
+    var cx0 = rect.left + rect.width / 2;
+    var cy0 = docTop + rect.height / 2;                           // page y of its centre
+    geometry = {
+      mode: 'centre',
+      span: span,
+      peak: peak,
+      moveStart: moveStart,
+      moveEnd: moveEnd,
+      dx: window.innerWidth / 2 - cx0,
+      centreY: centreY,
+      cy0: cy0,
+    };
+    // Reserve exactly the room the cooler travels through, so it never overlaps the next
+    // section. The content below is off screen at this point, so nothing visibly shifts.
+    var endDrift = centreY - cy0 + span;
+    stage.style.paddingBottom = Math.ceil(endDrift + rect.height * GROW / 2 + 32) + 'px';
   }
 
   function nearest(i) {
@@ -61,10 +105,22 @@
   function render() {
     raf = 0;
     if (!geometry) return;
-    var scrolled = Math.min(Math.max(window.scrollY - geometry.start, 0), geometry.span);
-    var t = geometry.span ? scrolled / geometry.span : 0;          // 0 → 1 through the hero
-    var open = Math.sin(Math.PI * t);                              // closed → open → closed
-    el.style.setProperty('--drift', (scrolled * DRIFT).toFixed(1) + 'px');
+    var g = geometry;
+    var open;
+    if (g.mode === 'drift') {
+      var scrolled = Math.min(Math.max(window.scrollY - g.start, 0), g.span);
+      var t = g.span ? scrolled / g.span : 0;
+      open = Math.sin(Math.PI * t);                               // closed → open → closed
+      place(0, scrolled * DRIFT, 1);
+    } else {
+      var s = Math.min(Math.max(window.scrollY, 0), g.span);
+      var m = smooth((s - g.moveStart) / (g.moveEnd - g.moveStart));   // 0 → 1: to the middle
+      open = s <= g.peak ? smooth(s / g.peak) : smooth(1 - (s - g.peak) / (g.span - g.peak));
+      var natural = g.cy0 - s;                                    // where the layout puts it
+      var drifting = natural + s * DRIFT;                         // phones' drift, before moving
+      var y = drifting + (g.centreY - drifting) * m;              // …blending to the middle
+      place(g.dx * m, y - natural, 1 + GROW * m);
+    }
     var img = nearest(Math.round(open * (N - 1)));
     if (img && img !== drawn) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);

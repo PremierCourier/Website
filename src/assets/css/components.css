@@ -170,10 +170,11 @@
 
 .hero__sequence {
   position: relative;
+  z-index: 2;
   width: 100%;
   max-width: 460px;
   margin: 0 auto;
-  transform: translate3d(0, var(--drift, 0px), 0);
+  transform: translate3d(var(--tx, 0px), var(--drift, 0px), 0) scale(var(--s, 1));
 }
 
 /* Reserved from first paint (the js class is set in <head>), so nothing below shifts. */

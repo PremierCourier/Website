@@ -97,14 +97,17 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 - Approval gate: the closed still and the exploded end frame are approved before the sequence is rendered. No cooler-sequence frames enter `src/` until both are approved. Status: both approved 2026-09-19 (relayed by the project lead); the sequence is built and on staging for Alanna's final review.
 - Budget (frames cropped tight to the object and sized to its display box × DPR, so decoded memory stays low): desktop ≤72 frames at up to 1440px, AVIF with WebP fallback, total ≤3.5 MB; mobile/tablet ≤24 frames at 720px, total ≤900 KB; frames are fetched after the headline, phone element, and quote button have painted, and only when the hero is in view. First frame is inlined as the poster. `prefers-reduced-motion: reduce` shows the closed-cooler still only.
 - Scroll stays native: the page never pins, snaps, or hijacks scroll; frame index is a pure function of scroll offset. Canvas is `aria-hidden`; the headline carries the meaning.
-- Keeping the cooler in view without pinning: CSS reserves 60svh under the hero stage from first paint (no layout shift), and while the sequence plays the cooler drifts down through that space at 75% of scroll speed (`--drift`), so it stays on screen as it opens and closes. Reduced motion and Save-Data remove the reserved space and show the poster only.
+- Keeping the cooler in view without pinning scroll: CSS reserves 60svh under the hero stage from first paint (no layout shift).
+  - Laptops (≥1024px): once the headline has scrolled away, the cooler slides to the middle of the screen and grows 12% as it opens, stays centred while it closes, then scrolls away with the page. The script sizes the reserved space to exactly that path (the content below is off screen, so nothing visibly shifts).
+  - Phones: the cooler drifts down through the reserved space at 75% of scroll speed as it opens and closes.
+  - Holding the *object* centred is allowed; the page itself always scrolls natively — no scroll pinning, snapping, or slowing. Reduced motion and Save-Data remove the reserved space and show the poster only.
 - Source and pipeline: `design/cooler_sequence.py` → `npm run sequence` (crop to the union of all frames, desktop 72 / mobile 24 frames, AVIF + WebP, poster, budget check) → `src/assets/sequence/`.
 - Hero LCP is the headline, not the canvas. Budget: hero must not push LCP past 1.8s on mobile 4G or 1.2s on desktop.
 
 ### Motion
 
 - Scroll reveals via `IntersectionObserver` + CSS transitions: sections fade and translate up 16px over 400–600ms, once, on entry. Headlines may stagger by word (60ms). Nothing delays reading: text is visible at ≥0.6 opacity before the transition starts. Elements are dimmed only after the visitor's first scroll and only while just below the fold, so a page that is loaded but never scrolled (audits, crawlers, print) is never dimmed.
-- No scroll-jacking, no horizontal scroll sections, no sticky-pinned storytelling.
+- No scroll-jacking, no horizontal scroll sections, no sticky-pinned storytelling. (The hero cooler being held centred on laptops while the page scrolls normally is the one sanctioned exception — see the 3D section.)
 - `prefers-reduced-motion: reduce` disables reveals, parallax, and frame scrubbing; everything renders in its final state.
 - Layout: centered column, 1040px content max, 680px reading max, 8px radius everywhere, shadow `0 2px 12px rgba(11,53,86,0.08)`, ≥60% white space per viewport outside dark bands.
 - Icons: structural only (phone, clock, map pin). Maximum one decorative icon per page; zero preferred.
