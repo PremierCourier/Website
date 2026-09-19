@@ -15,3 +15,5 @@ desktop.ini
 .claude/
 design/renders/
 *.blend1
+functions/quote/node_modules/
+functions/quote/local.settings.json
