@@ -40,7 +40,11 @@ export function serve(dir, port) {
         file = path.join(file, 'index.html');
       }
       const body = await readFile(file);
-      res.writeHead(200, { 'Content-Type': TYPES[path.extname(file)] || 'application/octet-stream' });
+      // no-store: a local server must never hand the browser a stale script after a rebuild.
+      res.writeHead(200, {
+        'Content-Type': TYPES[path.extname(file)] || 'application/octet-stream',
+        'Cache-Control': 'no-store',
+      });
       res.end(body);
     } catch {
       try {

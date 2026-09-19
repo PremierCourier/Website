@@ -7,8 +7,9 @@
 //
 // Desktop (≥1024 px wide) scrubs 72 frames; smaller screens scrub 24. Frames load after
 // the page has loaded and only once the hero is in view, every fourth frame first so
-// scrubbing works at once. AVIF, falling back to WebP. The inlined poster (frame 0) shows
-// until then, and stays alone under reduced motion or Save-Data.
+// scrubbing works at once, and are decoded off the main thread. AVIF, falling back to
+// WebP. The inlined poster (frame 0) shows until then, and stays alone under reduced
+// motion or Save-Data.
 (function () {
   var el = document.querySelector('[data-sequence]');
   if (!el) return;
@@ -74,14 +75,43 @@
 
   function schedule() { if (!raf) raf = requestAnimationFrame(render); }
 
-  function load(i) {
+  // Frames are decoded off the main thread with createImageBitmap, already scaled to the
+  // canvas's pixel size, so drawing one is a cheap copy. (Decoding <img> frames and drawing
+  // them lets the browser discard and re-decode on every draw — that froze the page.)
+  // Browsers without createImageBitmap resize options get a full-size bitmap instead.
+  var bitmapOptions = null;
+
+  function toBitmap(blob) {
+    if (!window.createImageBitmap) return decodeWithImage(blob);
+    if (bitmapOptions === false) return createImageBitmap(blob);
+    return createImageBitmap(blob, bitmapOptions).catch(function (e) {
+      if (bitmapOptions && e && e.name === 'TypeError') {
+        bitmapOptions = false;
+        return createImageBitmap(blob);
+      }
+      throw e;
+    });
+  }
+
+  function decodeWithImage(blob) {
     var img = new Image();
-    img.decoding = 'async';
-    img.src = dir + String(i).padStart(3, '0') + ext;
-    return img.decode().then(function () { frames[i] = img; });
+    var url = URL.createObjectURL(blob);
+    img.src = url;
+    return img.decode().then(function () { URL.revokeObjectURL(url); return img; });
+  }
+
+  function load(i) {
+    return fetch(dir + String(i).padStart(3, '0') + ext)
+      .then(function (res) {
+        if (!res.ok) throw new Error(res.status);
+        return res.blob();
+      })
+      .then(toBitmap)
+      .then(function (bitmap) { frames[i] = bitmap; });
   }
 
   function loadAll() {
+    bitmapOptions = { resizeWidth: canvas.width, resizeHeight: canvas.height, resizeQuality: 'high' };
     // Frame 0 decides the format: AVIF if it decodes, otherwise WebP.
     load(0)
       .catch(function () { ext = '.webp'; return load(0); })
