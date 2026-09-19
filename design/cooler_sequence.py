@@ -387,6 +387,7 @@ def main():
         bpy.ops.render.render(write_still=True)
         print(f'Wrote {scene.render.filepath}')
         return
+    scene.cycles.samples = 64 if PREVIEW else 180   # denoised; frames are seen in motion
     frames_dir = os.path.join(OUT, 'frames')
     os.makedirs(frames_dir, exist_ok=True)
     for f in os.listdir(frames_dir):

@@ -1,0 +1,37 @@
+{
+  "route": "/services/specimen-and-lab-transport/",
+  "template": "service",
+  "status": "proposed",
+  "title": "Specimen and Lab Transport",
+  "description": "Specimens, blood products, and platelets picked up on the lab’s schedule and delivered on time — 24 hours a day, including holidays. Call (928) 533-3585.",
+  "eyebrow": "Services",
+  "heading": "Specimen and lab transport",
+  "lead": "Specimens picked up on the lab’s schedule and delivered on time — 24 hours a day, including holidays.",
+  "carry": {
+    "heading": "What we carry",
+    "items": [
+      "Specimens",
+      "Blood products",
+      "Platelets",
+      "Scheduled and urgent lab pickups"
+    ]
+  },
+  "outcome": "Results that never wait on logistics.",
+  "serve": {
+    "heading": "Who we work with",
+    "items": [
+      {
+        "name": "Hospitals",
+        "line": "Specimens, blood products, platelets, and surgical trays transported on time, every time."
+      },
+      {
+        "name": "Labs",
+        "line": "Time-sensitive specimen pickups handled with precision so your results never wait on logistics."
+      }
+    ]
+  },
+  "areaHeading": "Where we run",
+  "closing": {
+    "heading": "Scheduled routes that run without reminders."
+  }
+}

@@ -19,7 +19,14 @@
     "line2": "Prescott, AZ 86304"
   },
   "imageAlt": {
-    "logo": "Premier Courier Services, LLC"
+    "logo": "Premier Courier Services, LLC",
+    "travis": "Travis Womack, founder of Premier Courier",
+    "alanna": "Alanna Hanigan, owner and manager of Premier Courier",
+    "driver-dave": "Dave, Premier Courier driver",
+    "driver-sherry": "Sherry, Premier Courier driver",
+    "driver-sergio": "Sergio, Premier Courier driver",
+    "driver-brandon": "Brandon, Premier Courier driver",
+    "driver-zaine": "Zaine, Premier Courier driver"
   },
   "quoteEndpoint": "https://quote.premiercourieraz.com/api/quote",
   "cta": {
@@ -31,39 +38,131 @@
     "alannaAnswers": "Call (928) 533-3585. Alanna answers."
   },
   "nav": [
-    { "label": "Services", "route": "/#services" },
-    { "label": "How We Handle It", "route": "/how-we-handle-it/" },
-    { "label": "About", "route": "/about/" },
-    { "label": "Contact", "route": "/contact/" }
+    {
+      "label": "Services",
+      "route": "/services/specimen-and-lab-transport/"
+    },
+    {
+      "label": "How We Handle It",
+      "route": "/how-we-handle-it/"
+    },
+    {
+      "label": "About",
+      "route": "/about/"
+    },
+    {
+      "label": "Contact",
+      "route": "/contact/"
+    }
   ],
   "footer": {
     "services": [
-      { "label": "Specimen & Lab Transport", "route": "/services/specimen-and-lab-transport/" },
-      { "label": "Hospital, OR & Sterile Processing", "route": "/services/hospital-or-and-sterile-processing/" },
-      { "label": "Pharmacy Delivery", "route": "/services/pharmacy-delivery/" },
-      { "label": "Clinic & Dental Delivery", "route": "/services/clinic-and-dental-delivery/" },
-      { "label": "Legal & Financial Documents", "route": "/services/legal-and-financial-documents/" }
+      {
+        "label": "Specimen & Lab Transport",
+        "route": "/services/specimen-and-lab-transport/"
+      },
+      {
+        "label": "Hospital, OR & Sterile Processing",
+        "route": "/services/hospital-or-and-sterile-processing/"
+      },
+      {
+        "label": "Pharmacy Delivery",
+        "route": "/services/pharmacy-delivery/"
+      },
+      {
+        "label": "Clinic & Dental Delivery",
+        "route": "/services/clinic-and-dental-delivery/"
+      },
+      {
+        "label": "Legal & Financial Documents",
+        "route": "/services/legal-and-financial-documents/"
+      }
     ],
     "areas": [
-      { "label": "Prescott", "route": "/areas/prescott/" },
-      { "label": "Flagstaff", "route": "/areas/flagstaff/" },
-      { "label": "Phoenix", "route": "/areas/phoenix/" },
-      { "label": "Tucson", "route": "/areas/tucson/" },
-      { "label": "Kingman", "route": "/areas/kingman/" }
+      {
+        "label": "Prescott",
+        "route": "/areas/prescott/"
+      },
+      {
+        "label": "Flagstaff",
+        "route": "/areas/flagstaff/"
+      },
+      {
+        "label": "Phoenix",
+        "route": "/areas/phoenix/"
+      },
+      {
+        "label": "Tucson",
+        "route": "/areas/tucson/"
+      },
+      {
+        "label": "Kingman",
+        "route": "/areas/kingman/"
+      }
     ],
     "company": [
-      { "label": "How We Handle It", "route": "/how-we-handle-it/" },
-      { "label": "About", "route": "/about/" },
-      { "label": "Get a Quote", "route": "/quote/" },
-      { "label": "Contact", "route": "/contact/" }
+      {
+        "label": "How We Handle It",
+        "route": "/how-we-handle-it/"
+      },
+      {
+        "label": "About",
+        "route": "/about/"
+      },
+      {
+        "label": "Get a Quote",
+        "route": "/quote/"
+      },
+      {
+        "label": "Contact",
+        "route": "/contact/"
+      }
     ]
   },
   "counties": [
-    { "name": "Yavapai County", "towns": ["Prescott", "Prescott Valley", "Chino Valley", "Sedona", "Cottonwood", "Jerome"] },
-    { "name": "Coconino County", "towns": ["Flagstaff"] },
-    { "name": "Maricopa County", "towns": ["Phoenix", "Mesa", "Tempe", "Scottsdale"] },
-    { "name": "Pima County", "towns": ["Tucson"] },
-    { "name": "Mohave County", "towns": ["Kingman"] }
+    {
+      "name": "Yavapai County",
+      "towns": [
+        "Prescott",
+        "Prescott Valley",
+        "Chino Valley",
+        "Sedona",
+        "Cottonwood",
+        "Jerome"
+      ],
+      "route": "/areas/prescott/"
+    },
+    {
+      "name": "Coconino County",
+      "towns": [
+        "Flagstaff"
+      ],
+      "route": "/areas/flagstaff/"
+    },
+    {
+      "name": "Maricopa County",
+      "towns": [
+        "Phoenix",
+        "Mesa",
+        "Tempe",
+        "Scottsdale"
+      ],
+      "route": "/areas/phoenix/"
+    },
+    {
+      "name": "Pima County",
+      "towns": [
+        "Tucson"
+      ],
+      "route": "/areas/tucson/"
+    },
+    {
+      "name": "Mohave County",
+      "towns": [
+        "Kingman"
+      ],
+      "route": "/areas/kingman/"
+    }
   ],
   "schema": {
     "@context": "https://schema.org",
@@ -84,19 +183,71 @@
       "addressCountry": "US"
     },
     "areaServed": [
-      { "@type": "AdministrativeArea", "name": "Yavapai County, AZ" },
-      { "@type": "AdministrativeArea", "name": "Coconino County, AZ" },
-      { "@type": "AdministrativeArea", "name": "Maricopa County, AZ" },
-      { "@type": "AdministrativeArea", "name": "Pima County, AZ" },
-      { "@type": "AdministrativeArea", "name": "Mohave County, AZ" }
+      {
+        "@type": "AdministrativeArea",
+        "name": "Yavapai County, AZ"
+      },
+      {
+        "@type": "AdministrativeArea",
+        "name": "Coconino County, AZ"
+      },
+      {
+        "@type": "AdministrativeArea",
+        "name": "Maricopa County, AZ"
+      },
+      {
+        "@type": "AdministrativeArea",
+        "name": "Pima County, AZ"
+      },
+      {
+        "@type": "AdministrativeArea",
+        "name": "Mohave County, AZ"
+      }
     ],
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
       "opens": "00:00",
       "closes": "23:59"
     },
-    "founder": { "@type": "Person", "name": "Travis Womack" },
-    "employee": { "@type": "Person", "name": "Alanna Hanigan", "jobTitle": "Owner and Manager" }
+    "founder": {
+      "@type": "Person",
+      "name": "Travis Womack"
+    },
+    "employee": {
+      "@type": "Person",
+      "name": "Alanna Hanigan",
+      "jobTitle": "Owner and Manager"
+    }
+  },
+  "handleBlock": {
+    "heading": "Handled right, the first time.",
+    "points": [
+      {
+        "title": "HIPAA-compliant handling",
+        "body": "Our drivers handle every item in a HIPAA-compliant manner."
+      },
+      {
+        "title": "The same care for every item",
+        "body": "We treat every item with the utmost care, no matter its value."
+      },
+      {
+        "title": "Any hour, including holidays",
+        "body": "Business doesn't stop at 5 p.m., on weekends, or on holidays. Neither do we."
+      },
+      {
+        "title": "Drivers your staff know by name",
+        "body": "Friendly, meticulous drivers your staff will know by name."
+      }
+    ],
+    "linkLabel": "How we handle it"
   }
 }

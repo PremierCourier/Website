@@ -1,0 +1,50 @@
+<section class="section page-head">
+  <div class="container container--reading">
+    <p class="eyebrow">{{ page.eyebrow }}</p>
+    <h1 class="page-head__title">{{ page.heading }}</h1>
+    <p class="lead">{{ page.lead }}</p>
+  </div>
+</section>
+
+<section class="section section--tight" aria-labelledby="origin-heading">
+  <div class="container">
+    <div class="profile reveal">
+      <div class="profile__photo">{{> picture img.travis.belowFold }}</div>
+      <div class="profile__text">
+        <h2 class="section__heading" id="origin-heading">{{ page.origin.heading }}</h2>
+        {{#each page.origin.paragraphs}}<p>{{ this }}</p>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt" aria-labelledby="alanna-heading">
+  <div class="container">
+    <div class="profile profile--reverse reveal">
+      <div class="profile__photo">{{> picture img.alanna.belowFold }}</div>
+      <div class="profile__text">
+        <h2 class="section__heading" id="alanna-heading">{{ page.alanna.heading }}</h2>
+        {{#each page.alanna.paragraphs}}<p>{{ this }}</p>
+        {{/each}}
+        <p class="band__cta"><a href="tel:{{ phone.tel }}">{{ cta.alannaAnswers }}</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="drivers-heading">
+  <div class="container">
+    <h2 class="section__heading reveal" id="drivers-heading">{{ page.drivers.heading }}</h2>
+    <p class="lead reveal">{{ page.drivers.lead }}</p>
+    <ul class="drivers">
+      {{#each page.drivers.list}}<li class="driver reveal">
+        {{#if photo}}{{> picture photo }}{{else}}<span class="driver__initial" aria-hidden="true">{{ initial }}</span>{{/if}}
+        <p class="driver__name">{{ name }}</p>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+</section>
+
+{{> cta-bar page.closing }}

@@ -75,43 +75,53 @@
     "items": [
       {
         "name": "Hospitals",
-        "line": "Specimens, blood products, platelets, and surgical trays transported on time, every time."
+        "line": "Specimens, blood products, platelets, and surgical trays transported on time, every time.",
+        "route": "/services/specimen-and-lab-transport/"
       },
       {
         "name": "Labs",
-        "line": "Time-sensitive specimen pickups handled with precision so your results never wait on logistics."
+        "line": "Time-sensitive specimen pickups handled with precision so your results never wait on logistics.",
+        "route": "/services/specimen-and-lab-transport/"
       },
       {
         "name": "Emergency Rooms",
-        "line": "24/7 availability for critical deliveries when every minute matters."
+        "line": "24/7 availability for critical deliveries when every minute matters.",
+        "route": "/services/hospital-or-and-sterile-processing/"
       },
       {
         "name": "Operating Rooms",
-        "line": "Urgent surgical supply runs available day or night, including holidays."
+        "line": "Urgent surgical supply runs available day or night, including holidays.",
+        "route": "/services/hospital-or-and-sterile-processing/"
       },
       {
         "name": "Sterile Processing Departments",
-        "line": "Compliant transport of sterilized instruments and trays with proper handling protocols."
+        "line": "Compliant transport of sterilized instruments and trays with proper handling protocols.",
+        "route": "/services/hospital-or-and-sterile-processing/"
       },
       {
         "name": "Pharmacies",
-        "line": "Prompt, discreet delivery of time-sensitive medications and pharmaceuticals."
+        "line": "Prompt, discreet delivery of time-sensitive medications and pharmaceuticals.",
+        "route": "/services/pharmacy-delivery/"
       },
       {
         "name": "Doctor Offices",
-        "line": "Flexible specimen, record, and supply deliveries that fit your office schedule."
+        "line": "Flexible specimen, record, and supply deliveries that fit your office schedule.",
+        "route": "/services/clinic-and-dental-delivery/"
       },
       {
         "name": "Dentists",
-        "line": "Reliable pickup and delivery of impressions, lab work, and supplies to keep your schedule running."
+        "line": "Reliable pickup and delivery of impressions, lab work, and supplies to keep your schedule running.",
+        "route": "/services/clinic-and-dental-delivery/"
       },
       {
         "name": "Law Firms",
-        "line": "Same-day, discreet delivery of legal documents, filings, and confidential materials."
+        "line": "Same-day, discreet delivery of legal documents, filings, and confidential materials.",
+        "route": "/services/legal-and-financial-documents/"
       },
       {
         "name": "Accountant Offices",
-        "line": "Secure same-day delivery of sensitive financial documents, tax season and beyond."
+        "line": "Secure same-day delivery of sensitive financial documents, tax season and beyond.",
+        "route": "/services/legal-and-financial-documents/"
       },
       {
         "name": "Airport Retrievals",
@@ -119,31 +129,10 @@
       },
       {
         "name": "And More",
-        "line": "If it needs to get there fast and handled right, we'll make it happen."
+        "line": "If it needs to get there fast and handled right, we'll make it happen.",
+        "route": "/quote/"
       }
     ]
-  },
-  "handle": {
-    "heading": "Handled right, the first time.",
-    "points": [
-      {
-        "title": "HIPAA-compliant handling",
-        "body": "Our drivers handle every item in a HIPAA-compliant manner."
-      },
-      {
-        "title": "The same care for every item",
-        "body": "We treat every item with the utmost care, no matter its value."
-      },
-      {
-        "title": "Any hour, including holidays",
-        "body": "Business doesn't stop at 5 p.m., on weekends, or on holidays. Neither do we."
-      },
-      {
-        "title": "Drivers your staff know by name",
-        "body": "Friendly, meticulous drivers your staff will know by name."
-      }
-    ],
-    "linkLabel": "How we handle it"
   },
   "testimonials": {
     "heading": "What customers say",

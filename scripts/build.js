@@ -181,8 +181,22 @@ export async function build(targetName = process.env.BUILD_TARGET || 'local') {
     return { ...page, hero: { ...page.hero, kit } };
   };
 
+  // Any content object with "photoId" gets `photo` (the lazy image entry) for {{> picture }}.
+  const withPhotos = (value, file) => {
+    if (Array.isArray(value)) return value.map((v) => withPhotos(v, file));
+    if (!value || typeof value !== 'object') return value;
+    const out = {};
+    for (const [k, v] of Object.entries(value)) out[k] = withPhotos(v, file);
+    if (value.photoId) {
+      const entry = img[value.photoId];
+      if (!entry) throw new Error(`content/${file}: no image src/assets/img/src/${value.photoId}.*`);
+      out.photo = entry.belowFold;
+    }
+    return out;
+  };
+
   for (const rawPage of pages) {
-    const page = withKit(rawPage);
+    const page = withPhotos(withKit(rawPage), rawPage.file);
     const tpl = templates[page.template];
     if (tpl === undefined) throw new Error(`content/${page.file}: no template src/pages/${page.template}.html`);
     const ctx = {

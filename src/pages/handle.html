@@ -1,0 +1,29 @@
+<section class="section page-head">
+  <div class="container container--reading">
+    <p class="eyebrow">{{ page.eyebrow }}</p>
+    <h1 class="page-head__title">{{ page.heading }}</h1>
+    <p class="lead">{{ page.lead }}</p>
+  </div>
+</section>
+
+<section class="section section--tight" aria-label="{{ page.pointsLabel }}">
+  <div class="container">
+    <ul class="points points--light">
+      {{#each page.points}}<li class="points__item reveal">
+        <h2 class="points__title">{{ title }}</h2>
+        <p>{{ body }}</p>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+</section>
+
+<section class="section band band--dark" aria-labelledby="owner-heading">
+  <div class="container container--reading">
+    <h2 class="band__heading reveal" id="owner-heading">{{ page.owner.heading }}</h2>
+    <p class="band__lead reveal">{{ page.owner.body }}</p>
+    <p class="band__cta reveal"><a href="tel:{{ phone.tel }}">{{ cta.alannaAnswers }}</a></p>
+  </div>
+</section>
+
+{{> cta-bar page.closing }}

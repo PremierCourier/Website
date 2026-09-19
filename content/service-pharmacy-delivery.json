@@ -1,0 +1,32 @@
+{
+  "route": "/services/pharmacy-delivery/",
+  "template": "service",
+  "status": "proposed",
+  "title": "Pharmacy Delivery",
+  "description": "Prompt, discreet delivery of time-sensitive medications and pharmaceuticals, scheduled or urgent, 24/7 including holidays. Call (928) 533-3585.",
+  "eyebrow": "Services",
+  "heading": "Pharmacy and pharmaceutical delivery",
+  "lead": "Prompt, discreet delivery of time-sensitive medications and pharmaceuticals — scheduled runs and urgent ones, 24 hours a day, including holidays.",
+  "carry": {
+    "heading": "What we carry",
+    "items": [
+      "Time-sensitive medications",
+      "Pharmaceuticals",
+      "Scheduled and urgent runs"
+    ]
+  },
+  "outcome": "Deliveries that arrive when promised, in the condition they left.",
+  "serve": {
+    "heading": "Who we work with",
+    "items": [
+      {
+        "name": "Pharmacies",
+        "line": "Prompt, discreet delivery of time-sensitive medications and pharmaceuticals."
+      }
+    ]
+  },
+  "areaHeading": "Where we run",
+  "closing": {
+    "heading": "Scheduled routes that run without reminders."
+  }
+}

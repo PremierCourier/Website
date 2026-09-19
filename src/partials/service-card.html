@@ -1,4 +1,6 @@
 <li class="card reveal">
+  {{#if route}}<a class="card__link" href="{{ base }}{{ route }}">{{/if}}
   <h3 class="card__title">{{ name }}</h3>
   <p class="card__body">{{ line }}</p>
+  {{#if route}}</a>{{/if}}
 </li>

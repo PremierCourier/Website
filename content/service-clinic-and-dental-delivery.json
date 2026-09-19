@@ -1,0 +1,38 @@
+{
+  "route": "/services/clinic-and-dental-delivery/",
+  "template": "service",
+  "status": "proposed",
+  "title": "Clinic and Dental Delivery",
+  "description": "Specimens, records, supplies, impressions, and lab work picked up and delivered on your office’s schedule. Call (928) 533-3585.",
+  "eyebrow": "Services",
+  "heading": "Physician, dental, and clinic deliveries",
+  "lead": "Specimens, records, supplies, impressions, and lab work — one reliable courier, on your office’s schedule.",
+  "carry": {
+    "heading": "What we carry",
+    "items": [
+      "Specimens",
+      "Records",
+      "Supplies",
+      "Dental impressions",
+      "Lab work"
+    ]
+  },
+  "outcome": "Scheduled routes that run without reminders.",
+  "serve": {
+    "heading": "Who we work with",
+    "items": [
+      {
+        "name": "Doctor Offices",
+        "line": "Flexible specimen, record, and supply deliveries that fit your office schedule."
+      },
+      {
+        "name": "Dentists",
+        "line": "Reliable pickup and delivery of impressions, lab work, and supplies to keep your schedule running."
+      }
+    ]
+  },
+  "areaHeading": "Where we run",
+  "closing": {
+    "heading": "One phone number, one person, any hour."
+  }
+}

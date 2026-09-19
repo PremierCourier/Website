@@ -1,0 +1,42 @@
+{
+  "route": "/about/",
+  "template": "about",
+  "status": "proposed",
+  "title": "About",
+  "description": "Founded by Travis Womack and owned and operated by Alanna Hanigan since 2014. Meet the owner and the drivers behind Premier Courier.",
+  "eyebrow": "About",
+  "heading": "His legacy lives on in everything we do.",
+  "lead": "Serving Central and Northern Arizona since 2014 — and built on a legacy that started long before.",
+  "origin": {
+    "heading": "Our story",
+    "paragraphs": [
+      "Premier Courier was founded by Travis Womack — an entrepreneur at heart from the very beginning. As a kid, he ran a door-to-door car washing service. In the 1990s, he launched a food delivery business long before apps made it mainstream. By the early 2000s, he had built a relationship with a local hospital that would become the foundation of Premier Courier.",
+      "For over two decades, Travis grew Premier Courier into the trusted name it is today throughout Central and Northern Arizona. He passed away in 2014 after a brave battle with cancer, leaving behind a business built on integrity, reliability, and genuine care for the community he served.",
+      "His legacy lives on in everything we do."
+    ]
+  },
+  "alanna": {
+    "heading": "Meet Alanna",
+    "paragraphs": [
+      "My name is Alanna, and I am the owner and manager of Premier Courier Services, LLC. I have proudly operated this business since 2014.",
+      "I am dedicated to providing professional, honest, and reliable courier services, ensuring timely and secure deliveries of important documents, specimens, pharmaceuticals, surgical trays, blood, and platelets. We treat every item with the utmost care, no matter its value. Our services are available 24/7, including holidays, because we understand that sometimes business needs to happen at any time.",
+      "As a small business owner, I highly value personal connections and strive to get to know each customer individually. This approach distinguishes Premier Courier from larger corporations, as I am personally involved in daily operations, building trust and strong relationships with our clients. My commitment to Premier Courier means my phone is always with me for any delivery needs. Many inquire why I don't use a phone answering service; my response is that no one will take the same pride and joy in this business as I do.",
+      "I look forward to the opportunity to meet with you soon and discuss how we can establish a successful partnership."
+    ]
+  },
+  "drivers": {
+    "heading": "Our drivers",
+    "lead": "Friendly, meticulous drivers your staff will know by name.",
+    "list": [
+      { "name": "Johnna", "photoId": null, "initial": "J" },
+      { "name": "Dave", "photoId": "driver-dave" },
+      { "name": "Sherry", "photoId": "driver-sherry" },
+      { "name": "Sergio", "photoId": "driver-sergio" },
+      { "name": "Brandon", "photoId": "driver-brandon" },
+      { "name": "Zaine", "photoId": "driver-zaine" }
+    ]
+  },
+  "closing": {
+    "heading": "One phone number, one person, any hour."
+  }
+}

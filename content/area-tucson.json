@@ -1,0 +1,46 @@
+{
+  "route": "/areas/tucson/",
+  "template": "area",
+  "status": "proposed",
+  "title": "Courier in Tucson, AZ",
+  "description": "Medical and business courier serving Tucson and Pima County 24/7, including holidays. Call (928) 533-3585.",
+  "eyebrow": "Service area",
+  "heading": "Tucson and Pima County.",
+  "lead": "Medical and business deliveries to and from Tucson, handled with the same care as every Premier Courier run.",
+  "county": "Pima County",
+  "towns": [
+    "Tucson"
+  ],
+  "servicesHeading": "What we carry",
+  "services": [
+    {
+      "name": "Specimen and lab transport",
+      "line": "Specimens, blood products, and platelets on the lab’s schedule.",
+      "route": "/services/specimen-and-lab-transport/"
+    },
+    {
+      "name": "Hospital, OR, and sterile processing",
+      "line": "Surgical trays, sterilized instruments, and urgent surgical supply runs.",
+      "route": "/services/hospital-or-and-sterile-processing/"
+    },
+    {
+      "name": "Pharmacy delivery",
+      "line": "Prompt, discreet delivery of time-sensitive medications.",
+      "route": "/services/pharmacy-delivery/"
+    },
+    {
+      "name": "Clinic and dental delivery",
+      "line": "Specimens, records, supplies, impressions, and lab work.",
+      "route": "/services/clinic-and-dental-delivery/"
+    },
+    {
+      "name": "Legal and financial documents",
+      "line": "Same-day, discreet delivery of filings and confidential documents.",
+      "route": "/services/legal-and-financial-documents/"
+    }
+  ],
+  "coverageHeading": "All five counties",
+  "closing": {
+    "heading": "Call (928) 533-3585. Alanna answers."
+  }
+}

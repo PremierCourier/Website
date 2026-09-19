@@ -1,0 +1,24 @@
+{
+  "route": "/how-we-handle-it/",
+  "template": "handle",
+  "status": "proposed",
+  "title": "How We Handle It",
+  "description": "HIPAA-compliant handling, the same care for every item, 24/7 including holidays, and the owner on the phone. How Premier Courier handles every run.",
+  "eyebrow": "How we handle it",
+  "heading": "Handled right, the first time.",
+  "lead": "Deliveries that arrive when promised, in the condition they left.",
+  "pointsLabel": "How we handle every run",
+  "points": [
+    { "title": "HIPAA-compliant handling", "body": "Our drivers handle every item in a HIPAA-compliant manner." },
+    { "title": "The same care for every item", "body": "We treat every item with the utmost care, no matter its value." },
+    { "title": "Any hour, including holidays", "body": "Business doesn't stop at 5 p.m., on weekends, or on holidays. Neither do we." },
+    { "title": "Drivers your staff know by name", "body": "Friendly, meticulous drivers your staff will know by name." }
+  ],
+  "owner": {
+    "heading": "One phone number, one person, any hour.",
+    "body": "The owner answers the phone directly — there is no answering service."
+  },
+  "closing": {
+    "heading": "Scheduled routes that run without reminders."
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "route": "/services/hospital-or-and-sterile-processing/",
+  "template": "service",
+  "status": "proposed",
+  "title": "Hospital, OR and Sterile Processing Runs",
+  "description": "Surgical trays, sterilized instruments, and urgent surgical supply runs, day or night, including holidays. Call (928) 533-3585.",
+  "eyebrow": "Services",
+  "heading": "Hospital, OR, and sterile processing runs",
+  "lead": "Surgical trays and sterilized instruments moved with proper handling protocols, and urgent surgical supply runs available day or night, including holidays.",
+  "carry": {
+    "heading": "What we carry",
+    "items": [
+      "Surgical trays",
+      "Sterilized instruments",
+      "Urgent surgical supplies",
+      "ER-critical deliveries"
+    ]
+  },
+  "outcome": "Handled right, the first time.",
+  "serve": {
+    "heading": "Who we work with",
+    "items": [
+      {
+        "name": "Operating Rooms",
+        "line": "Urgent surgical supply runs available day or night, including holidays."
+      },
+      {
+        "name": "Sterile Processing Departments",
+        "line": "Compliant transport of sterilized instruments and trays with proper handling protocols."
+      },
+      {
+        "name": "Emergency Rooms",
+        "line": "24/7 availability for critical deliveries when every minute matters."
+      },
+      {
+        "name": "Hospitals",
+        "line": "Specimens, blood products, platelets, and surgical trays transported on time, every time."
+      }
+    ]
+  },
+  "areaHeading": "Where we run",
+  "closing": {
+    "heading": "Scheduled routes that run without reminders."
+  }
+}
