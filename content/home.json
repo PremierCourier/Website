@@ -2,6 +2,7 @@
   "route": "/",
   "template": "home",
   "status": "proposed",
+  "scripts": ["hero.js"],
   "title": "Medical and Business Courier",
   "description": "Arizona's trusted medical and business courier. On time, every time — 24/7, including holidays, and the owner answers the phone.",
   "hero": {

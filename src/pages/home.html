@@ -9,12 +9,15 @@
         <a class="button button--secondary" href="tel:{{ phone.tel }}">Call {{ phone.display }}</a>
       </div>
     </div>
-    <div class="hero__stage" data-parallax>
-      <picture data-hero-still>
-        <source type="image/avif" srcset="{{ img.cooler-hero.avif }}">
-        <source type="image/webp" srcset="{{ img.cooler-hero.webp }}">
-        <img class="hero__object" src="{{ img.cooler-hero.fallback }}" alt="{{ page.hero.coolerAlt }}" width="{{ img.cooler-hero.width }}" height="{{ img.cooler-hero.height }}" fetchpriority="low" decoding="async">
-      </picture>
+    <div class="hero__stage">
+      <div class="hero__turntable"{{#if turntableFrames}} data-turntable data-frames="{{ turntableFrames }}" data-path="{{ base }}/assets/turntable"{{/if}}>
+        <picture data-hero-still>
+          <source type="image/avif" srcset="{{ img.cooler-hero.avif }}">
+          <source type="image/webp" srcset="{{ img.cooler-hero.webp }}">
+          <img src="{{ img.cooler-hero.fallback }}" alt="{{ page.hero.coolerAlt }}" width="{{ img.cooler-hero.width }}" height="{{ img.cooler-hero.height }}" fetchpriority="low" decoding="async">
+        </picture>
+        {{#if turntableFrames}}<canvas class="hero__canvas" aria-hidden="true"></canvas>{{/if}}
+      </div>
     </div>
   </div>
 </section>

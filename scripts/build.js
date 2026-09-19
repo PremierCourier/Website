@@ -142,6 +142,10 @@ export async function build(targetName = process.env.BUILD_TARGET || 'local') {
     await copyFile(path.join(ROOT, 'node_modules/@fontsource/inter/files', f), path.join(DIST, 'assets/fonts', f));
   }
   await cp(path.join(SRC, 'assets/js'), path.join(DIST, 'assets/js'), { recursive: true });
+  // Turntable frames are final web files (npm run stills); copied as-is.
+  const turntable = path.join(SRC, 'assets/turntable');
+  const turntableFrames = existsSync(turntable) ? (await readdir(path.join(turntable, '720'))).length : 0;
+  if (turntableFrames) await cp(turntable, path.join(DIST, 'assets/turntable'), { recursive: true });
 
   const css = await buildCss(base);
   const layout = await readFile(path.join(SRC, 'layouts/base.html'), 'utf8');
@@ -162,6 +166,7 @@ export async function build(targetName = process.env.BUILD_TARGET || 'local') {
       year,
       css,
       schemaJson,
+      turntableFrames,
       noindex: target.noindex,
       canonical: shared.site.url + (page.route === '/404.html' ? '/' : page.route),
       fullTitle: `${page.title} ${shared.site.titleSuffix}`,

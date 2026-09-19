@@ -1,12 +1,17 @@
 # Premier Courier transport cooler — hero still.
 #
-#   blender -b -P design/cooler.py -- [--preview] [--angle DEG]
+#   blender -b -P design/cooler.py -- [--preview] [--angle DEG] [--turntable N]
 #
 # Builds the cooler from scratch (no external assets), lights it on white with a
 # shadow-catcher floor, renders design/renders/cooler-hero.png with a transparent
 # background, and saves design/cooler.blend for hand editing.
 #
-# The P mark decal is a flat placeholder disc until the P mark trace is approved.
+# --turntable N renders N frames of the cooler turning a full circle about its vertical
+# axis (camera and lights fixed) into design/renders/turntable/NNN.png. Frame 000 matches
+# the hero still, so the page can swap from the still to the sequence without a jump.
+#
+# The decal is the P mark from the official logo PNG (design/p-mark.png, 40×59 px) on a
+# white disc. It swaps for the vector trace once Alanna approves one.
 # Render metadata stamps are disabled so no file path, host name, or date is written.
 
 import math
@@ -19,6 +24,7 @@ from mathutils import Vector
 ARGS = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
 PREVIEW = '--preview' in ARGS
 AZIMUTH = float(ARGS[ARGS.index('--angle') + 1]) if '--angle' in ARGS else 34.0
+TURNTABLE = int(ARGS[ARGS.index('--turntable') + 1]) if '--turntable' in ARGS else 0
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT_DIR = os.path.join(HERE, 'renders')
@@ -62,6 +68,35 @@ def plastic(name, hex_color, roughness=0.38, coat=0.35):
     set_input(bsdf, ['Roughness'], roughness)
     set_input(bsdf, ['Coat Weight', 'Clearcoat'], coat)
     set_input(bsdf, ['Coat Roughness', 'Clearcoat Roughness'], 0.2)
+    return mat
+
+
+MARK_ASPECT = 40 / 59  # width / height of design/p-mark.png
+
+
+def mark_material(path):
+    # Image texture with its alpha, so only the mark shows on the white disc.
+    mat = bpy.data.materials.new('P Mark')
+    try:
+        mat.use_nodes = True
+    except AttributeError:
+        pass
+    nodes, links = mat.node_tree.nodes, mat.node_tree.links
+    bsdf = nodes.get('Principled BSDF')
+    tex = nodes.new('ShaderNodeTexImage')
+    # Copy the pixels into a new image packed inside the .blend. A loaded image keeps its
+    # absolute path, and remapping it to "//" leaves the old path's bytes in the file.
+    src = bpy.data.images.load(path)
+    img = bpy.data.images.new('P Mark', src.size[0], src.size[1], alpha=True)
+    img.pixels = src.pixels[:]
+    img.pack()
+    bpy.data.images.remove(src)
+    tex.image = img
+    tex.interpolation = 'Cubic'
+    tex.extension = 'CLIP'
+    links.new(tex.outputs['Color'], bsdf.inputs['Base Color'])
+    links.new(tex.outputs['Alpha'], bsdf.inputs['Alpha'])
+    set_input(bsdf, ['Roughness'], 0.5)
     return mat
 
 
@@ -111,7 +146,8 @@ def build():
     body_mat = plastic('Cooler Body', COURIER_BLUE)
     lid_mat = plastic('Cooler Lid', DEEP_BLUE)
     hardware_mat = plastic('Hardware', NAVY, roughness=0.5, coat=0.1)
-    decal_mat = plastic('Decal Placeholder', SKY, roughness=0.55, coat=0.0)
+    decal_mat = plastic('Decal', '#FFFFFF', roughness=0.5, coat=0.0)
+    mark_mat = mark_material(os.path.join(HERE, 'p-mark.png'))
 
     # Body
     rounded_box('Body', (W, D, H_BODY), (0, 0, H_BODY / 2), 0.035, body_mat)
@@ -139,19 +175,39 @@ def build():
     for x in (-0.15, 0.15):
         rounded_box(f'Handle Mount {x:+.2f}', (0.05, 0.05, 0.024), (x, 0, top_z + 0.016), 0.008, hardware_mat, 4)
 
-    # Latches straddling the lid seam, front face (the decal side, −Y)
-    latch_y = -(D / 2 + LID_OVERHANG + 0.004)
-    for x in (-0.17, 0.17):
-        rounded_box(f'Latch {x:+.2f}', (0.052, 0.018, 0.072), (x, latch_y, H_BODY + 0.01), 0.006, hardware_mat, 4)
+    # Latches straddling the lid seam, front (the decal side, −Y) and back
+    latch_y = D / 2 + LID_OVERHANG + 0.004
+    for side, y in (('Front', -latch_y), ('Back', latch_y)):
+        for x in (-0.17, 0.17):
+            rounded_box(f'Latch {side} {x:+.2f}', (0.052, 0.018, 0.072), (x, y, H_BODY + 0.01), 0.006, hardware_mat, 4)
 
-    # Decal placeholder on the front face (the approved P mark replaces this)
+    # Decal on the front face: white disc (the brand guide's white panel) carrying the P mark
+    decal_z = H_BODY * 0.47
     bpy.ops.mesh.primitive_cylinder_add(vertices=96, radius=0.078, depth=0.002,
-                                        location=(0, -(D / 2) - 0.0008, H_BODY * 0.47),
+                                        location=(0, -(D / 2) - 0.0008, decal_z),
                                         rotation=(math.radians(90), 0, 0))
     decal = bpy.context.active_object
-    decal.name = 'Decal Placeholder'
+    decal.name = 'Decal'
     bpy.ops.object.shade_smooth()
     decal.data.materials.append(decal_mat)
+
+    mark_h = 0.112
+    mark_w = mark_h * MARK_ASPECT
+    bpy.ops.mesh.primitive_plane_add(size=1, location=(0, -(D / 2) - 0.0022, decal_z),
+                                     rotation=(math.radians(90), 0, 0))
+    mark = bpy.context.active_object
+    mark.name = 'P Mark'
+    mark.scale = (mark_w, mark_h, 1)
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+    mark.data.materials.append(mark_mat)
+
+    # Rig: every cooler part hangs off one empty, so the turntable rotates the object
+    # while the camera, lights, and floor stay put.
+    rig = bpy.data.objects.new('Rig', None)
+    bpy.context.collection.objects.link(rig)
+    for obj in list(bpy.context.collection.objects):
+        if obj is not rig and obj.type in {'MESH', 'CURVE'}:
+            obj.parent = rig
 
     # Shadow-catcher floor: only the shadow reaches the transparent render
     bpy.ops.mesh.primitive_plane_add(size=12, location=(0, 0, 0))
@@ -244,10 +300,27 @@ def configure_render(scene):
     print('Rendering on CPU')
 
 
+def render_turntable(scene, frames):
+    out = os.path.join(OUT_DIR, 'turntable')
+    os.makedirs(out, exist_ok=True)
+    rig = bpy.data.objects['Rig']
+    scene.render.resolution_percentage = 60      # 720 px: covers the hero at 2x
+    scene.cycles.samples = 160
+    for i in range(frames):
+        rig.rotation_euler.z = math.radians(i * 360 / frames)
+        scene.render.filepath = os.path.join(out, f'{i:03d}.png')
+        bpy.ops.render.render(write_still=True)
+    rig.rotation_euler.z = 0
+    print(f'Wrote {frames} turntable frames to {out}')
+
+
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
     scene = build()
     configure_render(scene)
+    if TURNTABLE:
+        render_turntable(scene, TURNTABLE)
+        return
     # Write only the scene and what it uses. save_as_mainfile would also store UI state,
     # including the last directory the Save As operator saw (a local user path).
     bpy.data.libraries.write(os.path.join(HERE, 'cooler.blend'), {scene}, path_remap='RELATIVE_ALL', compress=False)

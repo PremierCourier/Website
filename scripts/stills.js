@@ -1,9 +1,13 @@
-// Publishes Blender renders from design/renders/ into src/assets/img/src/.
-// Re-encodes each PNG (dropping Blender's EXIF and render-stat text chunks) and fades
-// the outer 7% of every edge to transparent, so the soft floor shadow never ends in a
+// Publishes Blender renders from design/renders/.
+//   *.png            → src/assets/img/src/ (the build makes AVIF/WebP/PNG from these)
+//   turntable/*.png  → src/assets/turntable/{720,480}/NNN.avif (final web files; the
+//                      build copies them as-is, the hero script loads them after page load)
+// Every image is re-encoded (dropping Blender's EXIF and render-stat text chunks) and the
+// outer 7% of each edge fades to transparent, so the soft floor shadow never ends in a
 // hard line on the page. Preview renders (*-preview.png) are skipped.
 
-import { readdir, mkdir } from 'node:fs/promises';
+import { readdir, mkdir, rm } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
@@ -12,6 +16,9 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FROM = path.join(ROOT, 'design/renders');
 const TO = path.join(ROOT, 'src/assets/img/src');
 const FADE = 0.07;
+const TURNTABLE_FROM = path.join(FROM, 'turntable');
+const TURNTABLE_TO = path.join(ROOT, 'src/assets/turntable');
+const TURNTABLE_WIDTHS = [720, 480];
 
 function edgeMask(w, h) {
   const fx = Math.round(w * FADE);
@@ -31,6 +38,16 @@ function edgeMask(w, h) {
   );
 }
 
+async function faded(input) {
+  const { width, height } = await sharp(input).metadata();
+  const buffer = await sharp(input)
+    .ensureAlpha()
+    .composite([{ input: edgeMask(width, height), blend: 'dest-in' }])
+    .png()
+    .toBuffer();
+  return { buffer, width, height };
+}
+
 await mkdir(TO, { recursive: true });
 const files = (await readdir(FROM)).filter((f) => f.endsWith('.png') && !f.endsWith('-preview.png'));
 if (!files.length) {
@@ -38,12 +55,25 @@ if (!files.length) {
   process.exit(1);
 }
 for (const f of files) {
-  const input = path.join(FROM, f);
-  const { width, height } = await sharp(input).metadata();
-  await sharp(input)
-    .ensureAlpha()
-    .composite([{ input: edgeMask(width, height), blend: 'dest-in' }])
-    .png({ compressionLevel: 9 })
-    .toFile(path.join(TO, f));
+  const { buffer, width, height } = await faded(path.join(FROM, f));
+  await sharp(buffer).png({ compressionLevel: 9 }).toFile(path.join(TO, f));
   console.log(`published ${f} (${width}×${height})`);
+}
+
+if (existsSync(TURNTABLE_FROM)) {
+  const frames = (await readdir(TURNTABLE_FROM)).filter((f) => /^\d{3}\.png$/.test(f)).sort();
+  await rm(TURNTABLE_TO, { recursive: true, force: true });
+  for (const w of TURNTABLE_WIDTHS) await mkdir(path.join(TURNTABLE_TO, String(w)), { recursive: true });
+  for (const f of frames) {
+    const { buffer } = await faded(path.join(TURNTABLE_FROM, f));
+    await Promise.all(
+      TURNTABLE_WIDTHS.map((w) =>
+        sharp(buffer)
+          .resize({ width: w })
+          .avif({ quality: 50, effort: 6 })
+          .toFile(path.join(TURNTABLE_TO, String(w), f.replace('.png', '.avif'))),
+      ),
+    );
+  }
+  console.log(`published ${frames.length} turntable frames at ${TURNTABLE_WIDTHS.join(' and ')} px`);
 }

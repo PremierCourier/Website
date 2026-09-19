@@ -87,11 +87,11 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 ### 3D
 
 - Subjects are Premier Courier's own objects, nothing generic: (1) the sealed blue transport cooler with the P mark — home hero, lit on white, slow turn; (2) a relief map of the five counties in the brand blues with route lines — coverage band on home and area pages. No people, no vehicles, no abstract "tech" geometry.
-- Ship CSS-first: layered PNG/WebP renders with `perspective`, `transform: rotateX/rotateY/translateZ`, and pointer/scroll-driven parallax. This is the default implementation for both subjects.
+- Ship CSS-first: rendered stills, no WebGL. The home hero cooler is a **turntable sequence**: 60 Blender frames (6° apart, AVIF, 720/480 px) drawn to a canvas by `src/assets/js/hero.js`, so the object genuinely turns on scroll and pointer. The still paints first and stays for reduced motion, Save-Data, and no-AVIF browsers; frame 0 matches it. Frames load after `load` via `requestIdleCallback` and do not count toward LCP or page weight.
 - WebGL (Three.js, r160+, tree-shaken, ≤250 KB gzipped for lib + scene) only for the home hero cooler, only on desktop ≥1024px, only when `prefers-reduced-motion: no-preference`, loaded after `load` with `requestIdleCallback`. Mobile, tablet, and reduced-motion get a rendered still (AVIF/WebP) in the same layout. The still is also the poster that paints before WebGL initializes, so the hero never flashes empty.
 - Renders are produced once in Blender (source `.blend` files in `design/`, not in `src/`), exported as stills and, for the WebGL path, a single glTF ≤2 MB with a 1K baked texture. No runtime asset generation.
 - Hero LCP is the headline, not the scene. Headline, phone element, and quote button paint before any 3D asset is requested. Budget: hero scene must not push LCP past 1.8s on mobile 4G or 1.2s on desktop.
-- Interaction: gentle idle rotation and pointer parallax only. No click-to-spin, no scroll-jacking, no camera flythroughs.
+- Interaction: the cooler turns 90° toward the viewer as the hero scrolls away, bringing the P mark square-on (the page scrolls normally — nothing pins), and ±30° with pointer position on desktop, with a gentle idle drift when the pointer rests. No click-to-spin, no scroll-jacking, no camera flythroughs.
 
 ### Motion
 
@@ -151,5 +151,5 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 - Alanna's mobile number for SMS: set in Azure Function settings by Hemang; never in repo.
 - Photoshoot assets: not yet available. Build with the 3D cooler hero and rendered stills; photography lands on service and about pages when delivered.
 - Design changes not yet approved by Alanna: Inter-only type (no serif) and the 3D hero. They are presented to her on staging as proposals (brand guide v1.1).
-- P mark trace for the cooler decal: needs Alanna's approval. Until then, the cooler uses a flat blue decal placeholder.
+- P mark on the cooler decal: currently the mark cropped from the official logo PNG (40×59 px, slightly soft) on a white disc. A vector trace replaces it once Alanna approves one.
 - 3D renders: the hero is built now with a flat placeholder so layout and LCP work can proceed; `design/` Blender sources replace it. Cooler design must match the brand guide (blue, P mark, sealed, unlabeled) and is approved by Alanna as a still before any WebGL work starts.

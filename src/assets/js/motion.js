@@ -1,4 +1,4 @@
-// Scroll reveals (once, on entry) and the hero object's idle turn + pointer parallax.
+// Scroll reveals (once, on entry). The hero cooler's motion lives in hero.js.
 // prefers-reduced-motion: everything renders in its final state and nothing moves.
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -31,40 +31,4 @@
       reveals.forEach(function (el) { arm.observe(el); });
     }, { once: true, passive: true });
   }
-
-  var stage = document.querySelector('[data-parallax]');
-  if (!stage || reduce) return;
-
-  var desktop = window.matchMedia('(min-width: 1024px) and (pointer: fine)');
-  var MAX = 3;          // degrees of pointer tilt (a still reads as flat past ~4°)
-  var IDLE = 2.5;       // degrees of idle sway; the real turn arrives with WebGL
-  var PERIOD = 14000;   // ms per idle cycle
-  var target = { x: 0, y: 0 };
-  var visible = true;
-  var raf = 0;
-
-  function frame(t) {
-    raf = 0;
-    if (!visible || document.hidden) return;
-    var idle = Math.sin((t / PERIOD) * Math.PI * 2) * IDLE;
-    stage.style.setProperty('--rx', (target.y * -MAX).toFixed(2) + 'deg');
-    stage.style.setProperty('--ry', (idle + target.x * MAX).toFixed(2) + 'deg');
-    raf = requestAnimationFrame(frame);
-  }
-  function start() { if (!raf) raf = requestAnimationFrame(frame); }
-
-  window.addEventListener('pointermove', function (e) {
-    if (!desktop.matches) return;
-    target.x = (e.clientX / window.innerWidth) * 2 - 1;
-    target.y = (e.clientY / window.innerHeight) * 2 - 1;
-  }, { passive: true });
-
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (entries) {
-      visible = entries[0].isIntersecting;
-      if (visible) start();
-    }).observe(stage);
-  }
-  document.addEventListener('visibilitychange', function () { if (!document.hidden) start(); });
-  start();
 })();
