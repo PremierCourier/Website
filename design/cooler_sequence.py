@@ -52,13 +52,19 @@ CAV_W, CAV_D = W - 2 * WALL, D - 2 * WALL
 # Exploded layout: (lift in m, x shift, y shift, z-rotation deg, x-tilt deg, y-tilt deg).
 # Order is the opening order; each part starts a little after the previous one.
 PARTS = {
-    'lid':      {'order': 0, 'lift': 0.98, 'dx': 0.00, 'dy': 0.02, 'rz': 0,  'rx': -12, 'ry': 6},
-    'pack_top': {'order': 1, 'lift': 0.74, 'dx': -0.03, 'dy': 0.0, 'rz': -7, 'rx': 0,   'ry': -3},
-    'rack':     {'order': 2, 'lift': 0.54, 'dx': -0.08, 'dy': -0.02, 'rz': -10, 'rx': 14, 'ry': -3},
-    'pouch':    {'order': 2, 'lift': 0.46, 'dx': 0.09, 'dy': 0.0, 'rz': 10, 'rx': 0,   'ry': 4},
-    'pack_bot': {'order': 3, 'lift': 0.30, 'dx': -0.02, 'dy': 0.0, 'rz': -4, 'rx': 0,   'ry': -2},
+    'lid':      {'order': 0, 'lift': 0.98, 'dx': 0.00, 'dy': 0.02, 'rz': 0,  'rx': -12, 'ry': 6,
+                 'wob': 2.0, 'cycles': 2.0, 'phase': 0.0, 'sway': 0.006},
+    'pack_top': {'order': 1, 'lift': 0.74, 'dx': -0.03, 'dy': 0.0, 'rz': -7, 'rx': 0,   'ry': -3,
+                 'wob': 3.5, 'cycles': 2.6, 'phase': 1.1, 'sway': 0.010},
+    'rack':     {'order': 2, 'lift': 0.54, 'dx': -0.08, 'dy': -0.02, 'rz': -10, 'rx': 14, 'ry': -3,
+                 'wob': 3.0, 'cycles': 2.2, 'phase': 2.4, 'sway': 0.008},
+    'pouch':    {'order': 2, 'lift': 0.46, 'dx': 0.09, 'dy': 0.0, 'rz': 10, 'rx': 0,   'ry': 4,
+                 'wob': 5.0, 'cycles': 3.0, 'phase': 3.6, 'sway': 0.012},
+    'pack_bot': {'order': 3, 'lift': 0.30, 'dx': -0.02, 'dy': 0.0, 'rz': -4, 'rx': 0,   'ry': -2,
+                 'wob': 3.5, 'cycles': 2.4, 'phase': 4.9, 'sway': 0.009},
 }
 STAGGER = 0.1
+TUBE_BOB = 0.004   # metres each tube rides up and down inside the rack while it moves
 
 
 # ---------- helpers ----------
@@ -203,7 +209,9 @@ def round_part(name, radius, depth, location, mat, parent, vertices=48, bevel=Tr
 
 def build_rack(cx, base_z, width, depth, rig):
     """Tube rack: base plate, a drilled upper plate, four posts, six empty capped tubes.
-    Tubes are frosted and unlabeled with no contents. Returns the z of the tallest cap."""
+    Tubes are frosted and unlabeled with no contents.
+    Returns (z of the tallest cap, [(tube, cap, rim), …] so each tube can bob on its own)."""
+    tubes = []
     # Deep Blue rack so the pale tubes read against it; light caps so they read against the rack.
     rack_mat = material('Rack', DEEP_BLUE, roughness=0.3, coat=0.4)
     glass = material('Tube', '#DCE7F1', roughness=0.28, coat=0.6, Transmission_Weight=0.05, IOR=1.45)
@@ -239,8 +247,9 @@ def build_rack(cx, base_z, width, depth, rig):
             set_parent(tube, rig)
             cap_mat = caps[(row * 3 + col) % 3]
             cap_z = bottom + TUBE_L + 0.009
-            round_part(f'Cap {row}{col}', TUBE_R * 1.22, 0.022, (x, y, cap_z), cap_mat, rig)
-            round_part(f'Cap Rim {row}{col}', TUBE_R * 1.32, 0.005, (x, y, bottom + TUBE_L - 0.001), cap_mat, rig)
+            cap = round_part(f'Cap {row}{col}', TUBE_R * 1.22, 0.022, (x, y, cap_z), cap_mat, rig)
+            rim = round_part(f'Cap Rim {row}{col}', TUBE_R * 1.32, 0.005, (x, y, bottom + TUBE_L - 0.001), cap_mat, rig)
+            tubes.append((tube, cap, rim))
             top = max(top, cap_z + 0.011)
             bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=TUBE_R + 0.0012, depth=0.05, location=(x, y, upper_z))
             holes.append(active())
@@ -262,7 +271,7 @@ def build_rack(cx, base_z, width, depth, rig):
     bpy.context.view_layer.objects.active = upper
     bpy.ops.object.modifier_move_to_index(modifier='Holes', index=0)
     set_parent(cutter, rig)
-    return top
+    return top, tubes
 
 def build():
     bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -353,7 +362,7 @@ def build():
     half_w = CAV_W / 2 - 0.02
     rack_x = -CAV_W / 4
     rack = empty('Rack Rig', (rack_x, 0, base_z + 0.05))
-    rack_top = build_rack(rack_x, base_z, half_w, CAV_D - 0.07, rack)
+    rack_top, tubes = build_rack(rack_x, base_z, half_w, CAV_D - 0.07, rack)
 
     pouch_h = 0.06
     pouch_x = CAV_W / 4
@@ -367,6 +376,7 @@ def build():
 
     rigs = {'lid': lid, 'pack_top': pack_top, 'rack': rack, 'pouch': pouch, 'pack_bot': pack_bot}
     rest = {k: v.location.copy() for k, v in rigs.items()}
+    tube_rest = [[o.location.copy() for o in group] for group in tubes]
 
     # Shadow-catcher floor: only the overhead softbox casts a shadow.
     bpy.ops.mesh.primitive_plane_add(size=14, location=(0, 0, 0))
@@ -403,7 +413,8 @@ def build():
     scene.world = world
 
     configure_render(scene)
-    return scene, {'rigs': rigs, 'rest': rest, 'latches': latches, 'cam': cam, 'target': target}
+    return scene, {'rigs': rigs, 'rest': rest, 'latches': latches, 'cam': cam, 'target': target,
+                   'tubes': tubes, 'tube_rest': tube_rest}
 
 
 def pose(state, open_amount):
@@ -413,8 +424,32 @@ def pose(state, open_amount):
     for name, p in PARTS.items():
         k = smoothstep((open_amount - p['order'] * STAGGER) / span)
         rig = state['rigs'][name]
-        rig.location = state['rest'][name] + Vector((p['dx'] * k, p['dy'] * k, p['lift'] * k))
-        rig.rotation_euler = (math.radians(p['rx'] * k), math.radians(p['ry'] * k), math.radians(p['rz'] * k))
+        # Wobble while it travels: nothing as it sets off, strongest mid-way, settled once
+        # it is out — each part on its own amplitude, speed and phase, so they never move
+        # in unison. Baked into the frames, so it plays with the scroll.
+        env = math.sin(math.pi * k)
+        wob = math.radians(p['wob']) * env
+        osc = math.sin(k * 2 * math.pi * p['cycles'] + p['phase'])
+        osc2 = math.sin(k * 2 * math.pi * p['cycles'] * 0.6 + p['phase'] * 1.7)
+        sway = p['sway'] * env
+        rig.location = state['rest'][name] + Vector((
+            p['dx'] * k + sway * osc,
+            p['dy'] * k + sway * 0.6 * osc2,
+            p['lift'] * k,
+        ))
+        rig.rotation_euler = (
+            math.radians(p['rx'] * k) + wob * osc2,
+            math.radians(p['ry'] * k) + wob * osc,
+            math.radians(p['rz'] * k) + wob * 0.5 * osc,
+        )
+
+    # The tubes ride up and down a little inside the rack while it moves.
+    rack_k = smoothstep((open_amount - PARTS['rack']['order'] * STAGGER) / span)
+    rack_env = math.sin(math.pi * rack_k)
+    for i, (group, rests) in enumerate(zip(state['tubes'], state['tube_rest'])):
+        bob = TUBE_BOB * rack_env * math.sin(rack_k * 2 * math.pi * 2.4 + i * 1.05)
+        for obj, rest_loc in zip(group, rests):
+            obj.location = rest_loc + Vector((0, 0, bob))
     # Latches swing down in the first part of the lid's travel.
     latch_k = smoothstep(open_amount / (STAGGER * 1.5))
     for hinge in state['latches']:

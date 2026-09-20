@@ -8,8 +8,7 @@
 // jumping. Scrolling itself is never pinned, snapped, or slowed.
 //
 //   Laptops (≥1024 px): held from the first scroll; once the headline has gone, the cooler
-//   slides to the middle — with a shake on the way, like a box being carried — and grows
-//   to fill the height below the header as it opens, pauses
+//   slides to the middle and grows to fill the height below the header as it opens, pauses
 //   fully open, then is released — it closes and zooms back out as it scrolls away.
 //   Phones: held in the middle of the screen while it opens and closes, then scrolls away.
 //
@@ -33,8 +32,6 @@
   var MAX_SCALE = 1.8;      // laptops: never grow past this, however tall the screen
   var CLOSE_KEEP = 0.25;    // laptops: share of the growth kept once closed (zooms back out)
   var FRAME_EASE_MS = 70;   // how quickly the shown frame catches up with the scroll
-  var SHAKE_DEG = 3.5;      // laptops: peak wobble while sliding to the middle
-  var SHAKE_PX = 5;         // laptops: peak jostle while sliding to the middle
   var canvas = el.querySelector('canvas');
   var ctx = canvas.getContext('2d');
   var set = window.innerWidth >= 1024 ? 'desktop' : 'mobile';
@@ -53,11 +50,10 @@
     return x * x * (3 - 2 * x);
   }
 
-  function place(tx, ty, scale, rot) {
+  function place(tx, ty, scale) {
     el.style.setProperty('--tx', tx.toFixed(1) + 'px');
     el.style.setProperty('--ty', ty.toFixed(1) + 'px');
     el.style.setProperty('--s', scale.toFixed(4));
-    el.style.setProperty('--rot', (rot || 0).toFixed(2) + 'deg');
   }
 
   function measure() {
@@ -152,13 +148,7 @@
       open = 1 - c;
       scale = 1 + (g.grow - 1) * (1 - (1 - CLOSE_KEEP) * c);
     }
-    // Shake while it travels: zero as it sets off, strongest mid-way, settled on arrival —
-    // a box being carried and set down. A function of scroll, so it replays in reverse.
-    var e = Math.sin(Math.PI * m);
-    var rot = SHAKE_DEG * e * Math.sin(s * 0.11);
-    var jx = SHAKE_PX * e * Math.sin(s * 0.137 + 1.3);
-    var jy = SHAKE_PX * 0.8 * e * Math.sin(s * 0.173 + 0.4);
-    place(g.dx * m + jx, g.dy * m + jy, scale, rot);
+    place(g.dx * m, g.dy * m, scale);
     return open * (N - 1);
   }
 
