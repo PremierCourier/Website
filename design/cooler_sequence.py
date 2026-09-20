@@ -51,18 +51,25 @@ CAV_W, CAV_D = W - 2 * WALL, D - 2 * WALL
 
 # Exploded layout: (lift in m, x shift, y shift, z-rotation deg, x-tilt deg, y-tilt deg).
 # Order is the opening order; each part starts a little after the previous one.
+# Contents are lid, insulated body, two cold packs, and one sealed plain opaque pouch.
+# WITH_RACK builds a tube rack instead of the wide pouch; off by review decision, kept so it
+# can be switched back on in one line.
+WITH_RACK = False
+
 PARTS = {
-    'lid':      {'order': 0, 'lift': 0.98, 'dx': 0.00, 'dy': 0.02, 'rz': 0,  'rx': -12, 'ry': 6,
+    'lid':      {'order': 0, 'lift': 0.92, 'dx': 0.00, 'dy': 0.02, 'rz': 0,  'rx': -12, 'ry': 6,
                  'wob': 2.0, 'cycles': 2.0, 'phase': 0.0, 'sway': 0.006},
-    'pack_top': {'order': 1, 'lift': 0.74, 'dx': -0.03, 'dy': 0.0, 'rz': -7, 'rx': 0,   'ry': -3,
+    'pack_top': {'order': 1, 'lift': 0.68, 'dx': -0.03, 'dy': 0.0, 'rz': -7, 'rx': 0,   'ry': -3,
                  'wob': 3.5, 'cycles': 2.6, 'phase': 1.1, 'sway': 0.010},
-    'rack':     {'order': 2, 'lift': 0.54, 'dx': -0.08, 'dy': -0.02, 'rz': -10, 'rx': 14, 'ry': -3,
-                 'wob': 3.0, 'cycles': 2.2, 'phase': 2.4, 'sway': 0.008},
-    'pouch':    {'order': 2, 'lift': 0.46, 'dx': 0.09, 'dy': 0.0, 'rz': 10, 'rx': 0,   'ry': 4,
+    'pouch':    {'order': 2, 'lift': 0.46, 'dx': 0.03, 'dy': 0.0, 'rz': 9,  'rx': 0,   'ry': 4,
                  'wob': 5.0, 'cycles': 3.0, 'phase': 3.6, 'sway': 0.012},
-    'pack_bot': {'order': 3, 'lift': 0.30, 'dx': -0.02, 'dy': 0.0, 'rz': -4, 'rx': 0,   'ry': -2,
+    'pack_bot': {'order': 3, 'lift': 0.26, 'dx': -0.02, 'dy': 0.0, 'rz': -4, 'rx': 0,   'ry': -2,
                  'wob': 3.5, 'cycles': 2.4, 'phase': 4.9, 'sway': 0.009},
 }
+if WITH_RACK:
+    PARTS['rack'] = {'order': 2, 'lift': 0.54, 'dx': -0.08, 'dy': -0.02, 'rz': -10, 'rx': 14,
+                     'ry': -3, 'wob': 3.0, 'cycles': 2.2, 'phase': 2.4, 'sway': 0.008}
+    PARTS['pouch'].update({'lift': 0.46, 'dx': 0.09})
 STAGGER = 0.1
 TUBE_BOB = 0.004   # metres each tube rides up and down inside the rack while it moves
 
@@ -359,22 +366,30 @@ def build():
     box('Cold Pack Bottom', pack_size, (0, 0, z1), 0.012, gel, parent=pack_bot)
 
     base_z = z1 + 0.016 + 0.004                     # floor of the middle layer
-    half_w = CAV_W / 2 - 0.02
-    rack_x = -CAV_W / 4
-    rack = empty('Rack Rig', (rack_x, 0, base_z + 0.05))
-    rack_top, tubes = build_rack(rack_x, base_z, half_w, CAV_D - 0.07, rack)
+    rigs = {'lid': lid, 'pack_bot': pack_bot}
+    tubes = []
 
-    pouch_h = 0.06
-    pouch_x = CAV_W / 4
+    if WITH_RACK:
+        half_w = CAV_W / 2 - 0.02
+        rack_x = -CAV_W / 4
+        rack = empty('Rack Rig', (rack_x, 0, base_z + 0.05))
+        middle_top, tubes = build_rack(rack_x, base_z, half_w, CAV_D - 0.07, rack)
+        rigs['rack'] = rack
+        pouch_w, pouch_x, pouch_h = half_w, CAV_W / 4, 0.06
+    else:
+        pouch_w, pouch_x, pouch_h = CAV_W - 0.07, 0.0, 0.07
+        middle_top = base_z + pouch_h
+
     pouch = empty('Pouch Rig', (pouch_x, 0, base_z + pouch_h / 2))
-    box('Pouch', (half_w, CAV_D - 0.06, pouch_h), (pouch_x, 0, base_z + pouch_h / 2), 0.02, pouch_mat, 8, parent=pouch)
-    box('Pouch Seal', (0.022, CAV_D - 0.07, 0.012), (pouch_x + half_w / 2 - 0.004, 0, base_z + pouch_h / 2), 0.004, seal_mat, 3, parent=pouch)
+    box('Pouch', (pouch_w, CAV_D - 0.06, pouch_h), (pouch_x, 0, base_z + pouch_h / 2), 0.02, pouch_mat, 8, parent=pouch)
+    box('Pouch Seal', (0.022, CAV_D - 0.07, 0.012), (pouch_x + pouch_w / 2 - 0.004, 0, base_z + pouch_h / 2), 0.004, seal_mat, 3, parent=pouch)
+    rigs['pouch'] = pouch
 
-    z3 = rack_top + 0.004 + 0.016
+    z3 = middle_top + 0.004 + 0.016
     pack_top = empty('Pack Top Rig', (0, 0, z3))
     box('Cold Pack Top', pack_size, (0, 0, z3), 0.012, gel, parent=pack_top)
+    rigs['pack_top'] = pack_top
 
-    rigs = {'lid': lid, 'pack_top': pack_top, 'rack': rack, 'pouch': pouch, 'pack_bot': pack_bot}
     rest = {k: v.location.copy() for k, v in rigs.items()}
     tube_rest = [[o.location.copy() for o in group] for group in tubes]
 
@@ -443,13 +458,6 @@ def pose(state, open_amount):
             math.radians(p['rz'] * k) + wob * 0.5 * osc,
         )
 
-    # The tubes ride up and down a little inside the rack while it moves.
-    rack_k = smoothstep((open_amount - PARTS['rack']['order'] * STAGGER) / span)
-    rack_env = math.sin(math.pi * rack_k)
-    for i, (group, rests) in enumerate(zip(state['tubes'], state['tube_rest'])):
-        bob = TUBE_BOB * rack_env * math.sin(rack_k * 2 * math.pi * 2.4 + i * 1.05)
-        for obj, rest_loc in zip(group, rests):
-            obj.location = rest_loc + Vector((0, 0, bob))
     # Latches swing down in the first part of the lid's travel.
     latch_k = smoothstep(open_amount / (STAGGER * 1.5))
     for hinge in state['latches']:
@@ -457,13 +465,25 @@ def pose(state, open_amount):
     # Camera pulls back and up on the lid's curve (the first and highest part to move), so
     # the rising stack never outruns the frame.
     cam_k = smoothstep(open_amount / span)
-    target_z = 0.2 + 0.52 * cam_k
-    dist = 1.95 + 1.2 * cam_k
+    target_z = 0.2 + 0.44 * cam_k
+    dist = 1.95 + 1.5 * cam_k
     elev, az = math.radians(20 + 4 * cam_k), math.radians(34)
     state['target'].location = (0, 0, target_z)
     state['cam'].location = Vector((0, 0, target_z)) + Vector((
         -math.sin(az) * math.cos(elev), -math.cos(az) * math.cos(elev), math.sin(elev))) * dist
     bpy.context.view_layer.update()
+
+    # The tubes ride up and down a little inside the rack while it moves (rack build only).
+    if not state['tubes']:
+        return
+    rack_k = smoothstep((open_amount - PARTS['rack']['order'] * STAGGER) / span)
+    rack_env = math.sin(math.pi * rack_k)
+    for i, (group, rests) in enumerate(zip(state['tubes'], state['tube_rest'])):
+        bob = TUBE_BOB * rack_env * math.sin(rack_k * 2 * math.pi * 2.4 + i * 1.05)
+        for obj, rest_loc in zip(group, rests):
+            obj.location = rest_loc + Vector((0, 0, bob))
+    bpy.context.view_layer.update()
+
 
 
 def configure_render(scene):

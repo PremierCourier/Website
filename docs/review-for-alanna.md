@@ -5,8 +5,8 @@ Everything on staging is `status: proposed` until Alanna approves it. Verbatim a
 ## 1. Design (brand guide v1.1 proposals)
 
 - [ ] **Inter only on the web** — the serif (Georgia) headings are dropped on the website. Office documents keep Georgia.
-- [ ] **3D cooler hero** — the sealed blue cooler with the P mark opens into its layers (lid, insulated body, two cold packs, a rack of six empty capped test tubes, one sealed plain pouch) as you scroll and closes again. Nothing in it carries a label or text, and the tubes are empty.
-- [ ] **Syringe** — left out on purpose (a needle reads as injection rather than transport). Say if you'd like a capped syringe in a sealed pack added.
+- [ ] **3D cooler hero** — the sealed blue cooler with the P mark opens into its layers (lid, insulated body, two cold packs, one sealed plain opaque pouch) as you scroll and closes again. Nothing in it carries a label, text, or contents.
+- [ ] Tubes, racks, and syringes are deliberately left out of the opened cooler.
 - [ ] **No UI gradients** — the logo-gradient bands and buttons from the guide are retired in favour of flat brand blues.
 - [ ] **Copper** appears once per screen: the "Call Now" button (desktop header) or the bottom call bar (phones).
 

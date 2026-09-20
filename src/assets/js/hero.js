@@ -13,8 +13,9 @@
 //   Phones: held in the middle of the screen while it opens and closes, then scrolls away.
 //
 // The hold's length is a spacer under the cooler (.hero__travel), so nothing below is ever
-// overlapped. Desktop scrubs 72 frames; phones 24. Frames load after the page has loaded
-// and only once the hero is in view, every fourth frame first, decoded off the main thread;
+// overlapped. Desktop scrubs 72 frames; phones 24. Fetching starts at the first scroll or
+// after load on an idle callback, whichever comes first, every fourth frame first (keyframes
+// before in-betweens) and decoded off the main thread;
 // AVIF, falling back to WebP. The inlined poster (frame 0) shows until then, and stays
 // alone under reduced motion or Save-Data.
 (function () {
@@ -238,19 +239,20 @@
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', function () { measure(); schedule(); });
 
-  function whenInView() {
-    if (!('IntersectionObserver' in window)) return loadAll();
-    var io = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting) {
-        io.disconnect();
-        loadAll();
-      }
-    }, { rootMargin: '200px 0px' });
-    io.observe(el);
+  // Fetching starts at the first scroll, or after load when the browser is idle — whichever
+  // comes first — so a visitor who scrolls immediately never waits for idle time, and one
+  // who doesn't scroll still gets the frames without competing with the page's own load.
+  var started = false;
+  function start() {
+    if (started) return;
+    started = true;
+    window.removeEventListener('scroll', start);
+    loadAll();
   }
+  window.addEventListener('scroll', start, { passive: true, once: true });
   function afterLoad() {
-    if ('requestIdleCallback' in window) requestIdleCallback(whenInView, { timeout: 1500 });
-    else setTimeout(whenInView, 200);
+    if ('requestIdleCallback' in window) requestIdleCallback(start, { timeout: 1500 });
+    else setTimeout(start, 200);
   }
   if (document.readyState === 'complete') afterLoad();
   else window.addEventListener('load', afterLoad, { once: true });

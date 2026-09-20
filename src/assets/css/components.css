@@ -133,6 +133,9 @@
 
 .hero {
   padding: clamp(48px, 7vw, 104px) 0 clamp(56px, 7vw, 96px);
+  /* At least a full viewport, so the hero never ends mid-screen above the fold. */
+  min-height: 100vh;
+  min-height: 100svh;
   /* clip, not hidden: hidden would make .hero a scroll container and break the sticky hold */
   overflow: clip;
 }
