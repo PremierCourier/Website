@@ -14,7 +14,7 @@
 #   blend/cooler_sequence.blend                                  scene only, no UI state/paths
 #
 # Nothing in the cooler carries a label, barcode, form, or text; the tubes are empty, capped,
-# and unlabeled. The P mark is the real
+# and unlabeled. No syringes or needles. The P mark is the real
 # mark cropped from the official logo (design/p-mark.png), applied as a texture — never drawn.
 
 import math
@@ -51,10 +51,10 @@ CAV_W, CAV_D = W - 2 * WALL, D - 2 * WALL
 
 # Exploded layout: (lift in m, x shift, y shift, z-rotation deg, x-tilt deg, y-tilt deg).
 # Order is the opening order; each part starts a little after the previous one.
-# Contents are lid, insulated body, two cold packs, and one sealed plain opaque pouch.
-# WITH_RACK builds a tube rack instead of the wide pouch; off by review decision, kept so it
-# can be switched back on in one line.
-WITH_RACK = False
+# Contents are lid, insulated body, two cold packs, and — with WITH_RACK on — a rack of six
+# empty, capped, unlabeled tubes beside a sealed plain opaque pouch. Off builds the wide
+# pouch alone. Tubes are empty and unlabeled either way.
+WITH_RACK = True
 
 PARTS = {
     'lid':      {'order': 0, 'lift': 0.92, 'dx': 0.00, 'dy': 0.02, 'rz': 0,  'rx': -12, 'ry': 6,
