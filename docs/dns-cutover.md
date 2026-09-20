@@ -14,9 +14,9 @@ Do not start until: `main` is approved by Alanna in writing, `APPROVED=1` produc
    | `@` | A | Squarespace defaults | |
    | MX, TXT (SPF/DKIM/DMARC) | — | **leave untouched** | |
 
-2. **Verify the domain for the GitHub org** (prevents domain takeover): GitHub → `premiercourier-az` org → Settings → Pages → Add a domain → `premiercourieraz.com`. Add the `_github-pages-challenge-premiercourier-az` TXT record it gives you at Squarespace, then click Verify.
+2. **Verify the domain for the GitHub org** (prevents domain takeover): GitHub → `PremierCourier` org → Settings → Pages → Add a domain → `premiercourieraz.com`. Add the `_github-pages-challenge-PremierCourier` TXT record it gives you at Squarespace, then click Verify.
 3. **Lower the TTL** of the `www` and `@` records to the minimum Squarespace allows, so a rollback propagates fast.
-4. **Production is live on GitHub**: the `pcaz-website` repo's Pages site is serving the `gh-pages` branch at `premiercourier-az.github.io`, with `CNAME` = `www.premiercourieraz.com` (written by the production build).
+4. **Production is live on GitHub**: the `pcaz-website` repo's Pages site is serving the `gh-pages` branch at `premiercourier.github.io`, with `CNAME` = `www.premiercourieraz.com` (written by the production build).
 
 ## Cutover
 
@@ -25,7 +25,7 @@ Do not start until: `main` is approved by Alanna in writing, `APPROVED=1` produc
 
    | Host | Type | Value |
    |---|---|---|
-   | `www` | CNAME | `premiercourier-az.github.io` |
+   | `www` | CNAME | `premiercourier.github.io` |
    | `@` | A | `185.199.108.153` |
    | `@` | A | `185.199.109.153` |
    | `@` | A | `185.199.110.153` |
@@ -33,12 +33,12 @@ Do not start until: `main` is approved by Alanna in writing, `APPROVED=1` produc
    | `@` | AAAA (optional) | `2606:50c0:8000::153`, `2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153` |
 
    Remove only the old Squarespace website A/CNAME records for `@` and `www`. Nothing else.
-3. In GitHub → `pcaz-website` → Settings → Pages: custom domain `www.premiercourieraz.com`. Wait for the DNS check to pass, then tick **Enforce HTTPS** once the certificate is issued (can take up to an hour).
+3. In GitHub → `Website` → Settings → Pages: custom domain `www.premiercourieraz.com`. Wait for the DNS check to pass, then tick **Enforce HTTPS** once the certificate is issued (can take up to an hour).
 4. If the quote function is live: confirm the `quote` CNAME (→ the Function App host) is present and unchanged.
 
 ## Verify
 
-- `nslookup www.premiercourieraz.com` → `premiercourier-az.github.io`; `nslookup premiercourieraz.com` → the four 185.199.x.153 addresses.
+- `nslookup www.premiercourieraz.com` → `premiercourier.github.io`; `nslookup premiercourieraz.com` → the four 185.199.x.153 addresses.
 - `https://www.premiercourieraz.com/` loads the new site with a valid certificate; `http://` and the bare domain redirect to `https://www.`.
 - Spot-check on a phone (Alanna's is the reference): home, a service page, `/quote/` (submit a test request), `/contact/`.
 - Send a test email to alanna@premiercourieraz.com and confirm it arrives — proves mail was untouched.

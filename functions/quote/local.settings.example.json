@@ -3,7 +3,7 @@
   "Values": {
     "FUNCTIONS_WORKER_RUNTIME": "node",
     "AzureWebJobsStorage": "",
-    "ALLOWED_ORIGINS": "https://www.premiercourieraz.com,https://premiercourier-az.github.io,http://localhost:4321",
+    "ALLOWED_ORIGINS": "https://www.premiercourieraz.com,https://premiercourier.github.io,http://localhost:4321",
     "SITE_URL": "https://www.premiercourieraz.com",
     "MAIL_TO": "alanna@premiercourieraz.com",
     "MAIL_FROM": "quotes@premiercourieraz.com",

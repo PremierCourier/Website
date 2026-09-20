@@ -20,9 +20,9 @@ Read this file fully before writing code. `@docs/brand-guide-internal.md` and `@
 - Page status: every page's content JSON carries `"status": "proposed"` or `"status": "approved"`. `npm run build` builds every page; the production deploy refuses to publish if any page is not `approved`. Staging publishes proposed pages so Alanna can review them.
 - Output: `dist/`. Committed by CI only.
 - Quote form backend: Azure Function app `pcaz-quote` (`functions/quote/`, Node), fronted by the custom domain `quote.premiercourieraz.com` (CNAME at Squarespace) so the `azurewebsites.net` hostname never appears in page source. It sends email to alanna@premiercourieraz.com and SMS via Twilio to Alanna's mobile. Secrets in Function App settings only; never in this repo.
-- Hosting: GitHub org `premiercourier-az` (owned by support@premiercourieraz.com, GitHub Team plan). Both repos are private.
-  - Production: repo `pcaz-website`, Pages from its `gh-pages` branch. DNS stays at Squarespace (A records → GitHub Pages IPs, `www` CNAME → `premiercourier-az.github.io`). HTTPS enforced.
-  - Staging: repo `pcaz-website-staging`, Pages on, no custom domain, no `CNAME` file.
+- Hosting: GitHub org `PremierCourier` (owned by support@premiercourieraz.com, GitHub Team plan). Both repos are private.
+  - Production: repo `Website`, Pages from its `gh-pages` branch. DNS stays at Squarespace (A records → GitHub Pages IPs, `www` CNAME → `premiercourier.github.io`). HTTPS enforced.
+  - Staging: repo `Website-staging`, Pages on, no custom domain, no `CNAME` file.
 - `CNAME` is written only by the production build. Staging builds never emit it.
 - `.gitattributes` marks `CLAUDE.md` and `docs/` `export-ignore`, so they never land in a zip export.
 
@@ -143,7 +143,7 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 
 ## Deploy and DNS
 
-- `staging` branch → workflow builds without `CNAME` and pushes `dist/` to the `pcaz-website-staging` repo's Pages site with an SSH deploy key owned by that repo (`STAGING_DEPLOY_KEY`; setup steps in `.github/workflows/staging.yml`) — never a personal access token. Send Alanna the link; she reviews on her phone.
+- `staging` branch → workflow builds without `CNAME` and pushes `dist/` to the `Website-staging` repo's Pages site with an SSH deploy key owned by that repo (`STAGING_DEPLOY_KEY`; setup steps in `.github/workflows/staging.yml`) — never a personal access token. Send Alanna the link; she reviews on her phone.
 - `main` → `gh-pages` via GitHub Actions on push, only when `APPROVED=1` is set on the workflow dispatch.
 - DNS cutover steps and rollback in `docs/dns-cutover.md`. Do not touch Squarespace DNS until `main` is approved and `dist/` passes audit + lighthouse.
 - Keep the Squarespace site live and untouched until cutover completes and HTTPS is verified on the custom domain.

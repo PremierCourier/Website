@@ -28,7 +28,7 @@ Secrets live here only — never in this repo, never in `local.settings.json` co
 
 | Setting | Value |
 |---|---|
-| `ALLOWED_ORIGINS` | `https://www.premiercourieraz.com,https://premiercourier-az.github.io` |
+| `ALLOWED_ORIGINS` | `https://www.premiercourieraz.com,https://premiercourier.github.io` |
 | `SITE_URL` | `https://www.premiercourieraz.com` |
 | `MAIL_TO` | `alanna@premiercourieraz.com` |
 | `MAIL_FROM` | a verified sender on the premiercourieraz.com domain, e.g. `quotes@premiercourieraz.com` |
