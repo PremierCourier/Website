@@ -1,15 +1,16 @@
 name: Deploy production
 
-# Manual only. Type 1 in "approved" only after Alanna has approved staging in writing.
+# Manual only. Type 1 in "approved" only after Alanna has approved the preview in writing, and
+# after the account owner has set the repository variable LAUNCHED = true (stops previews).
 on:
   workflow_dispatch:
     inputs:
       approved:
-        description: "Alanna approved staging in writing? Type 1 to deploy."
+        description: "Alanna approved the preview in writing, and LAUNCHED is set? Type 1 to deploy."
         required: true
 
 concurrency:
-  group: deploy-production
+  group: deploy-pages
   cancel-in-progress: false
 
 jobs:

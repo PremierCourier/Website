@@ -33,7 +33,7 @@ This guide exists so a writer, designer, social media manager, or AI system can 
 | **Version** | **Purpose**                                                                                                                                                 | **Status** |
 |-------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|------------|
 | **1.0**     | Initial internal brand and marketing intelligence guide. Palette derived from the existing logo; voice derived from the live website and Alanna’s own copy. | Superseded |
-| **1.1**     | Aligned with the website build: web type is Inter only (serif headings dropped on the web); Premier Courier's own objects may be shown as 3D renders; the blue UI gradient is retired. Proposed — Alanna approves by reviewing staging. | Current (proposed) |
+| **1.1**     | Aligned with the website build: web type is Inter only (serif headings dropped on the web); Premier Courier's own objects may be shown as 3D renders; the blue UI gradient is retired. Proposed — Alanna approves by reviewing the preview. | Current (proposed) |
 
 ## 01 Brand Foundation
 

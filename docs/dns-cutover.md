@@ -16,9 +16,13 @@ Do not start until: `main` is approved by Alanna in writing, `APPROVED=1` produc
 
 2. **Verify the domain for the GitHub org** (prevents domain takeover): GitHub → `PremierCourier` org → Settings → Pages → Add a domain → `premiercourieraz.com`. Add the `_github-pages-challenge-PremierCourier` TXT record it gives you at Squarespace, then click Verify.
 3. **Lower the TTL** of the `www` and `@` records to the minimum Squarespace allows, so a rollback propagates fast.
-4. **Production is live on GitHub**: the `pcaz-website` repo's Pages site is serving the `gh-pages` branch at `premiercourier.github.io`, with `CNAME` = `www.premiercourieraz.com` (written by the production build).
+4. **GitHub Pro** is active on the `PremierCourier` account (Pages from a private repo needs it), and Pages is enabled on `Website` with source `gh-pages` / root.
+5. **Production is live on GitHub**: the `pcaz-website` repo's Pages site is serving the `gh-pages` branch at `premiercourier.github.io`, with `CNAME` = `www.premiercourieraz.com` (written by the production build).
 
 ## Cutover
+
+0. **Stop previews first.** Account owner: repository variable `LAUNCHED = true` (Settings → Secrets and variables → Actions → Variables). From now on a push to `main` no longer publishes a preview over production. Then run **Deploy production** (Actions → Run workflow, `approved = 1`), which writes the `CNAME`.
+
 
 1. In Squarespace: disconnect the domain from the Squarespace *site* only (Settings → Domains → the domain → keep the registration and DNS at Squarespace). Keep the Squarespace site itself live and unpublished-from-domain, not deleted.
 2. Add or replace the website records:

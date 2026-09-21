@@ -1,0 +1,36 @@
+name: Deploy preview
+
+# Before launch, every push to main publishes a preview of the site to this repo's GitHub
+# Pages: https://premiercourier.github.io/Website/ — noindex, no CNAME, proposed pages
+# included, so Alanna can review everything on her phone.
+#
+# Launch guard: once the site is live on www.premiercourieraz.com, set the repository
+# variable LAUNCHED = true (Settings → Secrets and variables → Actions → Variables).
+# From then on this workflow stops, so a push to main can never overwrite production.
+# Production deploys only through "Deploy production" (manual, APPROVED = 1).
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: vars.LAUNCHED != 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Build, audit, push the preview to gh-pages
+        run: npm run deploy:preview
+        env:
+          DEPLOY_REMOTE: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git

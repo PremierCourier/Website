@@ -2,7 +2,8 @@
 //
 // BUILD_TARGET:
 //   local      (default) base path "", indexable, no CNAME — dev + lighthouse
-//   staging    base path "/pcaz-website-staging", noindex everywhere, no CNAME
+//   preview    base path "/Website" (the repo's Pages project site), noindex everywhere,
+//              no CNAME, proposed pages included — what Alanna reviews before launch
 //   production base path "", indexable, writes CNAME, refuses unless every page is approved
 
 import { readFile, writeFile, readdir, mkdir, rm, copyFile, cp } from 'node:fs/promises';
@@ -20,7 +21,7 @@ const CONTENT = path.join(ROOT, 'content');
 
 const TARGETS = {
   local: { base: '', noindex: false, cname: false, requireApproved: false },
-  staging: { base: '/pcaz-website-staging', noindex: true, cname: false, requireApproved: false },
+  preview: { base: '/Website', noindex: true, cname: false, requireApproved: false },
   production: { base: '', noindex: false, cname: true, requireApproved: true },
 };
 

@@ -1,6 +1,8 @@
-# Review for Alanna — staging sign-off list
+# Review for Alanna — preview sign-off list
 
-Everything on staging is `status: proposed` until Alanna approves it. Verbatim approved text (origin story, "Meet Alanna", the four testimonials, the who-we-serve lines, the brand line, the positioning statement, the elevator pitch) is not listed here — only what is **new** or **needs a decision**.
+Preview link: https://premiercourier.github.io/Website/ (not indexed by search engines; the live site is unchanged until she approves).
+
+Everything on the preview is `status: proposed` until Alanna approves it. Verbatim approved text (origin story, "Meet Alanna", the four testimonials, the who-we-serve lines, the brand line, the positioning statement, the elevator pitch) is not listed here — only what is **new** or **needs a decision**.
 
 ## 1. Design (brand guide v1.1 proposals)
 
@@ -70,7 +72,7 @@ Built only from approved facts and phrases; each line still needs Alanna's OK.
 ## 6. Quote form
 
 - [ ] Quote requests arrive by **email to alanna@premiercourieraz.com and a text message to her mobile**. OK?
-- Note for the staging review: until the quote service is switched on, submitting the form shows the "call us instead" message. That is expected — it is the fallback working.
+- Note for the preview review: until the quote service is switched on, submitting the form shows the "call us instead" message. That is expected — it is the fallback working.
 
 ## 7. Area pages
 

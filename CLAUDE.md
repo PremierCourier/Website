@@ -11,19 +11,19 @@ Read this file fully before writing code. `@docs/brand-guide-internal.md` and `@
 3. **Privacy.** No client, facility, department, or patient is ever named. No image of a labeled specimen, requisition, manifest, or signature log. No photo at a customer site. Reviews appear exactly as the customer published them.
 4. **Claims.** Only facts in `docs/content-rules.md` → Approved Facts. Never: "#1", "best", on-time percentages, guarantees, "real-time tracking", "HIPAA certified", "HIPAA-trained" (use "HIPAA-compliant handling"), a founding year (unconfirmed — leave out).
 5. **Real people only.** Photos of Alanna and drivers are real photographs. AI may edit a real photo (retouch, background cleanup, crop extension, resize, color match); it may never generate a person or place anyone somewhere they weren't photographed. Until the photoshoot exists, use only the images already published on the current site, or no people at all.
-6. **Nothing ships without Alanna's approval.** Deploy to the `staging` branch (Pages preview) for review; `main` deploys only after written approval.
+6. **Nothing ships without Alanna's approval.** Before launch, every push to `main` publishes a noindex preview (no custom domain) at https://premiercourier.github.io/Website/ for her review; the production build — custom domain, indexable — deploys only after her written approval.
 
 ## Stack
 
 - Node 20+, no framework. Plain HTML templates + CSS + minimal vanilla JS (nav toggle, form submit, scroll reveals, hero frame scrub). No React, no Tailwind, no client-side routing, no animation libraries.
 - Build: `scripts/build.js` — renders `src/pages/*.html` through `src/layouts/base.html`, injects `content/*.json`, copies `src/assets/`, optimizes images (`sharp`), strips EXIF, emits `sitemap.xml`, `robots.txt`, `llms.txt`, `404.html`, `CNAME`.
-- Page status: every page's content JSON carries `"status": "proposed"` or `"status": "approved"`. `npm run build` builds every page; the production deploy refuses to publish if any page is not `approved`. Staging publishes proposed pages so Alanna can review them.
+- Page status: every page's content JSON carries `"status": "proposed"` or `"status": "approved"`. `npm run build` builds every page; the production deploy refuses to publish if any page is not `approved`. The preview publishes proposed pages so Alanna can review them.
 - Output: `dist/`. Committed by CI only.
 - Quote form backend: Azure Function app `pcaz-quote` (`functions/quote/`, Node), fronted by the custom domain `quote.premiercourieraz.com` (CNAME at Squarespace) so the `azurewebsites.net` hostname never appears in page source. It sends email to alanna@premiercourieraz.com and SMS via Twilio to Alanna's mobile. Secrets in Function App settings only; never in this repo.
-- Hosting: GitHub org `PremierCourier` (owned by support@premiercourieraz.com, GitHub Team plan). Both repos are private.
-  - Production: repo `Website`, Pages from its `gh-pages` branch. DNS stays at Squarespace (A records → GitHub Pages IPs, `www` CNAME → `premiercourier.github.io`). HTTPS enforced.
-  - Staging: repo `Website-staging`, Pages on, no custom domain, no `CNAME` file.
-- `CNAME` is written only by the production build. Staging builds never emit it.
+- Hosting: GitHub **personal account** `PremierCourier` (support@premiercourieraz.com) — it needs **GitHub Pro** to serve Pages from a private repo; only the account owner can enable Pages or change repo settings (collaborators have push only). The repo `Website` is private and must stay private (it holds `CLAUDE.md` and `docs/`).
+  - Pages from the `gh-pages` branch of `Website`. Before launch that branch holds the **preview** build (base `/Website`, noindex, no `CNAME`) at https://premiercourier.github.io/Website/. At launch it holds the **production** build; DNS stays at Squarespace (A records → GitHub Pages IPs, `www` CNAME → `premiercourier.github.io`). HTTPS enforced.
+  - There is no separate staging repo.
+- `CNAME` is written only by the production build. Preview builds never emit it (with a `CNAME`, GitHub would redirect the preview to the custom domain, which still serves Squarespace).
 - `.gitattributes` marks `CLAUDE.md` and `docs/` `export-ignore`, so they never land in a zip export.
 
 ## Commands
@@ -31,13 +31,13 @@ Read this file fully before writing code. `@docs/brand-guide-internal.md` and `@
 ```
 npm install
 npm run dev        # build + local server on :4321 with watch
-npm run build      # clean build to dist/ (BUILD_TARGET=local|staging|production; default local)
+npm run build      # clean build to dist/ (BUILD_TARGET=local|preview|production; default local)
 npm run audit      # fails on forbidden strings, missing alt text, EXIF, broken internal links, missing meta
                    # (matching rules: docs/content-rules.md → Forbidden strings)
 npm run lighthouse # runs against dist/; fails under Performance 95 / SEO 100 / Accessibility 95 on mobile
 npm run sequence   # publishes the rendered cooler frames from design/ into src/assets/sequence/ (crop, AVIF+WebP, budget check)
 npm run stills     # publishes single renders from design/ into src/assets/img/src/ (strips metadata)
-npm run deploy:staging
+npm run deploy:preview   # CI runs this on every push to main, until launch
 npm run deploy     # requires APPROVED=1 env var; refuses otherwise
                    # deploys need DEPLOY_REMOTE (git URL); CI sets it — see .github/workflows/
 ```
@@ -94,7 +94,7 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 - Technique: pre-rendered frame sequence drawn to a `<canvas>`, frame index driven by scroll position within the hero (the Apple AirPods pattern). No Three.js, no WebGL, no glTF, no Blender in the build.
 - Subjects are Premier Courier's own objects, nothing generic: (1) the sealed blue transport cooler with the P mark — home hero: closed on white at scroll 0, opens into its layers (lid, insulated body, cold packs, and — side by side — a rack of six empty, capped, unlabeled tubes and one sealed plain opaque pouch) mid-hero, closes again by the time the phone element is reached; (2) a relief map of the five counties in the brand blues with route lines — coverage band: flat at entry, rises into relief over a short scroll. No people, no vehicles, no abstract "tech" geometry.
 - Frame production (in `design/`, outside the build): the layered cooler is modeled and animated in Blender (`design/cooler_sequence.py`) and rendered straight to frames — chosen over AI stills + morph because clean frames compress smaller, never flicker or warp, pace exactly with scroll, and render on a transparent background for a tight crop. The P mark is never generated or redrawn: it is the real mark applied as a texture in every frame. Exploded contents carry no labels, barcodes, forms, or text, and no syringes or needles. Tubes are allowed only empty, capped, and unlabeled — no liquid, no specimen, nothing readable. (`WITH_RACK` in the script switches the rack off for a pouch-only build.) Generated objects are permitted; generated people never are.
-- Approval gate: the closed still and the exploded end frame are approved before the sequence is rendered. No cooler-sequence frames enter `src/` until both are approved. Status: both approved 2026-09-19 (relayed by the project lead); the sequence is built and on staging for Alanna's final review.
+- Approval gate: the closed still and the exploded end frame are approved before the sequence is rendered. No cooler-sequence frames enter `src/` until both are approved. Status: both approved 2026-09-19 (relayed by the project lead); the sequence is built and on the preview for Alanna's final review.
 - Budget (frames cropped tight to the object and sized to its display box × DPR, so decoded memory stays low): desktop ≤72 frames at up to 1440px, AVIF with WebP fallback, total ≤3.5 MB; mobile/tablet ≤24 frames at 720px, total ≤900 KB; frames are fetched after the headline, phone element, and quote button have painted, and only when the hero is in view. First frame is inlined as the poster. `prefers-reduced-motion: reduce` shows the closed-cooler still only.
 - Scroll stays native: the page never pins, snaps, or hijacks scroll; frame index is a pure function of scroll offset. Canvas is `aria-hidden`; the headline carries the meaning.
 - Keeping the cooler in view without pinning scroll: CSS reserves 60svh under the hero stage from first paint (no layout shift).
@@ -143,7 +143,8 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 
 ## Deploy and DNS
 
-- `staging` branch → workflow builds without `CNAME` and pushes `dist/` to the `Website-staging` repo's Pages site with an SSH deploy key owned by that repo (`STAGING_DEPLOY_KEY`; setup steps in `.github/workflows/staging.yml`) — never a personal access token. Send Alanna the link; she reviews on her phone.
+- Before launch: every push to `main` runs **Deploy preview** (`.github/workflows/preview.yml`): build `preview`, audit, push `dist/` to `gh-pages` with the workflow's own token. Send Alanna the preview link; she reviews on her phone.
+- Launch guard: when the site goes live, the account owner sets the repository variable `LAUNCHED = true`; the preview workflow then stops, so a push to `main` can never overwrite production.
 - `main` → `gh-pages` via GitHub Actions on push, only when `APPROVED=1` is set on the workflow dispatch.
 - DNS cutover steps and rollback in `docs/dns-cutover.md`. Do not touch Squarespace DNS until `main` is approved and `dist/` passes audit + lighthouse.
 - Keep the Squarespace site live and untouched until cutover completes and HTTPS is verified on the custom domain.
@@ -155,7 +156,7 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 3. Lighthouse mobile: Performance ≥95, SEO 100, Accessibility ≥95, Best Practices ≥95.
 4. Renders correctly at 360, 768, 1280 px.
 5. No forbidden strings, no EXIF, alt text on every image, valid JSON-LD.
-6. Reviewed by Alanna on staging before merge to `main`.
+6. Reviewed and approved by Alanna on the preview before the production deploy.
 
 ## Open items (do not guess — ask)
 
@@ -163,6 +164,6 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 - Whether drivers receive formal HIPAA training: unconfirmed. Use "HIPAA-compliant handling" only.
 - Alanna's mobile number for SMS: set in Azure Function settings by Hemang; never in repo.
 - Photoshoot assets: not yet available. Build with the cooler frame-sequence hero; photography lands on service and about pages when delivered.
-- Design changes not yet approved by Alanna: Inter-only type (no serif) and the 3D hero. They are presented to her on staging as proposals (brand guide v1.1).
-- 3D frames: produced in `design/` (outside `src/`) per the 3D section. Stills approved and sequence built; Alanna gives final sign-off on staging.
+- Design changes not yet approved by Alanna: Inter-only type (no serif) and the 3D hero. They are presented to her on the preview as proposals (brand guide v1.1).
+- 3D frames: produced in `design/` (outside `src/`) per the 3D section. Stills approved and sequence built; Alanna gives final sign-off on the preview.
 - P mark source for compositing: the only mark available is cropped from the official logo PNG (40×59 px). At 1440px frames the badge is far larger than that, so the composite needs a vector trace or a high-resolution logo file, approved by Alanna.

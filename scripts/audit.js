@@ -173,7 +173,7 @@ export async function audit() {
     if (!/<link rel="canonical" href="https:\/\/[^"]+"/.test(html)) fail(r, 'missing canonical');
 
     const noindex = /<meta name="robots" content="noindex/.test(html);
-    if (info.target === 'staging' && !noindex) fail(r, 'staging page is indexable');
+    if (info.target === 'preview' && !noindex) fail(r, 'preview page is indexable');
     if (info.target === 'production' && noindex) fail(r, 'production page is noindex');
 
     // JSON-LD

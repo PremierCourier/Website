@@ -22,7 +22,7 @@ npm run stills                                                   # strip metadat
 Status:
 
 - The P mark (cooler decal, envelope seal) is cropped from the official logo (`p-mark.png`, 40×59 px). A vector trace replaces it once Alanna approves one.
-- The kit is a proposal; Alanna approves it on staging.
+- The sequence is a proposal; Alanna approves it on the preview.
 
 ## Cooler open/close sequence (the approved hero direction)
 
@@ -34,4 +34,4 @@ blender -b -P design/cooler_sequence.py -- --still exploded    # renders/sequenc
 blender -b -P design/cooler_sequence.py -- --sequence 72       # renders/sequence/frames/NNN.png, open 0 → 1
 ```
 
-Gate: the sequence is rendered, and frames enter `src/`, only after Alanna approves both stills. Until then the floating kit stays on staging.
+Gate: the sequence is rendered, and frames enter `src/`, only after Alanna approves both stills. Alanna gives final sign-off on the preview.

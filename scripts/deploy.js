@@ -1,6 +1,6 @@
 // Build + audit, then force-push dist/ to a Pages branch.
 //
-//   node scripts/deploy.js staging      → DEPLOY_REMOTE (the pcaz-website-staging repo), branch gh-pages
+//   node scripts/deploy.js preview      → DEPLOY_REMOTE (this repo), branch gh-pages — before launch
 //   node scripts/deploy.js production   → DEPLOY_REMOTE (this repo), branch gh-pages; requires APPROVED=1
 //
 // DEPLOY_REMOTE is a full git URL (CI passes one with a token). The deploy commit carries
@@ -23,9 +23,9 @@ function die(msg) {
   process.exit(1);
 }
 
-if (!['staging', 'production'].includes(target)) die('usage: node scripts/deploy.js staging|production');
+if (!['preview', 'production'].includes(target)) die('usage: node scripts/deploy.js preview|production');
 if (target === 'production' && process.env.APPROVED !== '1') {
-  die('Refusing to deploy production: set APPROVED=1 only after Alanna approves staging in writing.');
+  die('Refusing to deploy production: set APPROVED=1 only after Alanna approves the preview in writing.');
 }
 const remote = process.env.DEPLOY_REMOTE;
 if (!remote) die('DEPLOY_REMOTE is not set (git URL of the Pages repo).');

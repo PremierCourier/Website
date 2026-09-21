@@ -55,4 +55,4 @@ func start                                             # needs Azure Functions C
 4. Deploy: `func azure functionapp publish pcaz-quote` from this folder.
 5. SendGrid domain authentication for premiercourieraz.com (the DNS records SendGrid gives you, added at Squarespace), so mail from `MAIL_FROM` isn't marked as spam.
 6. **Twilio A2P 10DLC registration** for the sending number (brand + campaign), or use a toll-free number with toll-free verification. US carriers filter unregistered application-to-person texts — without this the SMS channel silently fails. Allow a few days for approval.
-7. Test from staging: submit the form, confirm the email and the SMS arrive, then submit with the honeypot filled and confirm nothing arrives.
+7. Test from the preview (https://premiercourier.github.io/Website/quote/): submit the form, confirm the email and the SMS arrive, then submit with the honeypot filled and confirm nothing arrives.
