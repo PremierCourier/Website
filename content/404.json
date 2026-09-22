@@ -6,5 +6,19 @@
   "description": "This page doesn't exist. Call (928) 533-3585 (24/7, including holidays) or head back to the home page.",
   "heading": "This page doesn't exist.",
   "lead": "If you need a delivery, call (928) 533-3585, any hour, including holidays.",
-  "homeLabel": "Back to the home page"
+  "homeLabel": "Back to the home page",
+  "links": [
+    {
+      "label": "Services",
+      "route": "/services/"
+    },
+    {
+      "label": "Get a Quote",
+      "route": "/quote/"
+    },
+    {
+      "label": "Contact",
+      "route": "/contact/"
+    }
+  ]
 }

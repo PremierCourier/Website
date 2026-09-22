@@ -6,7 +6,7 @@
   "description": "Founded by Travis Womack and owned and operated by Alanna Hanigan since 2014. Meet the owner and the drivers behind Premier Courier.",
   "eyebrow": "About",
   "heading": "Serving Central and Northern Arizona since 2014, and built on a legacy that started long before.",
-  "lead": "A real person answers the phone. There is no answering service.",
+  "lead": "",
   "origin": {
     "heading": "Our story",
     "paragraphs": [
@@ -29,11 +29,6 @@
     "lead": "Friendly, meticulous drivers your staff will know by name.",
     "list": [
       {
-        "name": "Johnna",
-        "photoId": null,
-        "initial": "J"
-      },
-      {
         "name": "Dave",
         "photoId": "driver-dave"
       },
@@ -52,6 +47,11 @@
       {
         "name": "Zaine",
         "photoId": "driver-zaine"
+      },
+      {
+        "name": "Johnna",
+        "photoId": null,
+        "initial": "J"
       }
     ]
   },

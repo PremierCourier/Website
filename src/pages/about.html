@@ -2,7 +2,7 @@
   <div class="container container--reading">
     <p class="eyebrow">{{ page.eyebrow }}</p>
     <h1 class="page-head__title">{{ page.heading }}</h1>
-    <p class="lead">{{ page.lead }}</p>
+    {{#if page.lead}}<p class="lead">{{ page.lead }}</p>{{/if}}
   </div>
 </section>
 
@@ -14,7 +14,6 @@
         <h2 class="section__heading" id="alanna-heading">{{ page.alanna.heading }}</h2>
         {{#each page.alanna.paragraphs}}<p>{{ this }}</p>
         {{/each}}
-        <p class="band__cta"><a href="tel:{{ phone.tel }}">{{ cta.personAnswers }}</a></p>
       </div>
     </div>
   </div>

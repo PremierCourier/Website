@@ -52,14 +52,14 @@
   color: var(--pc-on-dark);
 }
 
-/* The Call Now / 24-7 cue. Copper only on the mobile bottom bar; the desktop header cue is
-   outlined Deep Blue (below). Nothing else on the site uses copper. */
+/* The Call Now / 24-7 cue: the mobile bottom bar (Deep Blue) and the desktop header cue
+   (outlined Deep Blue, below). The site uses no copper. */
 .call-cue {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   padding: 10px 16px;
-  background: var(--pc-copper);
+  background: var(--pc-deep);
   color: var(--pc-on-dark);
   border-radius: var(--pc-radius);
   font-size: var(--pc-text-cue);
@@ -387,8 +387,13 @@
   font-weight: 500;
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
 .pull {
   margin: 0;
+  text-wrap: balance;
   color: var(--pc-deep);
   font-size: var(--pc-text-h2);
   font-weight: 800;
@@ -424,6 +429,11 @@
   grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
   gap: 56px;
   align-items: start;
+}
+
+/* Photo on the right: mirror the columns so both portraits are the same size. */
+.profile--reverse {
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
 }
 
 .profile--reverse .profile__photo {
@@ -480,6 +490,28 @@
   font-size: var(--pc-text-h1);
   line-height: 1.04;
   letter-spacing: -0.03em;
+}
+
+.link-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  margin: 32px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link-list a {
+  font-weight: 700;
+}
+
+.quote-form__intro {
+  margin: 0 0 4px;
+  color: var(--pc-text-2);
+}
+
+.quote-form__hint {
+  margin: 0 0 24px;
 }
 
 .contact-list {
@@ -756,23 +788,12 @@
 
   .points,
   .testimonials,
-  .split,
-  .profile {
+  .split {
     grid-template-columns: 1fr;
   }
 
   .profile {
-    gap: 28px;
-  }
-
-  /* Phones: text first, photo after; keeps the headline as the page's largest first paint. */
-  .profile__photo,
-  .profile--reverse .profile__photo {
-    order: 2;
-  }
-
-  .profile__photo {
-    max-width: 320px;
+    gap: 32px;
   }
 
   .hero__sequence {
@@ -781,6 +802,48 @@
 
   .site-footer__inner {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .profile,
+  .profile--reverse {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  /* Text first, portrait after: a portrait in the first screen pushes mobile LCP past budget
+     (2.7 s measured with it above the text). */
+  .profile__photo,
+  .profile--reverse .profile__photo {
+    order: 2;
+    max-width: 280px;
+  }
+
+  /* Stacked buttons share one width instead of a ragged column. */
+  .button-row .button,
+  .quote-form .button {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+
+  /* Card grids go two across, so twelve cards don't fill three screens. */
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .card,
+  .card__link {
+    padding: 16px;
+  }
+
+  .card__link {
+    margin: -16px;
+  }
+
+  .card__title {
+    font-size: var(--pc-text-body);
   }
 }
 

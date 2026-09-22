@@ -86,7 +86,7 @@
     if (set === 'mobile') {
       // Phones: stick in the middle; play while held for most of a screen of scrolling.
       var stickTop = Math.max(headerH + 8, centreTop);
-      var span = vh * 0.9;
+      var span = vh * 0.7;
       geometry = { mode: 'hold', start: docTop - stickTop, span: span };
       el.style.setProperty('--stick-top', stickTop.toFixed(1) + 'px');
       if (travel) travel.style.height = Math.ceil(span) + 'px';
@@ -136,7 +136,8 @@
     var s = Math.min(Math.max(window.scrollY - g.start, 0), g.span);
     if (g.mode === 'hold') {
       place(0, 0, 1);
-      return Math.sin(Math.PI * (s / g.span)) * (N - 1);             // closed → open → closed
+      var o = Math.sin(Math.PI * (s / g.span));
+      return o * o * o * (N - 1);                                    // closed → open (briefly) → closed
     }
     var m = smooth((s - g.moveStart) / (g.moveEnd - g.moveStart));  // 0 → 1: to the middle
     var scale = 1 + (g.grow - 1) * m;

@@ -6,5 +6,9 @@
       <a class="button button--primary" href="{{ base }}/">{{ page.homeLabel }}</a>
       <a class="button button--secondary" href="tel:{{ phone.tel }}">Call {{ phone.display }}</a>
     </div>
+    <ul class="link-list">
+      {{#each page.links}}<li><a href="{{ base }}{{ route }}">{{ label }}</a></li>
+      {{/each}}
+    </ul>
   </div>
 </section>

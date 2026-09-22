@@ -60,7 +60,9 @@
     "addressHint": "Please don't include patient names or health information.",
     "nowNote": "For a pickup right now, calling is fastest:",
     "scheduledNote": "For a recurring route, choose Scheduled and give the first date. We'll call to set up the rest.",
-    "privacyLink": "How we use this information"
+    "privacyLink": "How we use this information",
+    "choose": "Choose one",
+    "requiredNote": "All fields are required except email."
   },
   "success": "We'll call you shortly."
 }

@@ -36,15 +36,13 @@
   --pc-navy: #0B3556;
   --pc-sky: #6BADDF;
   --pc-steel: #608CBE;
-  --pc-copper: #C0632B;
   --pc-bg: #FFFFFF;
   --pc-bg-alt: #F3F7FB;
   --pc-text: #0B3556;
   --pc-text-2: #5A6B7C;
   --pc-border: #D9E3EC;
 
-  /* Roles. Courier Blue on white is 3.7:1, so text-sized links and buttons use Deep Blue (7.2:1).
-     Copper carries white text only at ≥19px bold (large text, 4.1:1). */
+  /* Roles. Courier Blue on white is 3.7:1, so text-sized links and buttons use Deep Blue (7.2:1). */
   --pc-link: var(--pc-deep);
   --pc-link-hover: var(--pc-navy);
   --pc-on-dark: #FFFFFF;
@@ -61,7 +59,7 @@
   --pc-text-h1: clamp(2.5rem, 1.6rem + 4.2vw, 4.5rem);   /* 40 → 72px */
   --pc-text-h2: clamp(1.75rem, 1.35rem + 1.8vw, 2.75rem);
   --pc-text-h3: 1.1875rem;
-  --pc-text-cue: 1.1875rem;           /* 19px; keeps copper at large-text contrast */
+  --pc-text-cue: 1.1875rem;           /* 19px */
 
   /* Shape and space */
   --pc-radius: 8px;

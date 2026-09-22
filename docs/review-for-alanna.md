@@ -10,7 +10,7 @@ Everything on the preview is `status: proposed` until Alanna approves it. Verbat
 - [ ] **3D cooler hero** — the sealed blue cooler with the P mark opens into its layers (lid, insulated body, two cold packs, a rack of six empty capped test tubes, one sealed plain opaque pouch) as you scroll and closes again. Nothing carries a label or text, and the tubes are empty.
 - [ ] **Syringe** — left out on purpose (a needle reads as injection rather than transport). Say if you'd like a capped syringe in a sealed pack added.
 - [ ] **No UI gradients** — the logo-gradient bands and buttons from the guide are retired in favour of flat brand blues.
-- [ ] **Copper** appears only on the bottom call bar on phones. The desktop "Call Now" button is outlined in blue, like the other call buttons.
+- [ ] **No copper/orange.** The call buttons are all brand blue: the bottom call bar on phones is solid blue, and the desktop "Call Now" button is outlined in blue.
 - [ ] **Logo**: a sharper version of the current logo (same design) is now used in the header, footer, and browser tab icon.
 
 ## 2. Photos

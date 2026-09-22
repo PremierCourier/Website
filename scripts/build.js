@@ -30,6 +30,18 @@ const REQUIRED_PAGE_FIELDS = ['route', 'template', 'status', 'title', 'descripti
 
 // Favicon: the P mark alone. It is the first run of opaque columns in the logo; the
 // crop stops at the transparent gap before the wordmark.
+// The phone number never breaks across lines ("533-" / "3585"). Only visible text in <body>
+// is wrapped; attributes, <head>, and <script>/<style> contents are left alone. Spaces next to
+// the number become non-breaking, since flex containers (buttons) would drop them.
+function keepPhoneTogether(html, number) {
+  const start = html.indexOf('<body');
+  const head = html.slice(0, start);
+  const body = html.slice(start).split(/(<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>)/);
+  return head + body.map((part, i) => (i % 2 ? part : part.replace(/>([^<]+)</g, (m, text) =>
+    '>' + text.split(number).map((t, j, all) => (j > 0 ? t.replace(/^ /, '&nbsp;') : t)
+      .replace(j < all.length - 1 ? / $/ : /(?!)/, '&nbsp;')).join(`<span class="nowrap">${number}</span>`) + '<'))).join('');
+}
+
 async function makeFavicon(logo, out) {
   if (!existsSync(logo)) return;
   const { data, info } = await sharp(logo).ensureAlpha().extractChannel(3).raw().toBuffer({ resolveWithObject: true });
@@ -204,7 +216,7 @@ export async function build(targetName = process.env.BUILD_TARGET || 'local') {
       exists: Object.fromEntries([...routes.keys()].map((r) => [r, true])),
     };
     ctx.body = render(tpl, ctx, `pages/${page.template}`);
-    const html = render(layout, ctx, 'layouts/base');
+    const html = keepPhoneTogether(render(layout, ctx, 'layouts/base'), shared.phone.display);
     const out = outputPath(page.route);
     await mkdir(path.dirname(out), { recursive: true });
     await writeFile(out, html);
