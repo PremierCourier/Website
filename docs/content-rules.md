@@ -9,6 +9,7 @@ The only source of facts, claims, and verbatim copy for this site. `npm run audi
 | Legal name: Premier Courier Services, LLC | Footer, schema `legalName`, legal/terms text |
 | Everyday name: Premier Courier | Running copy |
 | Directory / page-title form: Premier Courier Services, Prescott AZ | `<title>` suffix, schema `name` |
+| Founded 1999 (confirmed 2026-09-23 by the project lead) | Home and About headline ("since 1999"), elevator pitch, schema `foundingDate` "1999" |
 | Owner and manager: Alanna Hanigan, since 2014 | About page, schema `founder` is NOT Alanna — see below |
 | Founder: Travis Womack. Built the founding hospital relationship in the early 2000s; grew the company across Central and Northern Arizona; passed away in 2014 | About page only, as the approved origin text |
 | Phone: (928) 533-3585 | Every page; schema `telephone` as `+19285333585` |
@@ -27,7 +28,6 @@ The only source of facts, claims, and verbatim copy for this site. `npm run audi
 
 | Item | Status |
 |---|---|
-| Founding year of the business or the LLC | Unconfirmed — the current site contradicts itself ("early 2000s" vs "over two decades" before 2014). Omit from copy and from schema `foundingDate` |
 | "HIPAA-trained" | Unconfirmed whether formal training exists. Use "HIPAA-compliant handling" |
 | Any on-time percentage, delivery count, years-of-service figure for a driver | No approved number exists |
 | The proposed first-person line "No answering service. When you call, you get the owner." | Withdrawn — the site no longer says the owner answers |
@@ -98,7 +98,7 @@ Arizona's Trusted Courier. On Time, Every Time.
 Premier Courier Services is the trusted medical and business courier for Central and Northern Arizona — on time, every time, 24/7, including holidays.
 
 **Elevator pitch (home intro / about lead):**
-Premier Courier has served Central and Northern Arizona for more than two decades, transporting specimens, blood products, surgical trays, pharmaceuticals, and confidential documents for hospitals, labs, pharmacies, physician offices, and law firms. Our drivers are meticulous and HIPAA-compliant in how they handle every item, we run 24 hours a day including holidays, and when you call, a real person answers.
+Premier Courier has served Central and Northern Arizona since 1999, transporting specimens, blood products, surgical trays, pharmaceuticals, and confidential documents for hospitals, labs, pharmacies, physician offices, and law firms. Our drivers are meticulous and HIPAA-compliant in how they handle every item, we run 24 hours a day including holidays, and when you call, a real person answers.
 
 **Short version (meta descriptions, schema `description`):**
 Arizona's trusted medical and business courier. On time, every time — 24/7, including holidays, and a real person answers the phone.
@@ -106,7 +106,7 @@ Arizona's trusted medical and business courier. On time, every time — 24/7, in
 **Signature statements (approved, company voice):**
 - We treat every item with the utmost care, no matter its value.
 - Business doesn't stop at 5 p.m., on weekends, or on holidays. Neither do we.
-- Serving Central and Northern Arizona since 2014 — and built on a legacy that started long before.
+- Serving Central and Northern Arizona since 1999. Owned and operated by Alanna since 2014.
 - Friendly, meticulous drivers your staff will know by name.
 
 **CTA library:**
@@ -217,9 +217,10 @@ Order on the site: medical audiences first (Hospitals, Labs, Emergency Rooms, Op
     "opens": "00:00",
     "closes": "23:59"
   },
+  "foundingDate": "1999",
   "founder": { "@type": "Person", "name": "Travis Womack" },
   "employee": { "@type": "Person", "name": "Alanna Hanigan", "jobTitle": "Owner and Manager" }
 }
 ```
 
-No `foundingDate` until confirmed. No `streetAddress`. No `aggregateRating` — the four testimonials are not a rating source.
+`foundingDate` is "1999" (the audit requires exactly that). No `streetAddress`. No `aggregateRating` — the four testimonials are not a rating source.

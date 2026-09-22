@@ -194,7 +194,7 @@ Based in Prescott, Arizona. Serves Yavapai County (Prescott, Prescott Valley, Ch
 
 ### Elevator Pitch
 
-Premier Courier has served Central and Northern Arizona for more than two decades, transporting specimens, blood products, surgical trays, pharmaceuticals, and confidential documents for hospitals, labs, pharmacies, physician offices, and law firms. Our drivers are meticulous and HIPAA-compliant, we run 24 hours a day including holidays, and when you call, a real person answers.
+Premier Courier has served Central and Northern Arizona since 1999, transporting specimens, blood products, surgical trays, pharmaceuticals, and confidential documents for hospitals, labs, pharmacies, physician offices, and law firms. Our drivers are meticulous and HIPAA-compliant, we run 24 hours a day including holidays, and when you call, a real person answers.
 
 ### Short Version
 
@@ -220,7 +220,7 @@ Arizona’s trusted medical and business courier. On time, every time — 24/7, 
 
 - Business doesn’t stop at 5 p.m., on weekends, or on holidays. Neither do we.
 
-- Serving Central and Northern Arizona since 2014 — and built on a legacy that started long before.
+- Serving Central and Northern Arizona since 1999. Owned and operated by Alanna since 2014.
 
 - Friendly, meticulous, HIPAA-compliant drivers your staff will know by name.
 

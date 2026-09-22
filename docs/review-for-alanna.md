@@ -46,7 +46,7 @@ Built only from approved facts and phrases; each line still needs Alanna's OK.
 - One line per service on the cards.
 
 **About** (reordered: Alanna first, then the origin story)
-- Headline: "Serving Central and Northern Arizona since 2014 — and built on a legacy that started long before." (approved line)
+- Headline (home and About): "Serving Central and Northern Arizona since 1999. Owned and operated by Alanna since 2014."
 - Under it: "A real person answers the phone — there is no answering service."
 
 **Contact / Quote / 404**
@@ -63,7 +63,8 @@ Built only from approved facts and phrases; each line still needs Alanna's OK.
 
 ## 4. Facts that need a yes or no
 
-- [ ] **Founding year** — the current site says both "early 2000s" and "over two decades" before 2014. Which year? (Left out everywhere until answered.)
+- [x] **Founding year**: 1999. The home and About headline and the intro paragraph now say "since 1999".
+- [ ] **Origin story vs. 1999**: the approved story says Travis grew the company "for over two decades" before 2014, and that the hospital relationship "by the early 2000s" became its foundation. From 1999 to 2014 is 15 years. Which wording should the story use?
 - [ ] **HIPAA training** — do drivers receive formal HIPAA training? (Until then the site says only "HIPAA-compliant handling".)
 - [ ] **Chain of custody** — is it a documented part of every run?
 - [ ] **Signature on delivery** — always, or on request? (Would go on the legal/financial page.)

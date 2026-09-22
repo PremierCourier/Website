@@ -194,7 +194,7 @@ export async function audit() {
       if (s.areaServed?.length !== 5) fail(r, 'JSON-LD areaServed must list the five counties');
       if (s.address?.addressLocality !== 'Prescott' || s.address?.postalCode !== '86304') fail(r, 'JSON-LD address must be Prescott 86304');
       if (s.address?.streetAddress) fail(r, 'JSON-LD must not carry a streetAddress');
-      if (s.foundingDate) fail(r, 'JSON-LD foundingDate is unconfirmed — remove it');
+      if (s.foundingDate !== '1999') fail(r, 'JSON-LD foundingDate must be the confirmed "1999"');
       if (s.aggregateRating) fail(r, 'JSON-LD must not carry aggregateRating');
     }
 
