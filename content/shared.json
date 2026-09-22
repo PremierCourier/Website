@@ -35,7 +35,7 @@
     "scheduledRoute": "Set Up a Scheduled Route",
     "bottomBar": "(928) 533-3585 · Available 24/7",
     "formFailure": "Call us instead — (928) 533-3585. We answer.",
-    "alannaAnswers": "Call (928) 533-3585. Alanna answers."
+    "personAnswers": "Call (928) 533-3585. A real person answers."
   },
   "nav": [
     {
@@ -174,7 +174,7 @@
     "@id": "https://www.premiercourieraz.com/#business",
     "name": "Premier Courier Services",
     "legalName": "Premier Courier Services, LLC",
-    "description": "Arizona's trusted medical and business courier. On time, every time — 24/7, including holidays, and the owner answers the phone.",
+    "description": "Arizona's trusted medical and business courier. On time, every time — 24/7, including holidays, and a real person answers the phone.",
     "url": "https://www.premiercourieraz.com/",
     "telephone": "+19285333585",
     "email": "alanna@premiercourieraz.com",

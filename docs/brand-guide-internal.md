@@ -45,7 +45,7 @@ Premier Courier Services gets time-sensitive medical and business deliveries whe
 
 ### Brand Promise
 
-Every item is treated with the same care regardless of its value. The phone is answered by the owner, day or night. Drivers are meticulous, HIPAA-compliant, and attentive. Service runs 24 hours a day, 7 days a week, including holidays.
+Every item is treated with the same care regardless of its value. A real person answers the phone, day or night. Drivers are meticulous, HIPAA-compliant, and attentive. Service runs 24 hours a day, 7 days a week, including holidays.
 
 ### Primary Positioning
 
@@ -61,6 +61,8 @@ Premier Courier was founded by Travis Womack, an entrepreneur from childhood, wh
 
 ### The Owner Is the Brand
 
+> **Phone rule (2026-09-23):** never say the owner, Alanna, or "one person" answers the phone — it reads as a business that depends on one person. Say a real person answers; "no answering service" is fine. The owner stays visible through her story, her voice on About, and her relationships.
+
 Alanna is personally involved in daily operations, knows customers individually, and keeps her phone with her for any delivery need. She does not use an answering service by choice. This is the brand’s primary differentiator against larger couriers and must remain visible in the voice, the About content, and the customer-service claims.
 
 ## 02 Brand Pillars & Personality
@@ -72,8 +74,8 @@ Alanna is personally involved in daily operations, knows customers individually,
 | **Reliability**         | The delivery happens when it was promised. | “On time, every time.” Scheduled runs, urgent runs, after-hours runs, holidays.                  |
 | **Care**                | Every item matters, whatever its value.    | Meticulous handling, proper protocols for specimens, blood products, and sterile trays.          |
 | **Compliance**          | Handling is done the right way.            | HIPAA-compliant drivers, discreet delivery, chain-of-custody discipline, signature on delivery.  |
-| **Availability**        | Business happens at any hour.              | 24/7/365. Owner answers the phone directly.                                                      |
-| **Personal Connection** | A small business that knows its customers. | Named drivers, the owner’s direct line, friendly small-town service without the corporate layer. |
+| **Availability**        | Business happens at any hour.              | 24/7/365. A real person answers the phone.                                                      |
+| **Personal Connection** | A small business that knows its customers. | Named drivers, a real person on the phone, friendly small-town service without the corporate layer. |
 
 ### Premier Courier Should Always Feel
 
@@ -137,7 +139,7 @@ Based in Prescott, Arizona. Serves Yavapai County (Prescott, Prescott Valley, Ch
 
 | **Audience**                                      | **Lead With**                                                                              | **Avoid Leading With**                     |
 |---------------------------------------------------|--------------------------------------------------------------------------------------------|--------------------------------------------|
-| **Hospital lab / pathology managers**             | Specimen integrity, pickup reliability, after-hours coverage, one phone call to the owner. | Pricing, generic ‘fast delivery’ language. |
+| **Hospital lab / pathology managers**             | Specimen integrity, pickup reliability, after-hours coverage, a real person on the phone. | Pricing, generic ‘fast delivery’ language. |
 | **Sterile Processing / OR coordinators**          | Correct handling protocols for trays and instruments, urgent surgical runs at any hour.    | Anything that sounds like parcel shipping. |
 | **Pharmacy managers**                             | Discreet, prompt medication delivery; scheduled and urgent runs.                           | Volume or scale claims.                    |
 | **Physician, dental, and clinic office managers** | Fitting the office schedule, one reliable vendor for specimens, records, and supplies.     | Technical or compliance jargon.            |
@@ -159,7 +161,7 @@ Based in Prescott, Arizona. Serves Yavapai County (Prescott, Prescott Valley, Ch
 | **Pain Signal**                     | **How to Frame It**                                                                               |
 |-------------------------------------|---------------------------------------------------------------------------------------------------|
 | **Results waiting on logistics**    | The lab is ready; the specimen is not there. A courier that runs on the lab’s clock, not its own. |
-| **The 2 a.m. delivery**             | Hospitals do not close. Neither does Premier Courier — and the owner answers.                     |
+| **The 2 a.m. delivery**             | Hospitals do not close. Neither does Premier Courier — and a real person answers.                     |
 | **Mishandled specimens or trays**   | One wrong step voids the sample or the sterile field. Drivers who know the protocol.              |
 | **Call-center couriers**            | Talking to a dispatcher who has never seen your facility. Versus talking to Alanna.               |
 | **Driver turnover at big carriers** | A different stranger every week. Versus the same named drivers your staff recognize.              |
@@ -172,7 +174,7 @@ Based in Prescott, Arizona. Serves Yavapai County (Prescott, Prescott Valley, Ch
 
 - Deliveries that arrive when promised, in the condition they left.
 
-- One phone number, one person, any hour.
+- One phone number. A real person answers, any hour.
 
 - Drivers your staff know by name.
 
@@ -192,11 +194,11 @@ Based in Prescott, Arizona. Serves Yavapai County (Prescott, Prescott Valley, Ch
 
 ### Elevator Pitch
 
-Premier Courier has served Central and Northern Arizona for more than two decades, transporting specimens, blood products, surgical trays, pharmaceuticals, and confidential documents for hospitals, labs, pharmacies, physician offices, and law firms. Our drivers are meticulous and HIPAA-compliant, we run 24 hours a day including holidays, and when you call, the owner answers.
+Premier Courier has served Central and Northern Arizona for more than two decades, transporting specimens, blood products, surgical trays, pharmaceuticals, and confidential documents for hospitals, labs, pharmacies, physician offices, and law firms. Our drivers are meticulous and HIPAA-compliant, we run 24 hours a day including holidays, and when you call, a real person answers.
 
 ### Short Version
 
-Arizona’s trusted medical and business courier. On time, every time — 24/7, including holidays, and the owner answers the phone.
+Arizona’s trusted medical and business courier. On time, every time — 24/7, including holidays, and a real person answers the phone.
 
 ### Tagline / Campaign Line Options
 
@@ -214,7 +216,7 @@ Arizona’s trusted medical and business courier. On time, every time — 24/7, 
 
 - We treat every item with the utmost care, no matter its value.
 
-- No answering service. When you call, you get the owner. (Proposed first-person line — needs Alanna’s written approval before use.)
+- ~~No answering service. When you call, you get the owner.~~ Withdrawn: the site never says the owner or one named person answers.
 
 - Business doesn’t stop at 5 p.m., on weekends, or on holidays. Neither do we.
 
@@ -274,7 +276,7 @@ Logistics solutions; last-mile; leverage; seamless; cutting-edge; state-of-the-a
 | **Generic Courier Copy**                                                | **Premier Courier Copy**                                                                              |
 |-------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
 | **We provide fast, reliable delivery solutions across Arizona.**        | Specimens picked up on the lab’s schedule and delivered on time — 24 hours a day, including holidays. |
-| **Our state-of-the-art logistics network ensures on-time performance.** | Same drivers, same routes, same owner on the phone. That is how we stay on time.                      |
+| **Our state-of-the-art logistics network ensures on-time performance.** | Same drivers, same routes, a real person on the phone. That is how we stay on time.                      |
 | **Contact our team today!**                                             | Call (928) 533-3585. Alanna answers.                                                                  |
 
 > **SENTENCE TEST Could this sentence belong to any courier company? If yes, add the item, the hour, the place, or the person.**
@@ -507,7 +509,7 @@ Structural icons that identify an object (a phone for the phone number, a clock 
 
 *Operating instructions when this guide is provided to an AI system.*
 
-> **CONTEXT You are creating marketing for Premier Courier Services, LLC, an owner-run medical and business courier based in Prescott, Arizona, serving Central and Northern Arizona 24/7 including holidays. Its differentiators are reliability, careful HIPAA-compliant handling, and the owner answering the phone personally.**
+> **CONTEXT You are creating marketing for Premier Courier Services, LLC, an owner-run medical and business courier based in Prescott, Arizona, serving Central and Northern Arizona 24/7 including holidays. Its differentiators are reliability, careful HIPAA-compliant handling, and a real person answering the phone.**
 
 ### AI Must Understand
 
@@ -587,7 +589,7 @@ Structural icons that identify an object (a phone for the phone number, a clock 
 
 28. Would a hospital lab manager in Prescott trust it?
 
-> **FINAL BRAND SUMMARY Premier Courier Services: Arizona’s trusted medical and business courier. On time, every time, 24/7, including holidays — and the owner answers the phone.**
+> **FINAL BRAND SUMMARY Premier Courier Services: Arizona’s trusted medical and business courier. On time, every time, 24/7, including holidays — and a real person answers the phone.**
 
 ## 15 Appendix: Digital Tokens
 

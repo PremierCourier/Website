@@ -17,7 +17,7 @@ Read this file fully before writing code. `@docs/brand-guide-internal.md` and `@
 1. **No traceable authorship.** Nothing in the deployed artifact, commit history, file metadata, comments, package.json, or image EXIF may reference Hemang, True Lean Solutions, TLS, TechTranspire, Akhani LLC, Mack, or Meera. Git identity for this repo: `Premier Courier <support@premiercourieraz.com>`. Strip EXIF from every image at build time. Check `dist/` for these strings before every deploy (`npm run audit`).
 2. **No vendor or software references.** Asinpa, Odoo, GPS tracking, the custom app, and any dispute are never mentioned in code, content, comments, or commits.
 3. **Privacy.** No client, facility, department, or patient is ever named. No image of a labeled specimen, requisition, manifest, or signature log. No photo at a customer site. Reviews appear exactly as the customer published them.
-4. **Claims.** Only facts in `docs/content-rules.md` → Approved Facts. Never: "#1", "best", on-time percentages, guarantees, "real-time tracking", "HIPAA certified", "HIPAA-trained" (use "HIPAA-compliant handling"), a founding year (unconfirmed — leave out).
+4. **Claims.** Never say the owner, Alanna, or "one person" answers the phone — say "a real person answers" (a single person reads as a single point of failure). Only facts in `docs/content-rules.md` → Approved Facts. Never: "#1", "best", on-time percentages, guarantees, "real-time tracking", "HIPAA certified", "HIPAA-trained" (use "HIPAA-compliant handling"), a founding year (unconfirmed — leave out).
 5. **Real people only.** Photos of Alanna and drivers are real photographs. AI may edit a real photo (retouch, background cleanup, crop extension, resize, color match); it may never generate a person or place anyone somewhere they weren't photographed. Until the photoshoot exists, use only the images already published on the current site, or no people at all.
 6. **Nothing ships without Alanna's approval.** Before launch, every push to `main` publishes a noindex preview (no custom domain) at https://premiercourier.github.io/Website/ for her review; the production build — custom domain, indexable — deploys only after her written approval.
 
@@ -78,7 +78,7 @@ docs/             brand-guide-internal.md, content-rules.md, dns-cutover.md, rev
 | `/services/clinic-and-dental-delivery/` | service | Specimens, records, supplies, impressions, lab work |
 | `/services/legal-and-financial-documents/` | service | Same-day, confidential (signature on delivery pending Alanna's confirmation) |
 | `/areas/prescott/` `/areas/flagstaff/` `/areas/phoenix/` `/areas/tucson/` `/areas/kingman/` | area | County + towns served, same service list, local CTA |
-| `/how-we-handle-it/` | page | HIPAA-compliant handling, every item treated with care, owner reachable 24/7. Chain of custody, signature on delivery, and temperature-appropriate transport wait for Alanna's confirmation (see content-rules.md) |
+| `/how-we-handle-it/` | page | HIPAA-compliant handling, every item treated with care, a real person answers 24/7. Chain of custody, signature on delivery, and temperature-appropriate transport wait for Alanna's confirmation (see content-rules.md) |
 | `/about/` | about | Origin story (approved text only), Alanna in first person, drivers |
 | `/quote/` | quote | Short form: pickup, drop-off, what, when, name, phone. Posts to Function |
 | `/contact/` | contact | Phone, email, hours, mailing address |
@@ -180,7 +180,7 @@ Account owner / project lead:
 
 Alanna (full list in `docs/review-for-alanna.md`, which starts with the preview link):
 - Approve or change every page (all 18 are `proposed`); design proposals (Inter only, 3D cooler with tubes, no gradients, copper Call Now); every line of newly composed copy.
-- Facts: founding year (leave out until confirmed); formal HIPAA training (until then "HIPAA-compliant handling" only); chain of custody, signature on delivery, temperature-appropriate transport (kept off the site); "No answering service. When you call, you get the owner." as her words.
+- Facts: founding year (leave out until confirmed); formal HIPAA training (until then "HIPAA-compliant handling" only); chain of custody, signature on delivery, temperature-appropriate transport (kept off the site).
 - Photos OK to reuse; a new photo of Johnna. The photoshoot hasn't happened yet: until it does, the cooler hero carries the home page, and the new photos go on the service and About pages once they arrive.
 - The original/vector P mark (the only copy is 40×59 px cropped from the logo PNG, soft on the cooler and envelope seal); otherwise approval to have it traced.
 - Quote requests by email + text; the privacy page statements; one true, non-identifying local line per area page (the five area pages are ~90% identical now); an analytics provider, if any.

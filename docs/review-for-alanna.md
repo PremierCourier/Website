@@ -30,6 +30,10 @@ Built only from approved facts and phrases; each line still needs Alanna's OK.
 - Page headings, the one-line intro under each, and the "What we carry" lists. The lists add a few items drawn from the who-we-serve lines: "Scheduled and urgent lab pickups", "Urgent surgical supplies", "ER-critical deliveries", "Tax-season paperwork", "Confidential materials".
 - Each page ends with one of the brand guide's approved outcome lines ("Results that never wait on logistics.", etc.).
 
+**Changed line (was on the approved list)**
+- "One phone number, one person, any hour." now reads **"One phone number. A real person answers, any hour."** It appears on How we handle it, About, Clinic and dental, and Legal and financial documents. "One person" suggested everything depends on a single person being available; the point is that a human answers, not a machine or an answering service.
+- For the same reason, the site no longer says "the owner answers" or "Alanna answers" anywhere (home, contact, area pages, how we handle it, search descriptions). It says **"a real person answers"** instead, and keeps "there is no answering service."
+
 **Area pages** (Prescott, Flagstaff, Phoenix, Tucson, Kingman)
 - Headings ("Based in Prescott.", "Flagstaff and Coconino County.", …) and the one-line intro on each.
 
@@ -42,10 +46,10 @@ Built only from approved facts and phrases; each line still needs Alanna's OK.
 
 **About** (reordered: Alanna first, then the origin story)
 - Headline: "Serving Central and Northern Arizona since 2014 — and built on a legacy that started long before." (approved line)
-- Under it: "The owner answers the phone directly — there is no answering service."
+- Under it: "A real person answers the phone — there is no answering service."
 
 **Contact / Quote / 404**
-- "The owner answers the phone directly — there is no answering service."
+- Contact heading: "Call (928) 533-3585. A real person answers." and under it: "Any hour, including holidays. There is no answering service."
 - Quote intro: "Tell us what's going where, and when. For anything urgent, call (928) 533-3585."
 - Under the addresses: "Please don't include patient names or health information."
 - When "Now" is chosen: "For a pickup right now, calling is fastest: (928) 533-3585"
@@ -63,7 +67,6 @@ Built only from approved facts and phrases; each line still needs Alanna's OK.
 - [ ] **Chain of custody** — is it a documented part of every run?
 - [ ] **Signature on delivery** — always, or on request? (Would go on the legal/financial page.)
 - [ ] **Temperature-appropriate transport** — can the site say this?
-- [ ] **"No answering service. When you call, you get the owner."** — OK to use as Alanna's own words?
 
 ## 5. The P mark
 

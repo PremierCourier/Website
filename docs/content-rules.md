@@ -21,7 +21,7 @@ The only source of facts, claims, and verbatim copy for this site. `npm run audi
 | Drivers handle every item in a HIPAA-compliant manner | Wording is exactly "HIPAA-compliant handling" or "HIPAA-compliant" |
 | Items carried: specimens, blood products, platelets, surgical trays, sterilized instruments, pharmaceuticals, legal documents, financial documents, dental impressions and lab work, records and supplies | Service pages |
 | Audiences served: hospitals, labs, emergency rooms, operating rooms, sterile processing departments, physician offices, dentists, pharmacies, law firms, accountant offices, airport retrievals | Who-we-serve grid |
-| The owner answers the phone directly; no answering service | Home, About, Contact |
+| A real person answers the phone; no answering service | Home, About, Contact. Never say the owner or one named person answers — it reads as a business that depends on one person |
 
 ## Do not publish (until Alanna confirms in writing)
 
@@ -30,7 +30,7 @@ The only source of facts, claims, and verbatim copy for this site. `npm run audi
 | Founding year of the business or the LLC | Unconfirmed — the current site contradicts itself ("early 2000s" vs "over two decades" before 2014). Omit from copy and from schema `foundingDate` |
 | "HIPAA-trained" | Unconfirmed whether formal training exists. Use "HIPAA-compliant handling" |
 | Any on-time percentage, delivery count, years-of-service figure for a driver | No approved number exists |
-| The proposed first-person line "No answering service. When you call, you get the owner." | Proposed; needs Alanna's approval before it appears as her words |
+| The proposed first-person line "No answering service. When you call, you get the owner." | Withdrawn — the site no longer says the owner answers |
 | Any new testimonial not listed below | Needs the customer's approval for public use |
 | Chain of custody | Process claim, unconfirmed. Not on `/how-we-handle-it/` or anywhere else until Alanna confirms |
 | Temperature-appropriate transport | Process claim, unconfirmed. Same |
@@ -96,10 +96,10 @@ Arizona's Trusted Courier. On Time, Every Time.
 Premier Courier Services is the trusted medical and business courier for Central and Northern Arizona — on time, every time, 24/7, including holidays.
 
 **Elevator pitch (home intro / about lead):**
-Premier Courier has served Central and Northern Arizona for more than two decades, transporting specimens, blood products, surgical trays, pharmaceuticals, and confidential documents for hospitals, labs, pharmacies, physician offices, and law firms. Our drivers are meticulous and HIPAA-compliant in how they handle every item, we run 24 hours a day including holidays, and when you call, the owner answers.
+Premier Courier has served Central and Northern Arizona for more than two decades, transporting specimens, blood products, surgical trays, pharmaceuticals, and confidential documents for hospitals, labs, pharmacies, physician offices, and law firms. Our drivers are meticulous and HIPAA-compliant in how they handle every item, we run 24 hours a day including holidays, and when you call, a real person answers.
 
 **Short version (meta descriptions, schema `description`):**
-Arizona's trusted medical and business courier. On time, every time — 24/7, including holidays, and the owner answers the phone.
+Arizona's trusted medical and business courier. On time, every time — 24/7, including holidays, and a real person answers the phone.
 
 **Signature statements (approved, company voice):**
 - We treat every item with the utmost care, no matter its value.
@@ -190,7 +190,7 @@ Order on the site: medical audiences first (Hospitals, Labs, Emergency Rooms, Op
   "@id": "https://www.premiercourieraz.com/#business",
   "name": "Premier Courier Services",
   "legalName": "Premier Courier Services, LLC",
-  "description": "Arizona's trusted medical and business courier. On time, every time — 24/7, including holidays, and the owner answers the phone.",
+  "description": "Arizona's trusted medical and business courier. On time, every time — 24/7, including holidays, and a real person answers the phone.",
   "url": "https://www.premiercourieraz.com/",
   "telephone": "+19285333585",
   "email": "alanna@premiercourieraz.com",
