@@ -93,7 +93,7 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 
 - Type: Inter only (self-hosted woff2, weights 400/500/700/800). Headlines 700–800, tight leading, up to 72px on desktop. Body 400 at 17–18px. No serif on the web.
 - Color (tokens.css): `--pc-primary #178EC7`, `--pc-deep #0A5A96`, `--pc-navy #0B3556`, `--pc-sky #6BADDF`, `--pc-steel #608CBE`, `--pc-copper #C0632B`, `--pc-bg #FFFFFF`, `--pc-bg-alt #F3F7FB`, `--pc-text #0B3556`, `--pc-text-2 #5A6B7C`, `--pc-border #D9E3EC`.
-- Blue carries the brand: nav, footer, headings, links, service cards. Courier Blue is 3.7:1 on white, so text-sized links, buttons, and eyebrows use Deep Blue; Courier Blue is for large type and non-text accents. Copper is used for exactly one element per page — the Call Now / 24-7 cue. Never as a general accent, never for text.
+- Blue carries the brand: nav, footer, headings, links, service cards. Courier Blue is 3.7:1 on white, so text-sized links, buttons, and eyebrows use Deep Blue; Courier Blue is for large type and non-text accents. Copper is used for exactly one element: the mobile bottom call bar. The desktop header Call Now button is outlined Deep Blue, matching the secondary buttons (changed 2026-09-23 at the project lead's instruction). Never as a general accent, never for text.
 - Dark bands: Navy Ink `#0B3556` background with white type, used for the how-we-handle-it section on home and the coverage section. Maximum two dark bands per page. Copper still limited to one element.
 - Photography: golden-hour Arizona light, full-bleed, real people and real vehicles from the shoot. Before the shoot: the 3D hero object on white, no stock.
 - Current photos (About page) are the ones already published on the Squarespace site: Travis, Alanna, and drivers Dave, Sherry, Sergio, Brandon, Zaine — cropped 4:5, converted from Display P3 to sRGB (converting, never just dropping the profile, or skin tones shift), metadata stripped. Johnna's published photo was taken inside what looks like a client facility, so she shows as her initial until a new photo arrives.
@@ -126,6 +126,7 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 
 - Copy lives in `content/*.json`, never inline in templates. Copy is the approved text from the brand guide; do not paraphrase claims or rewrite testimonials.
 - Company voice ("we") on all pages except `/about/` Alanna section (first person).
+- No em dashes in site copy (content, templates, shipped CSS/JS comments). Hours read "24x7 (Incl. Holidays)".
 - Tone: clear, specific, warm, calm. One exclamation point per page maximum in our own copy; none on service pages. Verbatim testimonials are exempt.
 - Draft pages start as `status: proposed`. Only Alanna's approval moves a page to `approved`.
 - Name: "Premier Courier Services, LLC" in footer, schema, and legal; "Premier Courier" in running copy; page titles end with "| Premier Courier Services, Prescott AZ".

@@ -83,7 +83,9 @@ most trusted
 | logistics solutions, last-mile, seamless, cutting-edge, state-of-the-art, leverage, game changer, disrupt, synergy | Plain words: pickup, delivery, route, scheduled, urgent, same-day |
 | packages | The actual item: specimens, trays, filings, medications |
 | Guaranteed delivery times | "On time, every time" |
-| Contact our team today! | "Call (928) 533-3585. Alanna answers." |
+| Contact our team today! | "Call (928) 533-3585. A real person answers." |
+| Em dashes (—) anywhere in site copy | A period, comma, colon, or parentheses. Approved lines below are published this way |
+| "24 hours a day, 7 days a week, including holidays" (hours field) | "24x7 (Incl. Holidays)" |
 
 Exclamation points: at most one per page in our own copy; none on service pages or the how-we-handle-it page. Verbatim testimonials don't count toward the limit and are never edited to meet it.
 

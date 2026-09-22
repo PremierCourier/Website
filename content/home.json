@@ -6,14 +6,14 @@
     "hero.js"
   ],
   "title": "Medical and Business Courier",
-  "description": "Arizona's trusted medical and business courier. On time, every time — 24/7, including holidays, and a real person answers the phone.",
+  "description": "Arizona's trusted medical and business courier. On time, every time, 24/7, including holidays, and a real person answers the phone.",
   "hero": {
     "eyebrow": "Medical and business courier · Prescott, Arizona",
-    "lead": "Premier Courier Services is the trusted medical and business courier for Central and Northern Arizona — on time, every time, 24/7, including holidays.",
+    "lead": "Premier Courier Services is the trusted medical and business courier for Central and Northern Arizona. On time, every time, 24/7, including holidays.",
     "sequenceAlt": "Premier Courier's sealed blue transport cooler with the P mark"
   },
   "intro": {
-    "heading": "Serving Central and Northern Arizona since 2014 — and built on a legacy that started long before.",
+    "heading": "Serving Central and Northern Arizona since 2014, and built on a legacy that started long before.",
     "body": "Premier Courier has served Central and Northern Arizona for more than two decades, transporting specimens, blood products, surgical trays, pharmaceuticals, and confidential documents for hospitals, labs, pharmacies, physician offices, and law firms. Our drivers are meticulous and HIPAA-compliant in how they handle every item, we run 24 hours a day including holidays, and when you call, a real person answers."
   },
   "serve": {
@@ -103,7 +103,7 @@
   },
   "coverage": {
     "heading": "Based in Prescott. Serving five Arizona counties.",
-    "lead": "Yavapai, Coconino, Maricopa, Pima, and Mohave counties — 24 hours a day, including holidays."
+    "lead": "Yavapai, Coconino, Maricopa, Pima, and Mohave counties, 24 hours a day, including holidays."
   },
   "closing": {
     "heading": "Scheduled routes that run without reminders."

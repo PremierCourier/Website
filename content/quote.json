@@ -6,7 +6,7 @@
     "quote-form.js"
   ],
   "title": "Get a Quote",
-  "description": "Request a quote for a specimen, tray, pharmaceutical, or document delivery. Or call (928) 533-3585 — 24/7, including holidays.",
+  "description": "Request a quote for a specimen, tray, pharmaceutical, or document delivery. Or call (928) 533-3585, 24/7, including holidays.",
   "heading": "Get a Quote",
   "lead": "Tell us what's going where, and when. For anything urgent, call (928) 533-3585.",
   "fields": {
@@ -59,7 +59,7 @@
     "sending": "Sending…",
     "addressHint": "Please don't include patient names or health information.",
     "nowNote": "For a pickup right now, calling is fastest:",
-    "scheduledNote": "For a recurring route, choose Scheduled and give the first date — we'll call to set up the rest.",
+    "scheduledNote": "For a recurring route, choose Scheduled and give the first date. We'll call to set up the rest.",
     "privacyLink": "How we use this information"
   },
   "success": "We'll call you shortly."

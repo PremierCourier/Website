@@ -3,13 +3,13 @@
 // The browser holds the cooler in place with CSS `position: sticky` (native, so it never
 // lags or jitters behind the scroll, in either direction). This script only sets what
 // doesn't fight the scroll: which frame shows, how far the cooler has slid toward the
-// middle, and how large it is — all functions of scroll offset. The shown frame is eased
+// middle, and how large it is: all functions of scroll offset. The shown frame is eased
 // toward its target, so a mouse-wheel notch plays through the frames between instead of
 // jumping. Scrolling itself is never pinned, snapped, or slowed.
 //
 //   Laptops (≥1024 px): held from the first scroll; once the headline has gone, the cooler
 //   slides to the middle and grows to fill the height below the header as it opens, pauses
-//   fully open, then is released — it closes and zooms back out as it scrolls away.
+//   fully open, then is released; it closes and zooms back out as it scrolls away.
 //   Phones: held in the middle of the screen while it opens and closes, then scrolls away.
 //
 // The hold's length is a spacer under the cooler (.hero__travel), so nothing below is ever
@@ -176,7 +176,7 @@
 
   // Frames are decoded off the main thread with createImageBitmap, already scaled to the
   // canvas's pixel size, so drawing one is a cheap copy. (Decoding <img> frames and drawing
-  // them lets the browser discard and re-decode on every draw — that froze the page.)
+  // them lets the browser discard and re-decode on every draw; that froze the page.)
   // Browsers without createImageBitmap resize options get a full-size bitmap instead.
   var bitmapOptions = null;
 
@@ -239,8 +239,8 @@
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', function () { measure(); schedule(); });
 
-  // Fetching starts at the first scroll, or after load when the browser is idle — whichever
-  // comes first — so a visitor who scrolls immediately never waits for idle time, and one
+  // Fetching starts at the first scroll, or after load when the browser is idle, whichever
+  // comes first, so a visitor who scrolls immediately never waits for idle time, and one
   // who doesn't scroll still gets the frames without competing with the page's own load.
   var started = false;
   function start() {

@@ -1,5 +1,5 @@
 // Quote form: required-field checks, honeypot, JSON POST. On any failure the phone number
-// is shown — the form is never the only path.
+// is shown; the form is never the only path.
 (function () {
   var form = document.querySelector('.quote-form');
   if (!form) return;
@@ -18,7 +18,7 @@
     var scheduled = when.value === 'scheduled';
     dateField.hidden = !scheduled;
     date.required = scheduled;
-    // "Now": point at the phone — faster than a form and a callback.
+    // "Now": point at the phone, faster than a form and a callback.
     if (nowNote) nowNote.hidden = when.value !== 'now';
   }
 

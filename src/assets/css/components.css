@@ -19,7 +19,7 @@
 }
 
 .site-header__logo img {
-  width: 150px;
+  width: 200px;
   height: auto;
 }
 
@@ -52,8 +52,8 @@
   color: var(--pc-on-dark);
 }
 
-/* The copper Call Now / 24-7 cue. One element per viewport: the header cue on desktop,
-   the bottom bar on mobile. Nothing else on the site uses copper. */
+/* The Call Now / 24-7 cue. Copper only on the mobile bottom bar; the desktop header cue is
+   outlined Deep Blue (below). Nothing else on the site uses copper. */
 .call-cue {
   display: inline-flex;
   align-items: center;
@@ -72,6 +72,20 @@
 .call-cue:hover {
   color: var(--pc-on-dark);
   filter: brightness(0.94);
+}
+
+/* Header cue matches the outlined secondary button (Deep Blue on white). */
+.call-cue--header {
+  padding: 8px 14px;
+  background: transparent;
+  border: 2px solid var(--pc-deep);
+  color: var(--pc-deep);
+}
+
+.call-cue--header:hover {
+  background: var(--pc-bg-alt);
+  color: var(--pc-navy);
+  filter: none;
 }
 
 .call-cue--bar {
@@ -166,8 +180,8 @@
 
 /* Hero sequence: the cooler opens and closes as the page scrolls (hero.js). The inlined
    poster (frame 0) paints with the HTML; the canvas takes over once frames load. The
-   browser holds the cooler with position: sticky over the spacer (.hero__travel) — native,
-   so it never jitters — while hero.js sets the frame, the slide to centre, and the size.
+   browser holds the cooler with position: sticky over the spacer (.hero__travel), native,
+   so it never jitters, while hero.js sets the frame, the slide to centre, and the size.
    Scroll itself is never pinned or slowed. */
 .hero__stage {
   position: relative;
@@ -615,7 +629,7 @@
 }
 
 .logo-panel img {
-  width: 150px;
+  width: 200px;
 }
 
 .site-footer__line {
@@ -640,8 +654,8 @@
 
 /* ---------- Scroll reveals ---------- */
 /* Text starts at 0.6 opacity so nothing waits on the animation to be read. An element is
-   only dimmed ("armed") just before it scrolls into view; anything never scrolled to — print,
-   crawlers, audits — stays at full opacity. */
+   only dimmed ("armed") just before it scrolls into view; anything never scrolled to (print,
+   crawlers, audits) stays at full opacity. */
 
 .js .reveal.is-armed {
   opacity: 0.6;
@@ -678,7 +692,7 @@
   }
 
   .site-header__logo img {
-    width: 128px;
+    width: 164px;
   }
 
   .call-cue--header {
@@ -751,7 +765,7 @@
     gap: 28px;
   }
 
-  /* Phones: text first, photo after — keeps the headline as the page's largest first paint. */
+  /* Phones: text first, photo after; keeps the headline as the page's largest first paint. */
   .profile__photo,
   .profile--reverse .profile__photo {
     order: 2;

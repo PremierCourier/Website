@@ -3,10 +3,10 @@
   "template": "service",
   "status": "proposed",
   "title": "Specimen and Lab Transport",
-  "description": "Specimens, blood products, and platelets picked up on the lab’s schedule and delivered on time — 24 hours a day, including holidays. Call (928) 533-3585.",
+  "description": "Specimens, blood products, and platelets picked up on the lab’s schedule and delivered on time, 24 hours a day, including holidays. Call (928) 533-3585.",
   "eyebrow": "Services",
   "heading": "Specimen and lab transport",
-  "lead": "Specimens picked up on the lab’s schedule and delivered on time — 24 hours a day, including holidays.",
+  "lead": "Specimens picked up on the lab’s schedule and delivered on time, 24 hours a day, including holidays.",
   "carry": {
     "heading": "What we carry",
     "items": [
