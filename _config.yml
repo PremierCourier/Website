@@ -1,0 +1,16 @@
+# Safety net. GitHub Pages must publish from the gh-pages branch (the built site), never
+# from main. If Pages is ever pointed at main, this makes Jekyll publish nothing: every
+# source path is excluded, so CLAUDE.md, docs/, design/, and the function code can never
+# appear as public pages. (Do not add .nojekyll to main — that would serve files raw.)
+exclude:
+  - CLAUDE.md
+  - README.md
+  - docs
+  - design
+  - functions
+  - scripts
+  - src
+  - content
+  - package.json
+  - package-lock.json
+  - _config.yml
