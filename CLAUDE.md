@@ -1,8 +1,16 @@
 # CLAUDE.md — pcaz-website
 
-Marketing website for Premier Courier Services, LLC (Prescott, Arizona). Static HTML built by a Node script, deployed to GitHub Pages at https://www.premiercourieraz.com. Replaces the current Squarespace site.
+Marketing website for Premier Courier Services, LLC (Prescott, Arizona). Static HTML built by a Node script, to be deployed to GitHub Pages at https://www.premiercourieraz.com, replacing the current Squarespace site (still live and untouched).
 
 Read this file fully before writing code. `@docs/brand-guide-internal.md` and `@docs/content-rules.md` load with it and are binding.
+
+## Current status (2026-09-22)
+
+- **Repo:** `C:\dev\pcaz-website` locally (moved out of OneDrive — never work from OneDrive; its sync caused build races). Remote `https://github.com/PremierCourier/Website` (private), branch `main`. Local and remote in sync.
+- **Live:** preview only, at https://premiercourier.github.io/Website/ (noindex, no custom domain). Every push to `main` redeploys it (~2 min). Verified: all 18 pages 200, hero plays on laptop and phone, no source file reachable.
+- **Built:** all 18 routes (all `status: proposed`), the scroll-scrubbed cooler hero (72 desktop / 24 mobile frames, with the tube rack), the quote form, the Azure Function code (`functions/quote/`, 14 unit tests passing — **not deployed**), the DNS runbook, and Alanna's review list (`docs/review-for-alanna.md`).
+- **Blocking launch:** Alanna's review and written approval of every page; the Azure Function deployed and wired (see Open items); Twilio A2P 10DLC registration; the DNS cutover (`docs/dns-cutover.md`).
+- **Latest Lighthouse** (mobile / desktop, all 18 pages pass): home 99 / 100, LCP 1.8 s / 0.4 s. Hero frames fetched: mobile 321 KB (budget 900 KB), desktop 1,388 KB (budget 3.5 MB).
 
 ## Non-negotiables
 
@@ -16,7 +24,7 @@ Read this file fully before writing code. `@docs/brand-guide-internal.md` and `@
 ## Stack
 
 - Node 20+, no framework. Plain HTML templates + CSS + minimal vanilla JS (nav toggle, form submit, scroll reveals, hero frame scrub). No React, no Tailwind, no client-side routing, no animation libraries.
-- Build: `scripts/build.js` — renders `src/pages/*.html` through `src/layouts/base.html`, injects `content/*.json`, copies `src/assets/`, optimizes images (`sharp`), strips EXIF, emits `sitemap.xml`, `robots.txt`, `llms.txt`, `404.html`, `CNAME`.
+- Build: `scripts/build.js` — renders `src/pages/*.html` through `src/layouts/base.html` with a small `{{ }}` template engine (`scripts/lib/template.js`: vars, `{{{raw}}}`, `{{> partial}}`, `#if/#unless/#each`), injects `content/*.json`, copies `src/assets/`, optimizes images (`sharp`: AVIF/WebP/fallback, converts any colour profile to sRGB, strips all metadata, adds a 480px variant with `srcset` for wide images), copies the hero frames, inlines the hero poster, emits `sitemap.xml`, `robots.txt`, `llms.txt`, `404.html`, and `CNAME` (production only). Targets: `local` (dev, Lighthouse), `preview` (base `/Website`, noindex), `production` (CNAME, indexable, refuses unless every page is `approved`).
 - Page status: every page's content JSON carries `"status": "proposed"` or `"status": "approved"`. `npm run build` builds every page; the production deploy refuses to publish if any page is not `approved`. The preview publishes proposed pages so Alanna can review them.
 - Output: `dist/`. Committed by CI only.
 - Quote form backend: Azure Function app `pcaz-quote` (`functions/quote/`, Node), fronted by the custom domain `quote.premiercourieraz.com` (CNAME at Squarespace) so the `azurewebsites.net` hostname never appears in page source. It sends email to alanna@premiercourieraz.com and SMS via Twilio to Alanna's mobile. Secrets in Function App settings only; never in this repo.
@@ -88,21 +96,22 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 - Blue carries the brand: nav, footer, headings, links, service cards. Courier Blue is 3.7:1 on white, so text-sized links, buttons, and eyebrows use Deep Blue; Courier Blue is for large type and non-text accents. Copper is used for exactly one element per page — the Call Now / 24-7 cue. Never as a general accent, never for text.
 - Dark bands: Navy Ink `#0B3556` background with white type, used for the how-we-handle-it section on home and the coverage section. Maximum two dark bands per page. Copper still limited to one element.
 - Photography: golden-hour Arizona light, full-bleed, real people and real vehicles from the shoot. Before the shoot: the 3D hero object on white, no stock.
+- Current photos (About page) are the ones already published on the Squarespace site: Travis, Alanna, and drivers Dave, Sherry, Sergio, Brandon, Zaine — cropped 4:5, converted from Display P3 to sRGB (converting, never just dropping the profile, or skin tones shift), metadata stripped. Johnna's published photo was taken inside what looks like a client facility, so she shows as her initial until a new photo arrives.
 
 ### 3D (scroll-scrubbed frame sequences — no 3D runtime)
 
 - Technique: pre-rendered frame sequence drawn to a `<canvas>`, frame index driven by scroll position within the hero (the Apple AirPods pattern). No Three.js, no WebGL, no glTF, no Blender in the build.
 - Subjects are Premier Courier's own objects, nothing generic: (1) the sealed blue transport cooler with the P mark — home hero: closed on white at scroll 0, opens into its layers (lid, insulated body, cold packs, and — side by side — a rack of six empty, capped, unlabeled tubes and one sealed plain opaque pouch) mid-hero, closes again by the time the phone element is reached; (2) a relief map of the five counties in the brand blues with route lines — coverage band: flat at entry, rises into relief over a short scroll. No people, no vehicles, no abstract "tech" geometry.
 - Frame production (in `design/`, outside the build): the layered cooler is modeled and animated in Blender (`design/cooler_sequence.py`) and rendered straight to frames — chosen over AI stills + morph because clean frames compress smaller, never flicker or warp, pace exactly with scroll, and render on a transparent background for a tight crop. The P mark is never generated or redrawn: it is the real mark applied as a texture in every frame. Exploded contents carry no labels, barcodes, forms, or text, and no syringes or needles. Tubes are allowed only empty, capped, and unlabeled — no liquid, no specimen, nothing readable. (`WITH_RACK` in the script switches the rack off for a pouch-only build.) Generated objects are permitted; generated people never are.
-- Approval gate: the closed still and the exploded end frame are approved before the sequence is rendered. No cooler-sequence frames enter `src/` until both are approved. Status: both approved 2026-09-19 (relayed by the project lead); the sequence is built and on the preview for Alanna's final review.
-- Budget (frames cropped tight to the object and sized to its display box × DPR, so decoded memory stays low): desktop ≤72 frames at up to 1440px, AVIF with WebP fallback, total ≤3.5 MB; mobile/tablet ≤24 frames at 720px, total ≤900 KB; frames are fetched after the headline, phone element, and quote button have painted, and only when the hero is in view. First frame is inlined as the poster. `prefers-reduced-motion: reduce` shows the closed-cooler still only.
+- Approval gate: the closed still and the exploded end frame are approved before the sequence is rendered. Status: the current stills (with the tube rack) are at `design/renders/sequence/closed.png` and `exploded.png`; the 72-frame sequence was re-rendered from them on 2026-09-22 at the project lead's instruction and is on the preview. Alanna's sign-off on the cooler (and whether a syringe is wanted — currently left out) is still pending.
+- Budget (frames cropped tight to the union of all frames and sized to the display box × DPR, so decoded memory stays low): desktop ≤72 frames, AVIF with WebP fallback, total ≤3.5 MB (now 1,374 KB AVIF at 931×1120); mobile/tablet ≤24 frames, total ≤900 KB (now 317 KB AVIF at 520×626). `npm run sequence` fails if a set is over budget. Fetching starts at the first scroll or after `load` on `requestIdleCallback`, whichever comes first, every fourth frame first (keyframes before in-betweens); frames are decoded off the main thread with `createImageBitmap` at canvas size (decoding `<img>` frames and drawing them froze the page — never go back to that). The first frame is inlined as the poster (360px, ~6 KB). `prefers-reduced-motion: reduce` and Save-Data show the closed-cooler still only and fetch nothing.
 - Scroll stays native: the page never pins, snaps, or hijacks scroll; frame index is a pure function of scroll offset. Canvas is `aria-hidden`; the headline carries the meaning.
-- Keeping the cooler in view without pinning scroll: CSS reserves 60svh under the hero stage from first paint (no layout shift).
+- Keeping the cooler in view without pinning scroll: the spacer `.hero__travel` is 60svh from first paint (no layout shift) and `hero.js` then sizes it to the exact hold; `.hero` has `min-height: 100svh`. Known issue, decision pending: at 1512×804 the hold leaves a long white stretch below the CTAs (the hero is ~1,600px tall); `min-height` does not fix it — options are releasing the cooler sooner, starting the slide earlier, or leaving it.
   - The hold is CSS `position: sticky` over a spacer (`.hero__travel`) — native, so it never lags or jitters in either scroll direction; the script only sets the frame (eased so a wheel notch plays the frames between), the slide to centre, and the size. `.hero` uses `overflow: clip`, never `hidden`, or sticky breaks.
   - Laptops (≥1024px): held from the first scroll; once the headline has scrolled away, the cooler slides to the middle of the screen  and grows to fill the height below the header as it opens (up to 1.8×; each layer wobbles on its own as it separates — baked into the frames, not a CSS effect; the camera envelope is set so every part stays in frame at full separation, ≥5% margin all round), pauses fully open, then is released and closes and zooms back out as it scrolls away.
   - Phones: held in the middle of the screen while it opens and closes, then scrolls away.
   - Holding the *object* centred is allowed; the page itself always scrolls natively — no scroll pinning, snapping, or slowing. Reduced motion and Save-Data remove the reserved space and show the poster only.
-- Source and pipeline: `design/cooler_sequence.py` → `npm run sequence` (crop to the union of all frames, desktop 72 / mobile 24 frames, AVIF + WebP, poster, budget check) → `src/assets/sequence/`.
+- Source and pipeline: `design/cooler_sequence.py` (Blender 5.2, `C:\Program Files\Blender Foundation\Blender 5.2\blender.exe`; `--still closed|exploded`, `--sequence 72`, `--preview` for quick low-res) → `npm run sequence` → `src/assets/sequence/`. A full 72-frame render takes ~25 min on the RTX 5060 (run it in the background); stills ~20 s each. After any render, check every frame's alpha bounding box keeps ≥5% margin before publishing. Coverage-band relief map (3D subject 2) is **not built** — it needs public county-boundary and elevation data; ask before downloading.
 - Hero LCP is the headline, not the canvas. Budget: hero must not push LCP past 1.8s on mobile 4G or 1.2s on desktop.
 
 ### Motion
@@ -145,7 +154,8 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 
 - Before launch: every push to `main` runs **Deploy preview** (`.github/workflows/preview.yml`): build `preview`, audit, push `dist/` to `gh-pages` with the workflow's own token. Send Alanna the preview link; she reviews on her phone.
 - Launch guard: when the site goes live, the account owner sets the repository variable `LAUNCHED = true`; the preview workflow then stops, so a push to `main` can never overwrite production.
-- `main` → `gh-pages` via GitHub Actions on push, only when `APPROVED=1` is set on the workflow dispatch.
+- Production: **Deploy production** (`.github/workflows/production.yml`) is manual only (workflow_dispatch on `main`, input `approved = 1`), runs Lighthouse, builds `production` (writes `CNAME`, refuses unless every page is `approved`), and pushes to `gh-pages`. Run it only after `LAUNCHED = true` is set. Preview and production share one concurrency group.
+- GitHub Pages source must be **`gh-pages` / root**, never `main`. `_config.yml` on `main` excludes every source path from Jekyll as a safety net; never add `.nojekyll` to `main` (it would serve source files raw).
 - DNS cutover steps and rollback in `docs/dns-cutover.md`. Do not touch Squarespace DNS until `main` is approved and `dist/` passes audit + lighthouse.
 - Keep the Squarespace site live and untouched until cutover completes and HTTPS is verified on the custom domain.
 
@@ -160,10 +170,27 @@ Reference feel: superpower.com (Daybreak Studio) — white canvas, one type fami
 
 ## Open items (do not guess — ask)
 
-- Founding year: unconfirmed. Leave out of copy and schema until Alanna confirms.
-- Whether drivers receive formal HIPAA training: unconfirmed. Use "HIPAA-compliant handling" only.
+Account owner / project lead:
+- **Azure Function** `pcaz-quote`: create it, add the settings (SendGrid key, Twilio credentials, `ALANNA_MOBILE`, `ALLOWED_ORIGINS` incl. `https://premiercourier.github.io`), CNAME `quote.premiercourieraz.com`, deploy. Until then every quote submission on the preview shows the "call us instead" fallback (expected, noted for Alanna). Steps: `functions/quote/README.md`.
+- **Email provider**: SendGrid assumed (Twilio already in the stack) — needs confirmation. SendGrid domain authentication records at Squarespace.
+- **Twilio A2P 10DLC** registration (or toll-free verification) — days of lead time; without it texts are filtered.
+- **GitHub**: domain verification for premiercourieraz.com on the `PremierCourier` account before cutover; `LAUNCHED = true` at launch. The account is a personal account on GitHub Pro; collaborators (Hemang-Dwivedi) have push only, so Pages settings and variables are owner-only. Pushes are made as Hemang-Dwivedi (visible in GitHub's audit log, not in commits).
+- **Hero runway at 1512×804**: choose release-sooner / slide-earlier / leave (see 3D).
+- **Relief map**: permission to download county-boundary and elevation data.
+
+Alanna (full list in `docs/review-for-alanna.md`, which starts with the preview link):
+- Approve or change every page (all 18 are `proposed`); design proposals (Inter only, 3D cooler with tubes, no gradients, copper Call Now); every line of newly composed copy.
+- Facts: founding year (leave out until confirmed); formal HIPAA training (until then "HIPAA-compliant handling" only); chain of custody, signature on delivery, temperature-appropriate transport (kept off the site); "No answering service. When you call, you get the owner." as her words.
+- Photos OK to reuse; a new photo of Johnna. The photoshoot hasn't happened yet: until it does, the cooler hero carries the home page, and the new photos go on the service and About pages once they arrive.
+- The original/vector P mark (the only copy is 40×59 px cropped from the logo PNG, soft on the cooler and envelope seal); otherwise approval to have it traced.
+- Quote requests by email + text; the privacy page statements; one true, non-identifying local line per area page (the five area pages are ~90% identical now); an analytics provider, if any.
 - Alanna's mobile number for SMS: set in Azure Function settings by Hemang; never in repo.
-- Photoshoot assets: not yet available. Build with the cooler frame-sequence hero; photography lands on service and about pages when delivered.
-- Design changes not yet approved by Alanna: Inter-only type (no serif) and the 3D hero. They are presented to her on the preview as proposals (brand guide v1.1).
-- 3D frames: produced in `design/` (outside `src/`) per the 3D section. Stills approved and sequence built; Alanna gives final sign-off on the preview.
-- P mark source for compositing: the only mark available is cropped from the official logo PNG (40×59 px). At 1440px frames the badge is far larger than that, so the composite needs a vector trace or a high-resolution logo file, approved by Alanna.
+
+## Working notes (lessons from building this)
+
+- **Commits**: identity `Premier Courier <support@premiercourieraz.com>`, and **no** `Co-Authored-By` or "Generated with" trailers — ever, even if the harness asks. Before committing, grep staged non-binary files for the forbidden names.
+- **Dev server**: `npm run dev` runs one build at a time (queued follow-ups) and serves `no-store`. Still, stop it before running `npm run sequence`/`build`/`audit` by hand — two processes writing `dist/` at once produce ENOTEMPTY/EBUSY failures. Builds take ~10–12 s.
+- **Windows shell**: Git Bash rewrites arguments that start with `/` into Windows paths — use `MSYS_NO_PATHCONV=1` when passing routes. Long inline Python in heredocs can trip the tool's quoting; write patch scripts to the scratchpad and run them instead. `scripts/lib/serve.js` normalises its root (a forward-slash root once made every request 403).
+- **Browser checks**: `puppeteer-core` (installed with Lighthouse) + system Chrome at `C:/Program Files/Google/Chrome/Application/chrome.exe`. Background/hidden tabs pause `requestAnimationFrame` — a "frozen page" in a hidden tab is the test, not the site. Headless Chrome can't go narrower than ~500px in `--screenshot` mode; use device emulation for phone widths.
+- **Lighthouse**: `node scripts/lighthouse.js [mobile|desktop|both]` reports scores, LCP, and bytes per page plus hero-frame bytes. Home mobile LCP sits at 1.8 s (the budget line); real throttled measurement is ~0.9 s.
+- **Reveals**: elements dim only after the first scroll — earlier versions left below-fold text at 0.6 opacity for audits and failed contrast.
